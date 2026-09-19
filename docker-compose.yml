@@ -1,0 +1,38 @@
+# ------------------------------
+# Docker Compose for development
+# Postgres database for Prisma
+# ------------------------------
+
+version: "3.8"
+
+services:
+  db:
+    container_name: next_tailwind_image_kit_db
+    image: postgres:15
+    restart: unless-stopped
+
+    # Environment variables for Postgres — set these in .env.local and run:
+    # docker compose --env-file .env.local up
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in environment}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+
+    # Expose Postgres to localhost
+    ports:
+      - "5432:5432"
+
+    # Persist database data locally even if container is destroyed
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    # Healthcheck (so Prisma waits until DB is ready)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+# Named volumes (persist DB files between runs)
+volumes:
+  postgres_data:

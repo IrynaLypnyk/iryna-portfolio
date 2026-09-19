@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%"
+     viewBox="0 0 40.67 40.68"
+     fill="currentColor"
+     stroke="currentColor"
+     >
+    <path d="M1 1l19.33 19.33" stroke-width="2"/>
+    <path d="M1 39.68l19.33-19.34" stroke-width="2"/>
+    <path d="M39.67 39.68L20.34 20.35" stroke-width="2"/>
+    <path d="M39.67 1L20.34 20.33" stroke-width="2"/>
+</svg>

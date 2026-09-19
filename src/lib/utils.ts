@@ -1,0 +1,12 @@
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+/** Merge class names with clsx and resolve conflicting Tailwind utilities via tailwind-merge. */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export const isNavItemActive = (pathname: string, href: string) =>
+  pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+
+
