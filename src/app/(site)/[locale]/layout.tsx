@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata, Viewport } from 'next';
 import { PERSON_CONTENT } from '@/constants/content';
 import { SITE_CONTENT } from '@/constants/site';
+import { sans, mono } from '@/fonts';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -78,7 +79,6 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
   };
 }
 
-
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -120,7 +120,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   });
 
   return (
-    <html lang={locale} className={cn('scroll-smooth')} data-scroll-behavior="smooth">
+    <html
+      lang={locale}
+      className={cn('scroll-smooth', sans.variable, mono.variable)}
+      data-scroll-behavior="smooth"
+    >
       <body
         className="bg-paper flex min-h-dvh flex-col font-sans antialiased"
         suppressHydrationWarning

@@ -1,2 +1,60 @@
 @import 'tailwindcss';
 
+:root {
+  --azure: #3d63ff;
+  --blue: #376dcd;
+  --blue-dark: oklch(0.42 0.15 263);
+  --violet: #a0acec;
+  --white: #ffffff;
+  --ivory: #faf6ec;
+  --black: oklch(0.21 0.018 252);
+  --gray-dark: oklch(0.34 0.016 252);
+  --gray: oklch(0.5 0.014 252);
+  --yellow: #f4c94a;
+  --gray-line: oklch(0.9 0.009 85);
+  --gray-line-light: oklch(0.945 0.007 85);
+
+  --grad-brand: linear-gradient(150deg, var(--blue) 0%, var(--violet) 100%);
+
+  --page-max: 1600px;
+  --header-height: 68px;
+  --page-pad-right: clamp(20px, 5vw, 56px);
+  --page-pad-left: clamp(20px, 10vw, 152px);
+}
+
+@theme {
+  /* ---- Fonts ---- */
+  --font-sans: var(--font-hanken);
+  --font-mono: var(--font-jetbrains);
+
+  /* ---- Line heights ---- */
+  --leading-tight: 1.08;
+  --leading-snug: 1.25;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+
+  /* ---- Tracking ---- */
+  --tracking-tight: -0.02em; /* large display */
+  --tracking-normal: 0;
+  --tracking-label: 0.08em; /* mono eyebrows, uppercase */
+
+  /* ---- App Colors ---- */
+  --color-app-page: var(--ivory);
+  --color-app-surface: var(--white);
+  --color-app-ink: var(--black);
+  --color-app-text: var(--gray-dark);
+  --color-app-on-dark: var(--white);
+  --color-app-muted: var(--gray);
+  --color-app-accent: var(--blue);
+  --color-app-accent-bright: var(--azure);
+  --color-app-link: var(--blue);
+  --color-app-link-hover: var(--black);
+  --color-app-link-active: var(--blue-dark);
+  --color-app-label: var(--blue);
+
+  --color-app-danger: var(--color-red-400);
+  --color-app-yellow: var(--yellow);
+
+  --color-app-line: var(--gray-line);
+  --color-app-line-soft: var(--gray-line-light);
+}

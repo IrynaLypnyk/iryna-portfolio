@@ -15,7 +15,7 @@ export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
 
-const { siteName } = SITE_CONTENT.uk ;
+const { siteName } = SITE_CONTENT.uk;
 
 // Admin panel must never be indexed, regardless of the public site's launch/index state.
 export const metadata: Metadata = {
@@ -43,7 +43,7 @@ type Props = {
 export default async function AdminLayout({ children }: Props) {
   return (
     <html lang="uk" suppressHydrationWarning className={cn()}>
-      <body className="text-ink flex min-h-screen flex-col bg-neutral-50 font-sans antialiased">
+      <body className="text-app-ink bg-app-page flex min-h-screen flex-col font-sans antialiased">
         {children}
         <Toaster />
       </body>

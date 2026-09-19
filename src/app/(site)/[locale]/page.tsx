@@ -5,7 +5,6 @@ import { PERSON_CONTENT } from '@/constants/content';
 import { SITE_CONTENT } from '@/constants/site';
 import type { Metadata } from 'next';
 
-
 type Props = {
   params: Promise<{ locale: LocaleType }>;
 };
@@ -24,12 +23,15 @@ export async function generateMetadata({ params }: Pick<Props, 'params'>): Promi
   });
 }
 
-
 export default async function IndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
   return (
-    <div>IndexPage</div>
+    <div>
+      <h1>
+        I build calm, fast <span className="gradient-text">interfaces</span> for the web.
+      </h1>
+    </div>
   );
 }

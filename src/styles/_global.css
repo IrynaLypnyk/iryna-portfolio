@@ -1,18 +1,7 @@
-:root {
-  --page-max: 1400px;
-}
-
 html {
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
 }
-
-body {
-  margin: 0;
-  background: #ffffff;
-  color: #000000;
-}
-
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -27,4 +16,10 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+.gradient-text {
+  background: var(--grad-brand);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
