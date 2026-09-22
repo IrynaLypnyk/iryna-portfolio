@@ -1,1 +1,102 @@
-{}
+{
+  "Subtitle": "{role} with 7+ years of experience building production web applications with React and TypeScript, now working across the stack with Next.js, PostgreSQL and Prisma",
+  "Common": {
+    "name": "Ірина Липник",
+    "role": "Software Developer",
+    "stack": "React · TypeScript · Next.js · PostgreSQL",
+    "switchLanguage": "Перемкнути мову",
+    "close": "Закрити",
+    "closeMenu": "Закрити меню",
+    "closeImageViewer": "Закрити перегляд зображень",
+    "backToTop": "Нагору"
+  },
+  "Navigation": {
+    "projects": "Проєкти",
+    "about": "Про мене",
+    "contact": "Контакти"
+  },
+  "Hero": {
+    "statement": {
+      "part1": "Cтворюю спокійні,",
+      "part2": "швидкі",
+      "part3": "інтерфейси",
+      "part4": "для вебу"
+    },
+    "body": "{role} з фокусом на продуманий UX, масштабовану UI-архітектуру та продукти з використанням ШІ.",
+    "location": "Тонбридж, UK · Київ, Україна",
+    "cta": "Переглянути проєкти",
+    "labelExperience": "Досвід",
+    "labelLocation": "Локація",
+    "metaExperience": "7+ років у розробці production web applications",
+    "metaStatus": "Відкрита до нових можливостей"
+  },
+  "Work": {
+    "title": "Вибрані проєкти",
+    "description": "Тут проєкти, над якими я працювала або продовжую працювати.",
+    "labelRole": "РОЛЬ",
+    "labelStack": "STACK",
+    "labelStatus": "СТАТУС",
+    "labelYear": "РІК",
+    "labelLinks": "ПОСИЛАННЯ",
+    "caseCta": "Дивитись case study",
+    "coverPlaceholder": "{title} — скріншот продукту",
+    "moreWork": "Інші та ранні роботи",
+    "archiveNote": "Ранні роботи показані чесно: рік, роль і технології. Їхня цінність — оригінальний дизайн і frontend craft, а не стек.",
+    "empty": "Проєкти додаються. Завітайте трохи пізніше."
+  },
+  "About": {
+    "title": "Про мене",
+    "photoCaption": "Тонбридж, UK",
+    "p1": "Мені подобається перетворювати ідеї на робочі продукти, продумувати UX-деталі, будувати чисту архітектуру та покращувати продуктивність.",
+    "p2": {
+      "p2-1": "Більша частина мого професійного досвіду пов’язана з ",
+      "p2-2": "Helsi",
+      "p2-3": ", де я працювала сім років і поступово виросла від створення інтерфейсів на HTML, CSS і jQuery до розробки ключового функціоналу для пацієнтської та лікарської частин платформи на React, TypeScript i Redux."
+    },
+    "p3": "Мені комфортно працювати самостійно й водночас співпрацювати з product, design і backend командами — від перших ідей до реалізації та запуску.",
+    "labelCurrently": "Працюю",
+    "labelLearning": "Досліджую",
+    "labelOutside": "Open source",
+    "currently": "Full-stack freelance-проєкт на Next.js, React 19, TypeScript, PostgreSQL і Prisma",
+    "learning": "AI-assisted development і практичні способи інтеграції AI в реальні продукти",
+    "outside": { "p1": "Долучаюсь до ", "p2": "Women Coding Community" }
+  },
+  "Contact": {
+    "title": "Контакти",
+    "lead": "Маєте ідею?",
+    "pitch1": "Перетворю на код.",
+    "pitch2": "Або пофікшу.",
+    "pitch3": "Або задеплою.",
+    "emailMe": "Написати листа",
+    "formName": "Імʼя",
+    "formEmail": "Email",
+    "formMessage": "Повідомлення",
+    "formSend": "Надіслати",
+    "sending": "Надсилаємо…",
+    "success": "Дякую — повідомлення надіслано.",
+    "error": "Щось пішло не так. Спробуйте ще раз.",
+    "validation": {
+      "nameRequired": "Введіть імʼя",
+      "nameMinLength": "Імʼя має містити щонайменше 2 символи",
+      "emailRequired": "Введіть email",
+      "emailInvalid": "Введіть коректний email",
+      "messageRequired": "Введіть повідомлення",
+      "messageMinLength": "Повідомлення має містити щонайменше 10 символів"
+    }
+  },
+  "Project": {
+    "back": "Назад до проєктів",
+    "next": "Далі",
+    "mainVisual": "Case study — головне зображення",
+    "detailVisual": "Деталь / інтерфейс"
+  },
+  "Footer": {
+    "supportUkraine": "Підтримуйте Україну",
+    "supportNote": "",
+    "soundsTitle": "Мій плейлист української музики",
+    "soundsNote": ""
+  },
+  "NavLinks": {
+    "home": "На головну"
+  }
+}

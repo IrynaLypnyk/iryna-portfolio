@@ -23,3 +23,16 @@ html {
   -webkit-background-clip: text;
   color: transparent;
 }
+
+.hero-grid {
+  background-image:
+    repeating-linear-gradient(to right, var(--color-app-line-soft) 0 1px, transparent 1px 92px),
+    repeating-linear-gradient(to bottom, var(--color-app-line-soft) 0 1px, transparent 1px 92px);
+  background-position: 0 -1px;
+}
+
+@media (max-width: 767px) {
+  .hero-grid {
+    background-image: none;
+  }
+}

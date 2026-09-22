@@ -19,12 +19,11 @@ export const routes = {
   },
 } as const;
 
-/** In-page anchors on the home page. The public site is a one-pager. */
 export const anchors = {
-  top: '#top',
-  work: '#work',
-  about: '#about',
-  contact: '#contact',
+  top: 'top',
+  projects: 'projects',
+  about: 'about',
+  contact: 'contact',
 } as const;
 
 export const apiRoutes = {
@@ -37,6 +36,6 @@ export const apiRoutes = {
       check: '/api/admin/auth/check',
       google: '/api/admin/auth/google',
       googleCallback: '/api/admin/auth/google/callback',
-    }
+    },
   },
 } as const;

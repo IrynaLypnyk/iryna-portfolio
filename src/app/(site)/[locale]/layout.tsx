@@ -1,4 +1,4 @@
-import { JsonLd } from '@/app/(site)/[locale]/_components/seo/JsonLd';
+import { JsonLd } from '@/app/(site)/[locale]/_components/_seo/JsonLd';
 import { routing, type LocaleType } from '@/i18n/routing';
 import { SITE_URL, IS_SITE_LIVE, buildLocaleUrl } from '@/lib/seo/config';
 import { buildPersonJsonLd, buildWebSiteJsonLd } from '@/lib/seo/json-ld';
@@ -11,6 +11,12 @@ import type { Metadata, Viewport } from 'next';
 import { PERSON_CONTENT } from '@/constants/content';
 import { SITE_CONTENT } from '@/constants/site';
 import { sans, mono } from '@/fonts';
+import { SiteHeader } from '@/app/(site)/[locale]/_components/_layouts/SiteHeader';
+import { GrowingThread } from '@/app/(site)/[locale]/_components/_ui/GrowingThread';
+import { SiteFooter } from '@/app/(site)/[locale]/_components/_layouts/SiteFooter';
+import { PageContainer } from '@/app/(site)/[locale]/_components/_ui/PageContainer';
+import { anchors } from '@/constants/routes';
+import { BackToTopButton } from '@/app/(site)/[locale]/_components/_ui/BackToTopButton';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -126,12 +132,18 @@ export default async function LocaleLayout({ children, params }: Props) {
       data-scroll-behavior="smooth"
     >
       <body
-        className="bg-paper flex min-h-dvh flex-col font-sans antialiased"
+        className="bg-app-page text-app-text flex min-h-dvh flex-col font-sans antialiased"
         suppressHydrationWarning
       >
         <JsonLd data={[personJsonLd, websiteJsonLd]} />
         <NextIntlClientProvider messages={messages} locale={locale}>
-          {children}
+          <SiteHeader />
+          <GrowingThread />
+          <PageContainer as="main" id={anchors.top.slice(1)} className="flex-1">
+            {children}
+          </PageContainer>
+          <SiteFooter />
+          <BackToTopButton />
         </NextIntlClientProvider>
       </body>
     </html>

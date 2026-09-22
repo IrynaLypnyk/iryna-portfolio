@@ -4,6 +4,11 @@ import { buildPageMetadata } from '@/lib/seo/build-metadata';
 import { PERSON_CONTENT } from '@/constants/content';
 import { SITE_CONTENT } from '@/constants/site';
 import type { Metadata } from 'next';
+import { Hero } from '@/app/(site)/[locale]/_components/_sections/Hero';
+import { About } from '@/app/(site)/[locale]/_components/_sections/About';
+import { Contact } from '@/app/(site)/[locale]/_components/_sections/Contact';
+import { Projects } from '@/app/(site)/[locale]/_components/_sections/Projects';
+import { ProjectData } from '@/types/projects';
 
 type Props = {
   params: Promise<{ locale: LocaleType }>;
@@ -27,11 +32,16 @@ export default async function IndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const projects: ProjectData[] = [];
+
   return (
     <div>
-      <h1>
-        I build calm, fast <span className="gradient-text">interfaces</span> for the web.
-      </h1>
+      <>
+        <Hero />
+        <Projects projects={projects} />
+        <About />
+        <Contact />
+      </>
     </div>
   );
 }

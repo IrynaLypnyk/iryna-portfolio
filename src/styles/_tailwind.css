@@ -4,6 +4,7 @@
   --azure: #3d63ff;
   --blue: #376dcd;
   --blue-dark: oklch(0.42 0.15 263);
+  --blue-light: #84aaff;
   --violet: #a0acec;
   --white: #ffffff;
   --ivory: #faf6ec;
@@ -18,8 +19,16 @@
 
   --page-max: 1600px;
   --header-height: 68px;
-  --page-pad-right: clamp(20px, 5vw, 56px);
-  --page-pad-left: clamp(20px, 10vw, 152px);
+  --page-pad-right: 20px;
+  --page-pad-left: 20px;
+  --section-py: clamp(30px, 10vh, 70px);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-pad-right: clamp(20px, 5vw, 56px);
+    --page-pad-left: clamp(20px, 10vw, 152px);
+  }
 }
 
 @theme {
@@ -46,11 +55,9 @@
   --color-app-on-dark: var(--white);
   --color-app-muted: var(--gray);
   --color-app-accent: var(--blue);
+  --color-app-accent-light: var(--blue-light);
   --color-app-accent-bright: var(--azure);
-  --color-app-link: var(--blue);
-  --color-app-link-hover: var(--black);
-  --color-app-link-active: var(--blue-dark);
-  --color-app-label: var(--blue);
+  --color-app-accent-dark: var(--blue-dark);
 
   --color-app-danger: var(--color-red-400);
   --color-app-yellow: var(--yellow);

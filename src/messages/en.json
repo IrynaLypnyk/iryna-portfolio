@@ -1,1 +1,105 @@
-{}
+{
+  "Subtitle": "{role} with 7+ years of experience building production web applications with React and TypeScript, now working across the stack with Next.js, PostgreSQL and Prisma",
+  "Common": {
+    "name": "Iryna Lypnyk",
+    "role": "Software Developer",
+    "stack": "React · TypeScript · Next.js · PostgreSQL",
+    "switchLanguage": "Switch language",
+    "close": "Close",
+    "closeMenu": "Close menu",
+    "closeImageViewer": "Close image viewer",
+    "backToTop": "Back to top"
+  },
+  "Navigation": {
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "Hero": {
+    "statement": {
+      "part1": "I build calm,",
+      "part2": " fast",
+      "part3": "interfaces",
+      "part4": "for the web"
+    },
+    "body": "{role} focused on thoughtful UX, scalable UI architecture, and AI-assisted products",
+    "location": "Tonbridge, UK · Kyiv, Ukraine",
+    "cta": "View my projects",
+    "labelExperience": "Experience",
+    "labelLocation": "Location",
+    "metaExperience": "7+ years building production web applications",
+    "metaStatus": "Open to opportunities"
+  },
+  "Work": {
+    "title": "Latest work",
+    "description": "Here, you’ll find projects I’ve worked on or continue to develop.",
+    "labelRole": "ROLE",
+    "labelStack": "STACK",
+    "labelStatus": "STATUS",
+    "labelYear": "YEAR",
+    "labelLinks": "LINKS",
+    "caseCta": "View case study",
+    "coverPlaceholder": "{title} — product screenshot",
+    "moreWork": "More work / Earlier work",
+    "archiveNote": "Earlier work is shown honestly with year, role and stack. Its value is the original design and frontend craft, not the framework.",
+    "empty": "Projects are being added. Check back shortly."
+  },
+  "About": {
+    "title": "About",
+    "photoCaption": "Tonbridge, UK",
+    "p1": "I enjoy turning ideas into working products, thinking through UX details, building clean architecture, and improving performance.",
+    "p2": {
+      "p2-1": "Most of my experience comes from seven years at",
+      "p2-2": "Helsi",
+      "p2-3": ", Ukraine’s largest digital healthcare platform, where I grew from building interfaces with HTML, CSS and jQuery to owning and developing core features across patient- and doctor-facing parts of the platform with React, TypeScript and Redux."
+    },
+    "p3": "I’m comfortable working independently and collaborating across product, design and backend — from early ideas through to delivery.",
+    "labelCurrently": "Currently",
+    "labelLearning": "Interested in",
+    "labelOutside": "Open source",
+    "currently": "Building full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
+    "learning": "AI-assisted development and practical ways to bring AI into real products",
+    "outside": {
+      "p1": "Contributing to open source project ",
+      "p2": "Women Coding Community"
+    }
+  },
+  "Contact": {
+    "title": "Contact",
+    "lead": "Have something in mind?",
+    "pitch1": "Let's build it.",
+    "pitch2": "Or fix it.",
+    "pitch3": "Or ship it.",
+    "emailMe": "Email me",
+    "formName": "Name",
+    "formEmail": "Email",
+    "formMessage": "Message",
+    "formSend": "Send message",
+    "sending": "Sending…",
+    "success": "Thank you — your message has been sent.",
+    "error": "Something went wrong. Please try again.",
+    "validation": {
+      "nameRequired": "Enter your name",
+      "nameMinLength": "Name must be at least 2 characters",
+      "emailRequired": "Enter your email",
+      "emailInvalid": "Enter a valid email",
+      "messageRequired": "Enter a message",
+      "messageMinLength": "Message must be at least 10 characters"
+    }
+  },
+  "Project": {
+    "back": "Back to selected work",
+    "next": "Next",
+    "mainVisual": "Case study — main visual",
+    "detailVisual": "Detail / interface"
+  },
+  "Footer": {
+    "supportUkraine": "Stand with Ukraine",
+    "supportNote": "A few verified organisations worth supporting.",
+    "soundsTitle": "My playlist of Ukrainian music",
+    "soundsNote": "A playlist of Ukrainian music I keep coming back to."
+  },
+  "NavLinks": {
+    "home": "Back to home"
+  }
+}
