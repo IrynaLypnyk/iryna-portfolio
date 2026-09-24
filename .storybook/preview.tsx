@@ -3,7 +3,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { mswLoader } from 'msw-storybook-addon/csf3';
 import en from '../src/messages/en.json';
 import uk from '../src/messages/uk.json';
+import { sans, mono } from '@/fonts';
 import '../src/styles/index.css';
+
+// Match the app's root scope, including dialogs rendered in document.body.
+document.documentElement.classList.add(sans.variable, mono.variable);
+document.body.classList.add('font-sans', 'font-normal', 'antialiased');
 
 const messagesByLocale = { en, uk } as const;
 
