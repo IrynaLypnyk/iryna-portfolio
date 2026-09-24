@@ -11,3 +11,132 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Admin {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  googleId  String?  @unique
+  image     String?
+  name      String?
+  password  String?
+  updatedAt DateTime @updatedAt
+}
+
+/// A portfolio case study.
+///
+/// `featured` splits the home page: featured projects render as full
+/// `ProjectArticle` blocks under "Selected work", the rest as compact
+/// `MoreWorkRow`s. Within each group the list is ordered by `order`.
+model Project {
+  id   String @id @default(cuid())
+  slug String @unique
+
+  shortLabel String
+
+  titleUk String
+  titleEn String
+
+  subtitleUk String
+  subtitleEn String
+
+  contextUk String
+  contextEn String
+
+  leadUk String
+  leadEn String
+
+  roleUk String
+  roleEn String
+
+  stack String?
+
+  statusUk String?
+  statusEn String?
+
+  yearLabel String?
+
+  externalUrl String?
+  linkLabelUk String?
+  linkLabelEn String?
+  linkNoteUk  String?
+  linkNoteEn  String?
+
+  order     Int     @default(0)
+  featured  Boolean @default(false)
+  published Boolean @default(true)
+
+  photos   Photo[]
+  sections ProjectSection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([featured, order])
+  @@index([published])
+}
+
+/// One numbered block of a case study ("01 Context", "02 My role", …).
+/// Optional second paragraph for sections that need additional detail.
+model ProjectSection {
+  id String @id @default(cuid())
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  order Int @default(0)
+
+  titleUk String
+  titleEn String
+
+  bodyUk String
+  bodyEn String
+
+  body2Uk String?
+  body2En String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, order])
+}
+
+model MediaAsset {
+  id             String @id @default(cuid())
+  imageKitFileId String @unique
+  src            String
+  width          Int
+  height         Int
+
+  defaultForPhotos   Photo[] @relation("DefaultPhotoAsset")
+  ukrainianForPhotos Photo[] @relation("UkrainianPhotoAsset")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id String @id @default(cuid())
+
+  assetId String
+  asset   MediaAsset @relation("DefaultPhotoAsset", fields: [assetId], references: [id], onDelete: Restrict)
+
+  assetUkId String?
+  assetUk   MediaAsset? @relation("UkrainianPhotoAsset", fields: [assetUkId], references: [id], onDelete: Restrict)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  orderInProject Int     @default(0)
+  isProjectCover Boolean @default(false)
+
+  captionUk String?
+  captionEn String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([assetId])
+  @@index([assetUkId])
+  @@index([projectId, orderInProject])
+}
