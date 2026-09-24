@@ -19,6 +19,24 @@ export type ProjectData = {
   coverPhoto: Photo<string> | null;
 };
 
+/** A localized case study with its sections, photos, and next project. */
+export type ProjectDetail = ProjectData & {
+  index: string;
+  lead: string;
+  externalUrl: string | null;
+  linkLabel: string | null;
+  linkNote: string | null;
+  sections: {
+    id: string;
+    index: string;
+    title: string;
+    body: string;
+    body2: string | null;
+  }[];
+  photos: Photo<string>[];
+  next: { slug: string; title: string } | null;
+};
+
 /**
  * A single image, already resolved to an absolute CDN URL.
  * `TText` is the alt/caption carrier: `LocalizedText` straight out of the DB

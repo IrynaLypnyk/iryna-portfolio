@@ -26,6 +26,16 @@ export const apiRoutes = {
   contact: '/api/contact',
 
   admin: {
+    projects: '/api/admin/projects',
+    project: (id: string) => `/api/admin/projects/${id}`,
+    projectPhotoUpload: (id: string) => `/api/admin/projects/${id}/photos/upload`,
+    projectPhotoUploadAuth: (id: string) => `/api/admin/projects/${id}/photos/upload-auth`,
+
+    photos: {
+      item: (id: string) => `/api/admin/photos/${id}`,
+      reorder: '/api/admin/photos/reorder',
+    },
+
     auth: {
       login: '/api/admin/auth/login',
       logout: '/api/admin/auth/logout',

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { sans, mono } from '@/fonts';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,7 +43,7 @@ type Props = {
 
 export default async function AdminLayout({ children }: Props) {
   return (
-    <html lang="uk" suppressHydrationWarning className={cn()}>
+    <html lang="uk" suppressHydrationWarning className={cn(sans.variable, mono.variable)}>
       <body className="text-app-ink bg-app-page flex min-h-screen flex-col font-sans antialiased">
         {children}
         <Toaster />
