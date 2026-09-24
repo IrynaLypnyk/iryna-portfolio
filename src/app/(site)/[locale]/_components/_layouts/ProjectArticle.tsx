@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
-import { UnderlineLink } from '@/app/(site)/[locale]/_components/_ui/UnderlineLink';
+import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { routes } from '@/constants/routes';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
@@ -62,9 +62,15 @@ export function ProjectArticle({ project, index, reversed = false, isLast = fals
 
         <MetaList items={meta} />
 
-        <UnderlineLink href={routes.project(project.slug)} internal variant="plain" arrow="right">
+        <AppLink
+          href={routes.project(project.slug)}
+          internal
+          variant="plain"
+          arrow="right"
+          color="blueBright"
+        >
           {t('caseCta')}
-        </UnderlineLink>
+        </AppLink>
       </div>
     </article>
   );

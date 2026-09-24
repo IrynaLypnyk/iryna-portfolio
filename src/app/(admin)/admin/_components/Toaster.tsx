@@ -9,6 +9,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <SonnerToaster
       theme="light"
+      richColors
       className="toaster group"
       position="top-center"
       icons={{
@@ -20,14 +21,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       toastOptions={{
         classNames: {
-          toast:
-            'rounded-none border border-[#aba582]/40 bg-red-400 text-green shadow-none px-5 py-4',
-          title: 'font-serif text-sm text-[#432b1b]',
-          description: 'text-xs text-[#7e654d]',
+          toast: 'rounded-none border shadow-none px-5 py-4',
+          title: 'font-sans text-sm',
+          description: 'text-xs',
           actionButton: 'bg-[#432b1b] text-[#eee8d7] rounded-none px-3 py-1 text-xs',
           cancelButton:
             'bg-transparent text-[#7e654d] border border-[#aba582]/40 rounded-none px-3 py-1 text-xs',
-          closeButton: 'border border-[#aba582]/40 bg-[#eee8d7] text-[#432b1b]',
+          closeButton: 'border',
         },
       }}
       {...props}

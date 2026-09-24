@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 const linkStyles =
-  'text-app-accent hover:text-app-accent-dark active:text-app-accent-dark transition-colors inline-flex items-center transition-colors';
+  'hover:text-app-accent-bright active:text-app-accent-dark transition-colors inline-flex items-center transition-colors';
 
 type Props = {
   href: string;

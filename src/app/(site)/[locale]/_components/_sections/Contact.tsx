@@ -1,11 +1,18 @@
 import { useTranslations } from 'next-intl';
 import { Kicker } from '@/app/(site)/[locale]/_components/_ui/Kicker';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
-import { UnderlineLink } from '@/app/(site)/[locale]/_components/_ui/UnderlineLink';
+import { AppLink, AppLinkProps } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { ContactForm } from '@/app/(site)/[locale]/_components/_layouts/ContactForm';
 import { CONTACT_INFO, SOCIAL_LINKS } from '@/constants/contacts';
 import { anchors } from '@/constants/routes';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
+
+const contactAppLinkProps = {
+  arrow: 'right',
+  color: 'black',
+  variant: 'underline',
+  arrowPosition: 'after',
+} satisfies Pick<AppLinkProps, 'arrow' | 'color' | 'variant' | 'arrowPosition'>;
 
 export function Contact() {
   const t = useTranslations('Contact');
@@ -32,24 +39,15 @@ export function Contact() {
           </div>
 
           <div className="flex flex-wrap gap-6">
-            <UnderlineLink
-              href={`mailto:${CONTACT_INFO.email}`}
-              arrow="right"
-              className="text-base"
-            >
+            <AppLink href={`mailto:${CONTACT_INFO.email}`} {...contactAppLinkProps}>
               {t('emailMe')}
-            </UnderlineLink>
-            <UnderlineLink
-              href={SOCIAL_LINKS.linkedin}
-              external
-              arrow="right"
-              className="text-base"
-            >
+            </AppLink>
+            <AppLink href={SOCIAL_LINKS.linkedin} external {...contactAppLinkProps}>
               LinkedIn
-            </UnderlineLink>
-            <UnderlineLink href={SOCIAL_LINKS.github} external arrow="right" className="text-base">
+            </AppLink>
+            <AppLink href={SOCIAL_LINKS.github} external {...contactAppLinkProps}>
               GitHub
-            </UnderlineLink>
+            </AppLink>
           </div>
         </div>
 

@@ -4,7 +4,7 @@ import { isDraftEqual, toEditableFields } from './helpers';
 import type { EditablePhoto, RowStatus, UpdateDraft } from './types';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { Trash2 } from 'lucide-react';
-import { Chip } from '@/app/(admin)/admin/_components/Chip';
+import { AdminChip } from '@/app/(admin)/admin/_components/AdminChip';
 import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
 import { AdminMediaPreview } from '@/app/(admin)/admin/(protected)/_components/AdminMediaPreview';
 
@@ -50,7 +50,7 @@ export function PhotoTableRow({
 
       {/* Project cover */}
       <td className="px-3 py-3">
-        <Chip
+        <AdminChip
           label="Обкл. проєкту"
           checked={item.draft.isProjectCover}
           onChangeAction={(checked) => onDraftChangeAction(item.id, 'isProjectCover', checked)}

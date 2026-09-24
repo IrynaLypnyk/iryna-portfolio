@@ -4,6 +4,7 @@ import { LocaleSwitcher } from '@/app/(site)/[locale]/_components/_ui/LocaleSwit
 import { PLAYLIST_URL, SUPPORT_UKRAINE_URL } from '@/constants/contacts';
 import { SupportMark } from '@/app/(site)/[locale]/_components/_ui/SupportMark';
 import { TextLink } from '@/app/(site)/[locale]/_components/_ui/TextLink';
+import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
 export function SiteFooter() {
   const t = useTranslations('Footer');
@@ -13,19 +14,17 @@ export function SiteFooter() {
     <footer data-component="SiteFooter" className="border-app-line bg-app-page border-t">
       <PageContainer className="py-(--section-py) pr-(--page-pad-right) pl-(--page-pad-left)">
         <div className="grid grid-cols-1 items-start gap-5 pb-5.5 sm:grid-cols-2">
-          <TextLink href={SUPPORT_UKRAINE_URL} isExternal={true}>
+          <AppLink href={SUPPORT_UKRAINE_URL} external={true} color="blue" arrow="upRight">
             <SupportMark />
             &nbsp;&nbsp;
             {t('supportUkraine')}
-          </TextLink>
+          </AppLink>
           {/*<span className="text-app-muted text-[12.5px]">{t('supportNote')}</span>*/}
-          <TextLink href={PLAYLIST_URL} className="sm:ml-auto">
-            <span aria-hidden="true" className="text-app-accent">
-              ♫
-            </span>
+          <AppLink href={PLAYLIST_URL} className="sm:ml-auto" color="blue" arrow="upRight">
+            <span aria-hidden="true">♫</span>
             &nbsp;&nbsp;
             {t('soundsTitle')}
-          </TextLink>
+          </AppLink>
           {/*<span className="text-app-muted max-w-85 text-[12.5px]">{t('soundsNote')}</span>*/}
         </div>
 

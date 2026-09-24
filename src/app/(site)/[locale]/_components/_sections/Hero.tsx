@@ -1,8 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { anchors } from '@/constants/routes';
-import { ScrollToSectionLink } from '@/app/(site)/[locale]/_components/_ui/ScrollToSectionLink';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
+import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
 export function Hero() {
   const t = useTranslations('Hero');
@@ -25,7 +25,15 @@ export function Hero() {
           <div className="text-app-muted max-w-160 text-[clamp(16px,1.4vw,18px)] leading-normal">
             <p>{t('body', { role })}</p>
           </div>
-          <ScrollToSectionLink anchor={anchors.projects}>{t('cta')}</ScrollToSectionLink>
+          <AppLink
+            href={anchors.projects}
+            fontMono={true}
+            arrow="right"
+            arrowPosition="before"
+            color="blueBright"
+          >
+            {t('cta')}
+          </AppLink>
         </div>
 
         <MetaList

@@ -23,20 +23,20 @@ export default async function AdminDashboard() {
   return (
     <main className="px-6 py-10">
       <div className="mx-auto max-w-350">
-        <h1 className="mb-8 text-3xl font-semibold text-neutral-900">Admin</h1>
+        <h1 className="text-app-text mb-8 text-3xl font-semibold">Admin</h1>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {SECTIONS.map(({ href, title, description, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="group rounded-xl border border-neutral-200 bg-white p-6 transition hover:border-neutral-400 hover:shadow-sm"
+              className="group border-app-line bg-app-surface hover:border-app-line rounded-xl border p-6 transition hover:shadow-sm"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 text-neutral-800 transition-colors group-hover:bg-neutral-200">
+              <div className="bg-app-accent-lightest text-app-accent group-hover:bg-app-accent-lightest mb-4 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
                 <Icon size={20} strokeWidth={1.75} aria-hidden="true" />
               </div>
-              <h2 className="text-lg font-semibold text-neutral-900">{title}</h2>
-              <p className="mt-2 text-sm text-neutral-600">{description}</p>
+              <h2 className="text-app-accent text-lg font-semibold">{title}</h2>
+              <p className="text-app-muted mt-2 text-sm">{description}</p>
             </Link>
           ))}
         </div>

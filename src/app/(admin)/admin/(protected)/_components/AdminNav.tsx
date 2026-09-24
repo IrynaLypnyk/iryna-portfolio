@@ -45,12 +45,12 @@ export function AdminNav() {
 
   return (
     <header
-      className="sticky top-0 z-20 border-b border-neutral-200 bg-white text-neutral-900"
+      className="border-app-line bg-app-surface text-app-text sticky top-0 z-20 border-b"
       data-component="AdminNav"
     >
       <div className="mx-auto hidden max-w-[1600px] items-center justify-between gap-4 px-6 py-3 lg:flex">
         {/* Left: logo + nav */}
-        <div className="flex min-w-0 items-center gap-4">
+        <div className="flex min-w-0 items-center gap-6">
           {/* Logo */}
           <div className="flex items-center gap-3">
             <Link href={routes.admin.root}>
@@ -62,14 +62,16 @@ export function AdminNav() {
           </div>
 
           {/* Nav */}
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-5">
             {NAV_LINKS.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  'flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  isActive(pathname, href) ? 'bg-neutral-100' : 'hover:bg-neutral-100'
+                  'flex items-center gap-1.5 py-1 text-sm font-medium transition-colors',
+                  isActive(pathname, href)
+                    ? 'text-app-accent font-semibold'
+                    : 'hover:text-app-accent'
                 )}
                 aria-current={isActive(pathname, href) ? 'page' : undefined}
               >
@@ -109,7 +111,7 @@ export function AdminNav() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-neutral-700 transition-colors hover:bg-neutral-100 active:bg-neutral-200"
+          className="text-app-text hover:bg-app-accent-lightest active:bg-app-accent-lightest inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors"
           aria-label={
             isMobileMenuOpen ? 'Закрити меню адміністратора' : 'Відкрити меню адміністратора'
           }
@@ -126,7 +128,7 @@ export function AdminNav() {
       </div>
 
       {isMobileMenuOpen && (
-        <div id="admin-mobile-menu" className="border-t border-neutral-200 px-4 py-3 lg:hidden">
+        <div id="admin-mobile-menu" className="border-app-line border-t px-4 py-3 lg:hidden">
           <nav className="flex flex-col gap-1" aria-label="Admin navigation">
             {NAV_LINKS.map(({ href, label, icon: Icon }) => {
               const active = isActive(pathname, href);
@@ -137,7 +139,7 @@ export function AdminNav() {
                   href={href}
                   className={cn(
                     'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    active ? 'bg-neutral-100' : 'hover:bg-neutral-100'
+                    active ? 'bg-app-accent-lightest' : 'hover:bg-app-accent-lightest'
                   )}
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -148,13 +150,13 @@ export function AdminNav() {
               );
             })}
 
-            <div className="my-2 border-t border-neutral-200" />
+            <div className="border-app-line my-2 border-t" />
 
             <a
               href={SITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
+              className="text-app-text hover:bg-app-accent-lightest flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <ExternalLink size={16} strokeWidth={1.75} />

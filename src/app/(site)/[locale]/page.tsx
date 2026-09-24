@@ -8,7 +8,9 @@ import { Hero } from '@/app/(site)/[locale]/_components/_sections/Hero';
 import { About } from '@/app/(site)/[locale]/_components/_sections/About';
 import { Contact } from '@/app/(site)/[locale]/_components/_sections/Contact';
 import { Projects } from '@/app/(site)/[locale]/_components/_sections/Projects';
-import { ProjectData } from '@/types/projects';
+import { getPublishedProjects } from '@/lib/projects/get-published-projects';
+
+export const dynamic = 'force-dynamic';
 
 type Props = {
   params: Promise<{ locale: LocaleType }>;
@@ -32,7 +34,7 @@ export default async function IndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const projects: ProjectData[] = [];
+  const projects = await getPublishedProjects(locale);
 
   return (
     <div>

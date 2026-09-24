@@ -5,11 +5,6 @@ import { TextLink } from './TextLink';
 const meta = {
   title: 'UI/MetaList',
   component: MetaList,
-  // argTypes: {
-  //   variant: { control: 'inline-radio', options: ['compact', 'roomy', 'panel'] },
-  //   labelColor: { control: 'inline-radio', options: ['gray', 'blue'] },
-  //   labelWidth: { control: { type: 'range', min: 40, max: 200, step: 4 } },
-  // },
   args: {
     items: [
       { label: 'Role', value: 'Lead frontend engineer' },
