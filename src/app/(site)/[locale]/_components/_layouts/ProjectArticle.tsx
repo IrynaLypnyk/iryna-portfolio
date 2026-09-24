@@ -48,17 +48,17 @@ export function ProjectArticle({ project, index, reversed = false, isLast = fals
       />
 
       <div className={cn('grid gap-5', reversed && 'md:order-1')}>
-        <div className="text-muted flex items-baseline gap-3 font-mono text-xs tracking-[0.1em]">
+        <div className="text-app-muted flex items-baseline gap-3 font-mono text-xs tracking-wide">
           <span>{String(index).padStart(2, '0')}</span>
           <span className="text-line">/</span>
           <span className="text-ink">{project.shortLabel}</span>
         </div>
 
-        <h3 className="text-[clamp(24px,2.9vw,40px)] leading-[1.08] font-medium tracking-[-0.028em] text-pretty">
+        <h3 className="text-[clamp(24px,2.9vw,40px)] leading-tight font-medium tracking-wide text-pretty">
           {project.title}
         </h3>
 
-        <p className="text-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
+        <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
         <MetaList items={meta} />
 

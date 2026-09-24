@@ -15,7 +15,7 @@ export function SectionHeader({ index, title, className }: Props) {
       )}
     >
       <span className="text-app-accent-bright font-mono text-xs">{index}</span>
-      <h2 className="text-[clamp(28px,4.4vw,60px)] leading-none font-medium tracking-[-0.03em]">
+      <h2 className="text-[clamp(28px,4.4vw,60px)] leading-none font-medium tracking-tight">
         {title}
       </h2>
     </div>

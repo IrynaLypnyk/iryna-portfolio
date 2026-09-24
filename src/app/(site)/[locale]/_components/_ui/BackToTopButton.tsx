@@ -45,8 +45,8 @@ export function BackToTopButton() {
         'flex h-11 w-11 cursor-pointer items-center justify-center rounded-full',
         'bg-app-page text-app-ink shadow-lg',
         'border-app-line border',
-        'hover:bg-app-accent hover:text-app-on-dark active:bg-app-accent',
-        'transition-all duration-300',
+        'hover:bg-app-accent-bright hover:text-app-on-dark active:bg-app-accent',
+        'transition-all',
         isVisible ? 'translate-y-0 opacity-70' : 'pointer-events-none translate-y-4 opacity-0'
       )}
     >

@@ -11,7 +11,7 @@ export function ScrollToSectionLink({ anchor, children }: Props) {
   return (
     <a
       href={anchor}
-      className="text-app-accent hover:text-app-link-hover tracking-label inline-flex min-h-11 w-fit items-center gap-2.5 self-start font-mono text-[13px] uppercase transition-colors"
+      className="text-app-accent hover:text-app-link-hover inline-flex min-h-11 w-fit items-center gap-2.5 self-start font-mono text-[13px] tracking-wide uppercase transition-colors"
     >
       <span aria-hidden="true">→</span> {children}
     </a>

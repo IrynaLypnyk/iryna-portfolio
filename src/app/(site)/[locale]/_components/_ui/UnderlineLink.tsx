@@ -41,7 +41,7 @@ export function UnderlineLink({
   const classNames = cn(
     'inline-flex w-fit items-center gap-2 text-[15px] transition-colors',
     variant === 'underline'
-      ? 'border-b border-app-accent/20 pb-1.5 text-ink hover:text-app-accent'
+      ? 'border-b border-app-accent-light/80 pb-1.5 text-app-text hover:text-app-accent'
       : 'text-app-text hover:text-app-accent-dark',
     className
   );

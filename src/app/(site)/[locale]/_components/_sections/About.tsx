@@ -35,13 +35,13 @@ export function About() {
               className="object-cover object-[50%_22%]"
             />
           </div>
-          <figcaption className="text-app-muted font-mono text-[11.5px] tracking-[0.04em]">
+          <figcaption className="text-app-muted font-mono text-[11.5px] tracking-wide">
             {t('photoCaption')}
           </figcaption>
         </figure>
 
         <div className="grid max-w-155 gap-5">
-          <p className="text-[clamp(19px,1.9vw,24px)] leading-[1.5] tracking-[-0.016em] text-pretty">
+          <p className="text-[clamp(19px,1.9vw,24px)] leading-[1.5] tracking-normal text-pretty">
             {t('p1', { role: tCommon('role') })}
           </p>
           <p className="text-app-text text-[17px] leading-[1.68] text-pretty">
@@ -54,9 +54,9 @@ export function About() {
           <p className="text-app-text text-[17px] leading-[1.68] text-pretty">{t('p3')}</p>
 
           <MetaList
-            variant="panel"
+            variant="roomy"
             labelColor="blue"
-            labelWidth={130}
+            labelWidth={100}
             className="border-app-line border-t pt-6.5"
             items={[
               { label: t('labelCurrently'), value: t('currently') },

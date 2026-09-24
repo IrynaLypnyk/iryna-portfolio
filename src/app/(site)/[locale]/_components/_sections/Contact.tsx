@@ -20,9 +20,9 @@ export function Contact() {
       <div className="grid items-start gap-[clamp(36px,7vw,96px)] md:grid-cols-2">
         <div className="grid gap-7">
           <div className="grid gap-4.5">
-            <Kicker className="tracking-[0.12em]">{t('lead')}</Kicker>
+            <Kicker className="tracking-wide">{t('lead')}</Kicker>
 
-            <div className="text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-tight font-medium tracking-[-0.03em]">
+            <div className="text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-tight font-medium tracking-normal">
               {t('pitch1')}
               <br />
               {t('pitch2')}

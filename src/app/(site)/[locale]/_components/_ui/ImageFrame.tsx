@@ -5,7 +5,7 @@ import type { Photo } from '@/types/projects';
 type Props = {
   photo: Photo<string> | null;
   /** Shown inside the empty frame while a project has no cover yet. */
-  placeholder?: string;
+  placeholder?: string | null;
   priority?: boolean;
   sizes?: string;
   className?: string;
@@ -27,8 +27,9 @@ export function ImageFrame({
     <div
       data-component="ImageFrame"
       className={cn(
-        'border-border bg-shell relative aspect-16/10 overflow-hidden border',
-        className
+        'border-app-line bg-shell relative aspect-16/10 overflow-hidden border',
+        className,
+        !photo && 'project-placeholder'
       )}
     >
       {photo ? (
@@ -41,9 +42,9 @@ export function ImageFrame({
           className="object-cover"
         />
       ) : (
-        placeholder && (
-          <span className="text-muted absolute inset-0 flex items-center justify-center p-6 text-center font-mono text-xs tracking-[0.08em]">
-            {placeholder}
+        placeholder !== null && (
+          <span className="text-app-muted absolute inset-0 flex items-center justify-center p-6 text-center font-mono text-xs tracking-wide uppercase">
+            {placeholder || 'Cover coming soon'}
           </span>
         )
       )}

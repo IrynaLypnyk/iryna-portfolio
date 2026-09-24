@@ -58,8 +58,8 @@ export function MetaList({
     <dl
       data-component="MetaList"
       className={cn(
-        'm-0 grid',
-        isRoomy ? 'gap-3.5 text-[15px]' : 'text-muted gap-2.5 font-mono text-xs',
+        'text-app-muted m-0 grid',
+        isRoomy ? 'gap-3.5 text-[15px]' : 'gap-2.5 font-mono text-xs',
         className
       )}
     >
@@ -71,14 +71,13 @@ export function MetaList({
         >
           <dt
             className={cn(
-              isRoomy
-                ? 'text-muted pt-0.5 font-mono text-[2px] tracking-[0.09em] uppercase'
-                : 'tracking-label'
+              'text-app-muted',
+              isRoomy ? 'pt-0.5 font-mono text-[2px] tracking-wide uppercase' : 'tracking-label'
             )}
           >
             <Label color={labelColor}>{item.label}</Label>
           </dt>
-          <dd className={cn('m-0', !isRoomy && 'text-ink')}>{item.value}</dd>
+          <dd className={cn('m-0')}>{item.value}</dd>
         </div>
       ))}
     </dl>

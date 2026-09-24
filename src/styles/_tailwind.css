@@ -5,12 +5,15 @@
   --blue: #376dcd;
   --blue-dark: oklch(0.42 0.15 263);
   --blue-light: #84aaff;
+  --blue-sky: #eff6ff;
   --violet: #a0acec;
-  --white: #ffffff;
+  --violet-light: #e2eaff;
+  --white: #fff;
   --ivory: #faf6ec;
   --black: oklch(0.21 0.018 252);
   --gray-dark: oklch(0.34 0.016 252);
-  --gray: oklch(0.5 0.014 252);
+  --gray: oklch(0.4 0.014 252);
+  --gray-light: oklch(0.5 0.007 252);
   --yellow: #f4c94a;
   --gray-line: oklch(0.9 0.009 85);
   --gray-line-light: oklch(0.945 0.007 85);
@@ -19,8 +22,8 @@
 
   --page-max: 1600px;
   --header-height: 68px;
-  --page-pad-right: 20px;
-  --page-pad-left: 20px;
+  --page-pad-right: 16px;
+  --page-pad-left: 16px;
   --section-py: clamp(30px, 10vh, 70px);
 }
 
@@ -45,7 +48,7 @@
   /* ---- Tracking ---- */
   --tracking-tight: -0.02em; /* large display */
   --tracking-normal: 0;
-  --tracking-label: 0.08em; /* mono eyebrows, uppercase */
+  --tracking-wide: 0.08em; /* mono eyebrows, uppercase */
 
   /* ---- App Colors ---- */
   --color-app-page: var(--ivory);
@@ -55,13 +58,20 @@
   --color-app-on-dark: var(--white);
   --color-app-muted: var(--gray);
   --color-app-accent: var(--blue);
+  --color-app-accent-lightest: var(--blue-sky);
   --color-app-accent-light: var(--blue-light);
   --color-app-accent-bright: var(--azure);
   --color-app-accent-dark: var(--blue-dark);
+  --color-app-disabled: var(--gray-light);
 
   --color-app-danger: var(--color-red-400);
+  --color-app-success: var(--color-green-300);
   --color-app-yellow: var(--yellow);
+  --color-app-violet-light: var(--violet-light);
 
   --color-app-line: var(--gray-line);
   --color-app-line-soft: var(--gray-line-light);
+
+  /* ---- Animations ---- */
+  --default-transition-duration: 300ms;
 }

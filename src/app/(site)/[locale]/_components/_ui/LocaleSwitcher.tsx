@@ -33,7 +33,7 @@ export function LocaleSwitcher({ variant = 'boxed' }: Props) {
     <div
       data-component="LocaleSwitcher"
       className={cn(
-        'flex items-center',
+        'inline-flex items-center',
         isFooter
           ? 'gap-2.5 font-mono text-[11.5px]'
           : 'border-app-line min-h-8.5 gap-0.5 border p-0.5'
@@ -55,13 +55,13 @@ export function LocaleSwitcher({ variant = 'boxed' }: Props) {
                 isActive ? 'cursor-default' : 'cursor-pointer',
                 isFooter
                   ? cn(
-                      'border-b pb-0.5 tracking-[0.06em]',
+                      'border-b pb-0.5 tracking-wide',
                       isActive
                         ? 'border-app-accent text-app-ink font-medium'
                         : 'text-app-muted hover:text-app-ink border-transparent'
                     )
                   : cn(
-                      'px-2.5 py-1.5 font-mono text-xs tracking-[0.04em]',
+                      'px-2.5 py-1.5 font-mono text-xs tracking-wide',
                       isActive
                         ? 'bg-app-ink text-app-on-dark hover:bg-app-accent-bright'
                         : 'text-app-muted hover:text-app-ink'

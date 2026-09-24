@@ -2,12 +2,18 @@ import { ReactNode } from 'react';
 
 type Props = {
   children?: ReactNode;
+  htmlFor?: string;
+  required?: boolean;
 };
 
-export function FormLabel({ children }: Props) {
+export function FormLabel({ children, htmlFor, required }: Props) {
   return (
-    <div className="text-app-muted font-mono text-[11.5px] tracking-[0.09em] uppercase">
+    <label
+      htmlFor={htmlFor}
+      className="text-app-muted font-mono text-[11.5px] tracking-wide uppercase"
+    >
       {children}
-    </div>
+      {required ? <span className="text-app-danger"> *</span> : null}
+    </label>
   );
 }

@@ -69,7 +69,7 @@ export function BurgerMenuButton({ isMenuOpen, toggleMobileMenu }: Props) {
                     closed: {
                       y: 0,
                       rotate: 0,
-                      width: 36,
+                      width: 18,
                     },
                     open: {
                       y: -11,

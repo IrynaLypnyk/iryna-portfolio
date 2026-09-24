@@ -7,17 +7,19 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { AccentButton } from '@/app/(site)/[locale]/_components/_ui/AccentButton';
 import { apiRoutes } from '@/constants/routes';
-import { ErrorMessage } from '@/app/(site)/[locale]/_components/_ui/form/ErrorMessage';
-import { FormLabel } from '@/app/(site)/[locale]/_components/_ui/form/FormLabel';
-import { FormRow } from '@/app/(site)/[locale]/_components/_ui/form/FormRow';
 import { AppInput } from '@/app/(site)/[locale]/_components/_ui/form/AppInput';
 import { AppTextarea } from '@/app/(site)/[locale]/_components/_ui/form/AppTextarea';
+import { cn } from '@/lib/utils';
+import { HeartBlue } from '@/app/(site)/[locale]/_components/_ui/HeartBlue';
+import { Spinner } from '@/app/(site)/[locale]/_components/_ui/Spinner';
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
 export function ContactForm() {
   const t = useTranslations('Contact');
+
   const [status, setStatus] = useState<Status>('idle');
+  const [submittedName, setSubmittedName] = useState('');
 
   // Built here rather than at module scope so the messages resolve in the
   // active locale.
@@ -68,7 +70,7 @@ export function ContactForm() {
       if (!response.ok) {
         throw new Error('Request failed');
       }
-
+      setSubmittedName(values.name);
       setStatus('success');
       reset();
     } catch {
@@ -85,38 +87,76 @@ export function ContactForm() {
           ? t('error')
           : '';
 
+  if (status === 'success') {
+    return (
+      <div
+        data-status="success"
+        data-component="ContactForm"
+        className="flex min-h-50 items-center justify-center gap-2 p-[clamp(22px,3vw,34px)]"
+      >
+        <HeartBlue />
+        <p className="text-app-accent-bright tracking-wide">
+          {t('success', { name: submittedName })}{' '}
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit(onSubmit)}
-      data-component="ContactForm"
-      className="border-app-line bg-app-surface grid gap-4.5 border p-[clamp(22px,3vw,34px)]"
-    >
-      <FormRow>
-        <FormLabel>{t('formName')} </FormLabel>
-        <AppInput type="text" autoComplete="name" {...register('name')} />
-        {errors.name?.message && <ErrorMessage message={errors.name.message} />}
-      </FormRow>
+    <div className="relative">
+      {status === 'sending' && (
+        <div className="bg-app-surface/70 absolute inset-0 z-10 flex items-center justify-center">
+          <Spinner size={46} />
+        </div>
+      )}
 
-      <FormRow>
-        <FormLabel>{t('formEmail')}</FormLabel>
-        <AppInput type="email" autoComplete="email" {...register('email')} />
-        {errors.email?.message && <ErrorMessage message={errors.email.message} />}
-      </FormRow>
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        data-component="ContactForm"
+        className="border-app-line bg-app-surface grid gap-4.5 border p-[clamp(22px,3vw,34px)]"
+      >
+        <div className="flex flex-col gap-8">
+          <AppInput
+            type="text"
+            id="name"
+            autoComplete="name"
+            {...register('name')}
+            label={t('formName')}
+            errorMessage={errors.name?.message}
+          />
 
-      <FormRow>
-        <FormLabel>{t('formMessage')} </FormLabel>
-        <AppTextarea rows={4} {...register('message')} />
-        {errors.message?.message && <ErrorMessage message={errors.message.message} />}
-      </FormRow>
+          <AppInput
+            id="email"
+            type="email"
+            autoComplete="email"
+            {...register('email')}
+            label={t('formEmail')}
+            errorMessage={errors.email?.message}
+          />
 
-      <AccentButton type="submit" disabled={status === 'sending'} className="mt-1.5">
-        {t('formSend')}
-      </AccentButton>
+          <AppTextarea
+            id="message"
+            rows={4}
+            {...register('message')}
+            label={t('formMessage')}
+            errorMessage={errors.message?.message}
+          />
+          <AccentButton type="submit" disabled={status === 'sending'} className="mt-1.5 self-start">
+            {t('formSend')}
+          </AccentButton>
+        </div>
 
-      <p aria-live="polite" className="text-app-brand m-0 min-h-4.5 text-[13.5px]">
-        {statusMessage}
-      </p>
-    </form>
+        {status === 'error' && (
+          <p
+            data-status="error"
+            aria-live="polite"
+            className={cn('text-app-danger m-0 min-h-4.5 text-base')}
+          >
+            {statusMessage}
+          </p>
+        )}
+      </form>
+    </div>
   );
 }

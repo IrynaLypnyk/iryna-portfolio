@@ -56,10 +56,10 @@
     "p3": "Мені комфортно працювати самостійно й водночас співпрацювати з product, design і backend командами — від перших ідей до реалізації та запуску.",
     "labelCurrently": "Працюю",
     "labelLearning": "Досліджую",
-    "labelOutside": "Open source",
-    "currently": "Full-stack freelance-проєкт на Next.js, React 19, TypeScript, PostgreSQL і Prisma",
+    "labelOutside": "ДОЛУЧАЮСЬ",
+    "currently": "full-stack freelance-проєкт на Next.js, React 19, TypeScript, PostgreSQL і Prisma",
     "learning": "AI-assisted development і практичні способи інтеграції AI в реальні продукти",
-    "outside": { "p1": "Долучаюсь до ", "p2": "Women Coding Community" }
+    "outside": { "p1": "до open-source проєкту ", "p2": "Women Coding Community" }
   },
   "Contact": {
     "title": "Контакти",
@@ -73,7 +73,7 @@
     "formMessage": "Повідомлення",
     "formSend": "Надіслати",
     "sending": "Надсилаємо…",
-    "success": "Дякую — повідомлення надіслано.",
+    "success": "Дякую, {name} — повідомлення надіслано.",
     "error": "Щось пішло не так. Спробуйте ще раз.",
     "validation": {
       "nameRequired": "Введіть імʼя",

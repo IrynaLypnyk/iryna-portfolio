@@ -54,13 +54,13 @@
       "p2-3": ", Ukraine’s largest digital healthcare platform, where I grew from building interfaces with HTML, CSS and jQuery to owning and developing core features across patient- and doctor-facing parts of the platform with React, TypeScript and Redux."
     },
     "p3": "I’m comfortable working independently and collaborating across product, design and backend — from early ideas through to delivery.",
-    "labelCurrently": "Currently",
-    "labelLearning": "Interested in",
-    "labelOutside": "Open source",
-    "currently": "Building full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
+    "labelCurrently": "Building",
+    "labelLearning": "Exploring",
+    "labelOutside": "Contributing",
+    "currently": "building full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
     "learning": "AI-assisted development and practical ways to bring AI into real products",
     "outside": {
-      "p1": "Contributing to open source project ",
+      "p1": "to open source project ",
       "p2": "Women Coding Community"
     }
   },
@@ -76,7 +76,7 @@
     "formMessage": "Message",
     "formSend": "Send message",
     "sending": "Sending…",
-    "success": "Thank you — your message has been sent.",
+    "success": "Thank you, {name} — your message has been sent.",
     "error": "Something went wrong. Please try again.",
     "validation": {
       "nameRequired": "Enter your name",

@@ -11,10 +11,6 @@ export const routes = {
     projectNew: '/admin/projects/new',
     project: (id: string) => `/admin/projects/${id}`,
 
-    blog: '/admin/blog',
-    blogNew: '/admin/blog/new',
-    blogPost: (id: string) => `/admin/blog/${id}`,
-
     media: '/admin/media',
   },
 } as const;
