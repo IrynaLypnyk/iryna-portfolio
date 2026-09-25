@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { NavigationLabelKey } from '@/constants/navigation';
 
 type Props = {
-  id?: NavigationLabelKey;
+  /** Anchor id for the section. Not every section is a header-nav target. */
+  id?: string;
   children: ReactNode;
   className?: string;
 };

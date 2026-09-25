@@ -54,6 +54,16 @@
     "archiveNote": "Earlier work is shown honestly with year, role and stack. Its value is the original design and frontend craft, not the framework.",
     "empty": "Projects are being added. Check back shortly."
   },
+  "Playground": {
+    "title": "Playground",
+    "intro": "Small experiments: AI, animation, UI ideas and prototypes.",
+    "expLabel": "EXP {index}",
+    "demoLabel": "Live demo",
+    "githubLabel": "GitHub",
+    "coverPlaceholder": "{title} — demo",
+    "backToWork": "Back to selected work",
+    "empty": "Experiments are being added. Check back shortly."
+  },
   "About": {
     "title": "About",
     "photoCaption": "Tonbridge, UK",

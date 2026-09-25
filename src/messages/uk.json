@@ -54,6 +54,16 @@
     "archiveNote": "Ранні роботи показані чесно: рік, роль і технології. Їхня цінність — оригінальний дизайн і frontend craft, а не стек.",
     "empty": "Проєкти додаються. Завітайте трохи пізніше."
   },
+  "Playground": {
+    "title": "Playground",
+    "intro": "Невеликі експерименти: AI, анімація, UI-ідеї та прототипи.",
+    "expLabel": "EXP {index}",
+    "demoLabel": "Демо",
+    "githubLabel": "GitHub",
+    "coverPlaceholder": "{title} — демо",
+    "backToWork": "Назад до вибраних проєктів",
+    "empty": "Експерименти додаються. Завітайте трохи пізніше."
+  },
   "About": {
     "title": "Про мене",
     "photoCaption": "Тонбридж, UK",

@@ -11,6 +11,7 @@ export async function deleteMediaAssetIfUnused(assetId: string): Promise<{ delet
     id: assetId,
     defaultForPhotos: { none: {} },
     ukrainianForPhotos: { none: {} },
+    experimentCovers: { none: {} },
   };
   const asset = await prisma.mediaAsset.findFirst({
     where: unusedAsset,

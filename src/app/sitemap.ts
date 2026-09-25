@@ -1,4 +1,5 @@
 import { routing, type LocaleType } from '@/i18n/routing';
+import { routes } from '@/constants/routes';
 import { buildLocaleUrl } from '@/lib/seo/config';
 import type { MetadataRoute } from 'next';
 
@@ -23,11 +24,9 @@ function buildEntriesForPathname(
 
 /**
  * The public site is a one-pager plus a case-study page per published project,
- * so the sitemap is the home page and whatever is currently published.
+ * so the sitemap is the home page, the Playground page, and whatever project
+ * is currently published.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-
-  return [
-    ...buildEntriesForPathname(''),
-  ];
+  return [...buildEntriesForPathname(''), ...buildEntriesForPathname(routes.playground)];
 }

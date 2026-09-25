@@ -2,7 +2,7 @@
 
 import { IMAGEKIT_ROOT_FOLDER } from './config';
 
-type ImageKitFolderType = 'projects' | 'blog' | 'team';
+type ImageKitFolderType = 'projects' | 'blog' | 'team' | 'experiments';
 
 export function getImageKitFolder(type: ImageKitFolderType, ...segments: string[]) {
   return [IMAGEKIT_ROOT_FOLDER, type, ...segments].filter(Boolean).join('/').replace(/\/+/g, '/');

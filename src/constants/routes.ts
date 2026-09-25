@@ -2,6 +2,7 @@ export const routes = {
   home: '/',
 
   project: (slug: string) => `/projects/${slug}`,
+  playground: '/playground',
 
   admin: {
     root: '/admin',
@@ -11,6 +12,10 @@ export const routes = {
     projectNew: '/admin/projects/new',
     project: (id: string) => `/admin/projects/${id}`,
 
+    experiments: '/admin/experiments',
+    experimentNew: '/admin/experiments/new',
+    experiment: (id: string) => `/admin/experiments/${id}`,
+
     media: '/admin/media',
   },
 } as const;
@@ -18,6 +23,7 @@ export const routes = {
 export const anchors = {
   top: 'top',
   projects: 'projects',
+  playground: 'playground',
   about: 'about',
   contact: 'contact',
 } as const;
@@ -35,6 +41,11 @@ export const apiRoutes = {
       item: (id: string) => `/api/admin/photos/${id}`,
       reorder: '/api/admin/photos/reorder',
     },
+
+    experiments: '/api/admin/experiments',
+    experiment: (id: string) => `/api/admin/experiments/${id}`,
+    experimentCoverUpload: (id: string) => `/api/admin/experiments/${id}/cover/upload`,
+    experimentCoverUploadAuth: (id: string) => `/api/admin/experiments/${id}/cover/upload-auth`,
 
     auth: {
       login: '/api/admin/auth/login',

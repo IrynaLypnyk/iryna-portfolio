@@ -8,7 +8,9 @@ import { Hero } from '@/app/(site)/[locale]/_components/_sections/Hero';
 import { About } from '@/app/(site)/[locale]/_components/_sections/About';
 import { Contact } from '@/app/(site)/[locale]/_components/_sections/Contact';
 import { Projects } from '@/app/(site)/[locale]/_components/_sections/Projects';
+import { Playground } from '@/app/(site)/[locale]/_components/_sections/Playground';
 import { getPublishedProjects } from '@/lib/projects/get-published-projects';
+import { getPublishedExperiments } from '@/lib/data/experiments';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,13 +36,17 @@ export default async function IndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const projects = await getPublishedProjects(locale);
+  const [projects, experiments] = await Promise.all([
+    getPublishedProjects(locale),
+    getPublishedExperiments(locale),
+  ]);
 
   return (
     <div>
       <>
         <Hero />
         <Projects projects={projects} />
+        <Playground experiments={experiments} />
         <About />
         <Contact />
       </>

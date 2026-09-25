@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ExternalLink, FolderKanban, Home, Images, Menu, X } from 'lucide-react';
+import { ExternalLink, FlaskConical, FolderKanban, Home, Images, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SITE_URL } from '@/lib/seo/config';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
@@ -14,6 +14,7 @@ import { LogoIcon } from '@/assets/icons';
 const NAV_LINKS = [
   { href: routes.admin.root, label: 'Головна', icon: Home },
   { href: routes.admin.projects, label: 'Проєкти', icon: FolderKanban },
+  { href: routes.admin.experiments, label: 'Playground', icon: FlaskConical },
   { href: routes.admin.media, label: 'Медіа', icon: Images },
 ] as const;
 

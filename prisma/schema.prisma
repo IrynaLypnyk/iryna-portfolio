@@ -114,11 +114,42 @@ model MediaAsset {
   width          Int
   height         Int
 
-  defaultForPhotos   Photo[] @relation("DefaultPhotoAsset")
-  ukrainianForPhotos Photo[] @relation("UkrainianPhotoAsset")
+  defaultForPhotos   Photo[]      @relation("DefaultPhotoAsset")
+  ukrainianForPhotos Photo[]      @relation("UkrainianPhotoAsset")
+  experimentCovers   Experiment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// A small Playground experiment (AI/animation/UI prototype), shown as a
+/// compact card on the home page and a full article on `/playground`.
+/// Single cover image — unlike `Project`, experiments don't need a gallery.
+model Experiment {
+  id   String @id @default(cuid())
+  slug String @unique
+
+  titleUk String
+  titleEn String
+
+  descriptionUk String
+  descriptionEn String
+
+  stack String?
+
+  demoUrl   String?
+  githubUrl String?
+
+  coverAssetId String?
+  coverAsset   MediaAsset? @relation(fields: [coverAssetId], references: [id], onDelete: SetNull)
+
+  order     Int     @default(0)
+  published Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, order])
 }
 
 model Photo {
