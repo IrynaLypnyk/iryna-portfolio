@@ -4,12 +4,15 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { apiRoutes, routes } from '@/constants/routes';
+import { useConfirmLeave } from './UnsavedChangesProvider';
 
 export default function LogoutButton() {
   const router = useRouter();
+  const confirmLeave = useConfirmLeave();
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
+    if (!confirmLeave()) return;
     setLoading(true);
 
     try {

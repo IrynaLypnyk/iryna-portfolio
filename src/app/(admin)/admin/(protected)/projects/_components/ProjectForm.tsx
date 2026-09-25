@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
-import { AdminDeleteDialog } from '@/app/(admin)/admin/(protected)/_components/AdminDeleteDialog';
+import {
+  useConfirmLeave,
+  useUnsavedChanges,
+} from '@/app/(admin)/admin/(protected)/_components/UnsavedChangesProvider';
 import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
 import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/AdminTextarea';
 import { apiRoutes, routes } from '@/constants/routes';
@@ -121,12 +124,20 @@ function toSectionDrafts(project: ProjectWithSections | undefined): SectionDraft
 
 const labelStyles = 'mb-1 block text-xs font-semibold tracking-wider text-neutral-500 uppercase';
 
+function snapshot(form: FormState, sections: SectionDraft[]) {
+  return JSON.stringify({ form, sections: sections.map(({ key: _key, ...section }) => section) });
+}
+
 export function ProjectForm({ mode, project }: Props) {
   const router = useRouter();
   const [form, setForm] = useState<FormState>(() => toFormState(project));
   const [sections, setSections] = useState<SectionDraft[]>(() => toSectionDrafts(project));
   const [isSaving, setIsSaving] = useState(false);
-  const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
+  const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form, sections));
+  const currentSnapshot = snapshot(form, sections);
+  const isDirty = currentSnapshot !== savedSnapshot;
+  useUnsavedChanges(isDirty);
+  const confirmLeave = useConfirmLeave();
 
   function updateField<Key extends keyof FormState>(key: Key, value: FormState[Key]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -167,6 +178,8 @@ export function ProjectForm({ mode, project }: Props) {
       }
 
       toast.success(mode === 'create' ? 'Проєкт створено' : 'Проєкт оновлено');
+      // Only mark the submitted values as saved; edits made during the request remain dirty.
+      setSavedSnapshot(currentSnapshot);
 
       if (mode === 'create' && result.project) {
         router.push(routes.admin.project(result.project.id));
@@ -428,29 +441,24 @@ export function ProjectForm({ mode, project }: Props) {
 
       <SectionsEditor sections={sections} onChangeAction={setSections} />
 
-      <div className="flex justify-end gap-3">
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        <span role="status" className="text-app-danger mr-auto text-sm">
+          {isDirty ? 'Є незбережені зміни' : ''}
+        </span>
         <AdminButton
           variant="outline"
           type="button"
-          onClickAction={() => setIsConfirmingCancel(true)}
+          onClickAction={() => {
+            if (confirmLeave()) router.push(routes.admin.projects);
+          }}
           disabled={isSaving}
         >
           Скасувати зміни
         </AdminButton>
-        <AdminButton type="submit" disabled={isSaving}>
+        <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
           {isSaving ? 'Збереження…' : mode === 'create' ? 'Створити проєкт' : 'Зберегти зміни'}
         </AdminButton>
       </div>
-
-      {isConfirmingCancel && (
-        <AdminDeleteDialog
-          title="Скасувати зміни?"
-          description="Незбережені зміни буде втрачено. Ви повернетеся до списку проєктів."
-          confirmLabel="Скасувати зміни"
-          onConfirmAction={() => router.push(routes.admin.projects)}
-          onCancelAction={() => setIsConfirmingCancel(false)}
-        />
-      )}
     </form>
   );
 }

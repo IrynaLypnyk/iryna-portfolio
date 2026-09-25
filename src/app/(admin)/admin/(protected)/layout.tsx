@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { requireAuth } from '@/lib/auth';
 import { AdminNav } from '@/app/(admin)/admin/(protected)/_components/AdminNav';
 import { routes } from '@/constants/routes';
+import { UnsavedChangesProvider } from './_components/UnsavedChangesProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,9 +23,11 @@ export default async function ProtectedAdminLayout({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen">
-      <AdminNav />
-      {children}
-    </div>
+    <UnsavedChangesProvider>
+      <div className="min-h-screen">
+        <AdminNav />
+        {children}
+      </div>
+    </UnsavedChangesProvider>
   );
 }

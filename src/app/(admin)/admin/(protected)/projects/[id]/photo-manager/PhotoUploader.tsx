@@ -16,6 +16,7 @@ type Props = {
   // Reorder mode
   isReorderMode: boolean;
   isSavingOrder: boolean;
+  hasUnsavedOrder: boolean;
   onSaveOrderAction: () => void;
   onExitReorderAction: (save: boolean) => void;
 };
@@ -27,6 +28,7 @@ export function PhotoUploader({
   onEnterReorderAction,
   isReorderMode,
   isSavingOrder,
+  hasUnsavedOrder,
   onSaveOrderAction,
   onExitReorderAction,
 }: Props) {
@@ -42,7 +44,11 @@ export function PhotoUploader({
   } = usePhotoUpload({ projectId, onPhotoUploadedAction });
 
   function handleExitClick() {
-    setConfirmingExit(true);
+    if (hasUnsavedOrder) {
+      setConfirmingExit(true);
+    } else {
+      onExitReorderAction(false);
+    }
   }
 
   function handleExitWithSave() {
@@ -76,7 +82,11 @@ export function PhotoUploader({
         {isReorderMode ? (
           <div className="flex flex-wrap items-center gap-2">
             {/* Reorder mode toolbar */}
-            <AdminButton onClickAction={onSaveOrderAction} disabled={isSavingOrder}>
+            <AdminButton
+              tone={hasUnsavedOrder ? 'danger' : 'default'}
+              onClickAction={onSaveOrderAction}
+              disabled={isSavingOrder}
+            >
               {isSavingOrder ? 'Збереження…' : 'Зберегти порядок'}
             </AdminButton>
             <AdminButton variant="outline" onClickAction={handleExitClick} disabled={isSavingOrder}>

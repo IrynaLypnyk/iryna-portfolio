@@ -17,6 +17,7 @@ import type {
   RowStatus,
 } from './photo-manager/types';
 import { apiRoutes } from '@/constants/routes';
+import { useUnsavedChanges } from '../../_components/UnsavedChangesProvider';
 
 export type { PhotoRow } from './photo-manager/types';
 
@@ -179,6 +180,11 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
   }
 
   const sortedItems = items.slice().sort((a, b) => a.orderInProject - b.orderInProject);
+  const hasUnsavedOrder =
+    isReorderMode &&
+    (reorderItems.length !== sortedItems.length ||
+      reorderItems.some((item, index) => item.id !== sortedItems[index]?.id));
+  useUnsavedChanges(hasUnsavedOrder);
 
   return (
     <div className="min-w-0 space-y-4">
@@ -189,6 +195,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
         onEnterReorderAction={enterReorderMode}
         isReorderMode={isReorderMode}
         isSavingOrder={isSavingOrder}
+        hasUnsavedOrder={hasUnsavedOrder}
         onSaveOrderAction={saveOrder}
         onExitReorderAction={exitReorder}
       />
