@@ -32,7 +32,6 @@ export function Projects({ projects }: Props) {
           key={project.slug}
           project={project}
           index={position + 1}
-          reversed={position % 2 === 1}
           isLast={position === featured.length - 1}
         />
       ))}

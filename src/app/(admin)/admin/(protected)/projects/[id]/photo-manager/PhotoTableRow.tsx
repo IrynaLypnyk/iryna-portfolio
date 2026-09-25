@@ -57,7 +57,7 @@ export function PhotoTableRow({
         />
       </td>
 
-      {/* Captions */}
+      {/* Captions, gallery link & description */}
       <td className="px-3 py-3">
         <div className="grid gap-2 sm:grid-cols-2">
           <AdminInput
@@ -76,6 +76,36 @@ export function PhotoTableRow({
             aria-label="Підпис (EN)"
             onChange={(event) =>
               onDraftChangeAction(item.id, 'captionEn', event.target.value || null)
+            }
+          />
+
+          <AdminInput
+            type="url"
+            value={item.draft.linkUrl ?? ''}
+            placeholder="Посилання для галереї (необов'язково)"
+            aria-label="Посилання для галереї"
+            className="sm:col-span-2"
+            onChange={(event) =>
+              onDraftChangeAction(item.id, 'linkUrl', event.target.value || null)
+            }
+          />
+
+          <AdminInput
+            type="text"
+            value={item.draft.descriptionUk ?? ''}
+            placeholder="Опис у галереї (UA)"
+            aria-label="Опис у галереї (UA)"
+            onChange={(event) =>
+              onDraftChangeAction(item.id, 'descriptionUk', event.target.value || null)
+            }
+          />
+          <AdminInput
+            type="text"
+            value={item.draft.descriptionEn ?? ''}
+            placeholder="Опис у галереї (EN)"
+            aria-label="Опис у галереї (EN)"
+            onChange={(event) =>
+              onDraftChangeAction(item.id, 'descriptionEn', event.target.value || null)
             }
           />
         </div>

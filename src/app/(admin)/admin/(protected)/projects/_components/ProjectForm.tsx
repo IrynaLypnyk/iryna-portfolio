@@ -13,6 +13,7 @@ import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInp
 import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/AdminTextarea';
 import { apiRoutes, routes } from '@/constants/routes';
 import { SectionsEditor, type SectionDraft } from './SectionsEditor';
+import { FeaturesEditor, type FeatureDraft } from './FeaturesEditor';
 
 /** Every field is held as a string so the inputs stay controlled. */
 type FormState = {
@@ -37,6 +38,8 @@ type FormState = {
   linkLabelEn: string;
   linkNoteUk: string;
   linkNoteEn: string;
+  githubUrl: string;
+  storybookUrl: string;
   order: string;
   featured: boolean;
   published: boolean;
@@ -72,6 +75,8 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
       linkLabelEn: '',
       linkNoteUk: '',
       linkNoteEn: '',
+      githubUrl: '',
+      storybookUrl: '',
       order: '0',
       featured: false,
       published: true,
@@ -100,6 +105,8 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
     linkLabelEn: project.linkLabelEn ?? '',
     linkNoteUk: project.linkNoteUk ?? '',
     linkNoteEn: project.linkNoteEn ?? '',
+    githubUrl: project.githubUrl ?? '',
+    storybookUrl: project.storybookUrl ?? '',
     order: String(project.order),
     featured: project.featured,
     published: project.published,
@@ -122,19 +129,40 @@ function toSectionDrafts(project: ProjectWithSections | undefined): SectionDraft
   }));
 }
 
+/**
+ * Zips the two locale arrays into paired drafts by position. Falls back to an
+ * empty string on either side if a legacy project has mismatched lengths.
+ */
+function toFeatureDrafts(featuresUk: string[], featuresEn: string[]): FeatureDraft[] {
+  const length = Math.max(featuresUk.length, featuresEn.length);
+
+  return Array.from({ length }, (_unused, index) => ({
+    key: crypto.randomUUID(),
+    uk: featuresUk[index] ?? '',
+    en: featuresEn[index] ?? '',
+  }));
+}
+
 const labelStyles = 'mb-1 block text-xs font-semibold tracking-wider text-neutral-500 uppercase';
 
-function snapshot(form: FormState, sections: SectionDraft[]) {
-  return JSON.stringify({ form, sections: sections.map(({ key: _key, ...section }) => section) });
+function snapshot(form: FormState, sections: SectionDraft[], features: FeatureDraft[]) {
+  return JSON.stringify({
+    form,
+    sections: sections.map(({ key: _key, ...section }) => section),
+    features: features.map(({ uk, en }) => ({ uk, en })),
+  });
 }
 
 export function ProjectForm({ mode, project }: Props) {
   const router = useRouter();
   const [form, setForm] = useState<FormState>(() => toFormState(project));
   const [sections, setSections] = useState<SectionDraft[]>(() => toSectionDrafts(project));
+  const [features, setFeatures] = useState<FeatureDraft[]>(() =>
+    toFeatureDrafts(project?.featuresUk ?? [], project?.featuresEn ?? [])
+  );
   const [isSaving, setIsSaving] = useState(false);
-  const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form, sections));
-  const currentSnapshot = snapshot(form, sections);
+  const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form, sections, features));
+  const currentSnapshot = snapshot(form, sections, features);
   const isDirty = currentSnapshot !== savedSnapshot;
   useUnsavedChanges(isDirty);
   const confirmLeave = useConfirmLeave();
@@ -158,6 +186,8 @@ export function ProjectForm({ mode, project }: Props) {
       // `key` is a client-only React identity; the server rebuilds order from
       // array position.
       sections: sections.map(({ key: _key, ...section }) => section),
+      featuresUk: features.map(({ uk }) => uk),
+      featuresEn: features.map(({ en }) => en),
     };
 
     try {
@@ -416,6 +446,26 @@ export function ProjectForm({ mode, project }: Props) {
           />
         </label>
 
+        <label>
+          <span className={labelStyles}>{"GitHub (необов'язково)"}</span>
+          <AdminInput
+            type="url"
+            value={form.githubUrl}
+            onChange={(event) => updateField('githubUrl', event.target.value)}
+            placeholder="https://github.com/user/repo"
+          />
+        </label>
+
+        <label>
+          <span className={labelStyles}>{"Storybook (необов'язково)"}</span>
+          <AdminInput
+            type="url"
+            value={form.storybookUrl}
+            onChange={(event) => updateField('storybookUrl', event.target.value)}
+            placeholder="https://example.storybook.io"
+          />
+        </label>
+
         <div className="flex flex-wrap gap-6 sm:col-span-2">
           <label className="flex items-center gap-2 text-sm text-neutral-700">
             <input
@@ -440,6 +490,8 @@ export function ProjectForm({ mode, project }: Props) {
       </div>
 
       <SectionsEditor sections={sections} onChangeAction={setSections} />
+
+      <FeaturesEditor features={features} onChangeAction={setFeatures} />
 
       <div className="flex flex-wrap items-center justify-end gap-3">
         <span role="status" className="text-app-danger mr-auto text-sm">

@@ -11,7 +11,6 @@ const meta = {
   argTypes: {
     project: { control: false },
     index: { control: { type: 'number', min: 1, max: 20 } },
-    reversed: { control: 'boolean' },
     isLast: { control: 'boolean' },
   },
 } satisfies Meta<typeof ProjectArticle>;
@@ -19,12 +18,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Image left, copy right. `index` is zero-padded into the "01" kicker. */
+/** Compact row layout. `index` is zero-padded into the "01" kicker. */
 export const Default: Story = {};
 
-/** `reversed` flips the grid — the page alternates sides down the list. */
-export const Reversed: Story = {
-  args: { reversed: true, index: 2 },
+/**
+ * Has features and multiple photos, so the `+` toggle renders. Click the
+ * title or the toggle to reveal the "Key features" grid, gallery, and CTA.
+ */
+export const Expandable: Story = {
+  args: { project: featuredProject },
+};
+
+/**
+ * No features and at most one photo: nothing extra to expand into, so the
+ * toggle is hidden and the CTA falls back to always-visible.
+ */
+export const NotExpandable: Story = {
+  args: { project: projectWithoutCover, index: 2 },
 };
 
 /** The meta list only renders the rows that exist, so no empty `<dt>` appears. */
@@ -43,11 +53,11 @@ export const Last: Story = {
 };
 
 /** Two in sequence, the way `Projects` renders them. */
-export const AlternatingPair: Story = {
+export const Sequence: Story = {
   render: () => (
     <div>
       <ProjectArticle project={featuredProject} index={1} />
-      <ProjectArticle project={projectWithoutCover} index={2} reversed isLast />
+      <ProjectArticle project={projectWithoutCover} index={2} isLast />
     </div>
   ),
 };

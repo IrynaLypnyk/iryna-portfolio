@@ -3,6 +3,9 @@ export type PhotoUpdateInput = {
   isProjectCover: boolean;
   captionUk: string | null;
   captionEn: string | null;
+  linkUrl: string | null;
+  descriptionUk: string | null;
+  descriptionEn: string | null;
 };
 
 type ValidationResult =
@@ -24,7 +27,15 @@ export function validatePhotoUpdateInput(body: unknown): ValidationResult {
     return { error: 'Некоректні дані запиту' };
   }
 
-  const { orderInProject, isProjectCover, captionUk, captionEn } = body as Record<string, unknown>;
+  const {
+    orderInProject,
+    isProjectCover,
+    captionUk,
+    captionEn,
+    linkUrl,
+    descriptionUk,
+    descriptionEn,
+  } = body as Record<string, unknown>;
 
   if (typeof orderInProject !== 'number' || !Number.isInteger(orderInProject)) {
     return { error: 'Порядок має бути цілим числом' };
@@ -38,12 +49,33 @@ export function validatePhotoUpdateInput(body: unknown): ValidationResult {
     return { error: 'captionEn має бути рядком або null' };
   }
 
+  if (!isNullableString(linkUrl)) {
+    return { error: 'linkUrl має бути рядком або null' };
+  }
+
+  const normalizedLinkUrl = linkUrl?.trim() || null;
+
+  if (normalizedLinkUrl !== null && !/^https?:\/\//.test(normalizedLinkUrl)) {
+    return { error: 'Посилання для галереї має починатися з http:// або https://' };
+  }
+
+  if (!isNullableString(descriptionUk)) {
+    return { error: 'descriptionUk має бути рядком або null' };
+  }
+
+  if (!isNullableString(descriptionEn)) {
+    return { error: 'descriptionEn має бути рядком або null' };
+  }
+
   return {
     data: {
       orderInProject,
       isProjectCover: isProjectCover === true,
       captionUk: normalizeCaption(captionUk),
       captionEn: normalizeCaption(captionEn),
+      linkUrl: normalizedLinkUrl,
+      descriptionUk: normalizeCaption(descriptionUk),
+      descriptionEn: normalizeCaption(descriptionEn),
     },
   };
 }

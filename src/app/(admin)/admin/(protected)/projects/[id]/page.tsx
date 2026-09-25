@@ -43,6 +43,9 @@ export default async function EditProjectPage({ params }: Props) {
     isProjectCover: photo.isProjectCover,
     captionUk: photo.captionUk,
     captionEn: photo.captionEn,
+    linkUrl: photo.linkUrl,
+    descriptionUk: photo.descriptionUk,
+    descriptionEn: photo.descriptionEn,
   }));
 
   return (

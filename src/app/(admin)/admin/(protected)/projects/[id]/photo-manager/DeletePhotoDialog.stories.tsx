@@ -12,11 +12,17 @@ const photo: EditablePhoto = {
   isProjectCover: false,
   captionUk: null,
   captionEn: null,
+  linkUrl: null,
+  descriptionUk: null,
+  descriptionEn: null,
   draft: {
     orderInProject: 1,
     isProjectCover: false,
     captionUk: null,
     captionEn: null,
+    linkUrl: null,
+    descriptionUk: null,
+    descriptionEn: null,
   },
 };
 

@@ -30,6 +30,8 @@ export function toPhoto(
     width: photo.asset.width,
     height: photo.asset.height,
     alt: caption ?? pick(locale, project.titleUk, project.titleEn),
+    linkUrl: photo.linkUrl,
+    description: pick(locale, photo.descriptionUk, photo.descriptionEn),
   };
 }
 
@@ -49,6 +51,12 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
     featured: project.featured,
     order: project.order,
     coverPhoto: cover ? toPhoto(project, cover, locale) : null,
+    features: locale === 'uk' ? project.featuresUk : project.featuresEn,
+    externalUrl: project.externalUrl,
+    linkLabel: pick(locale, project.linkLabelUk, project.linkLabelEn),
+    githubUrl: project.githubUrl,
+    storybookUrl: project.storybookUrl,
+    photos: project.photos.map((photo) => toPhoto(project, photo, locale)),
   };
 }
 
@@ -75,8 +83,6 @@ export function toProjectDetail(
     ...toProjectData(project, locale),
     index: pad(position >= 0 ? position + 1 : project.order),
     lead: pick(locale, project.leadUk, project.leadEn),
-    externalUrl: project.externalUrl,
-    linkLabel: pick(locale, project.linkLabelUk, project.linkLabelEn),
     linkNote: pick(locale, project.linkNoteUk, project.linkNoteEn),
     sections: project.sections.map((section, index) => ({
       id: section.id,
@@ -85,7 +91,6 @@ export function toProjectDetail(
       body: pick(locale, section.bodyUk, section.bodyEn),
       body2: pick(locale, section.body2Uk, section.body2En),
     })),
-    photos: project.photos.map((photo) => toPhoto(project, photo, locale)),
     next: nextProject
       ? {
           slug: nextProject.slug,

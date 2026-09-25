@@ -8,7 +8,7 @@ type Props = {
 
 export function MoreWorkRow({ project }: Props) {
   const stamp = [project.stack, project.yearLabel].filter(Boolean).join(' · ');
-  console.log(project);
+
   return (
     <div
       data-component="MoreWorkRow"

@@ -11,6 +11,8 @@ export const samplePhoto: Photo<string> = {
   width: 1600,
   height: 1000,
   alt: 'A laptop on a desk showing a dashboard interface',
+  linkUrl: null,
+  description: null,
 };
 
 export const featuredProject: ProjectData = {
@@ -27,6 +29,26 @@ export const featuredProject: ProjectData = {
   featured: true,
   order: 1,
   coverPhoto: samplePhoto,
+  features: [
+    'Token pipeline that regenerates every platform target from one source',
+    'Accessible-by-default primitives with built-in focus and contrast checks',
+    'Versioned docs site with live, editable code examples',
+    'Automated visual regression suite gating every merge',
+  ],
+  externalUrl: 'https://atlas-design-system.example.com',
+  linkLabel: 'Live product',
+  githubUrl: 'https://github.com/example/atlas-design-system',
+  storybookUrl: 'https://atlas-design-system.storybook.example.com',
+  photos: [
+    samplePhoto,
+    { ...samplePhoto, id: 'photo-2', description: 'Token editor with live contrast checks' },
+    {
+      ...samplePhoto,
+      id: 'photo-3',
+      description: 'Component docs, generated from source',
+      linkUrl: 'https://atlas-design-system.storybook.example.com',
+    },
+  ],
 };
 
 /** Same shape, no cover — exercises the `ImageFrame` placeholder path. */
@@ -40,6 +62,7 @@ export const projectWithoutCover: ProjectData = {
   status: 'In progress',
   yearLabel: '2025',
   coverPhoto: null,
+  photos: [],
 };
 
 /** Minimal project: every optional field null, to check the layout never collapses. */
@@ -56,6 +79,12 @@ export const sparseProject: ProjectData = {
   featured: false,
   order: 9,
   coverPhoto: null,
+  features: [],
+  externalUrl: null,
+  linkLabel: null,
+  githubUrl: null,
+  storybookUrl: null,
+  photos: [],
 };
 
 export const moreWorkProject: ProjectData = {

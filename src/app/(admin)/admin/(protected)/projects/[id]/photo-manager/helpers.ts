@@ -6,6 +6,9 @@ export function toEditableFields(photo: PhotoRow): EditableFields {
     isProjectCover: photo.isProjectCover,
     captionUk: photo.captionUk,
     captionEn: photo.captionEn,
+    linkUrl: photo.linkUrl,
+    descriptionUk: photo.descriptionUk,
+    descriptionEn: photo.descriptionEn,
   };
 }
 
@@ -21,6 +24,9 @@ export function isDraftEqual(a: EditableFields, b: EditableFields): boolean {
     a.orderInProject === b.orderInProject &&
     a.isProjectCover === b.isProjectCover &&
     a.captionUk === b.captionUk &&
-    a.captionEn === b.captionEn
+    a.captionEn === b.captionEn &&
+    a.linkUrl === b.linkUrl &&
+    a.descriptionUk === b.descriptionUk &&
+    a.descriptionEn === b.descriptionEn
   );
 }

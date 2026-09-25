@@ -29,6 +29,10 @@ export type ProjectInput = {
   linkLabelEn: string | null;
   linkNoteUk: string | null;
   linkNoteEn: string | null;
+  featuresUk: string[];
+  featuresEn: string[];
+  githubUrl: string | null;
+  storybookUrl: string | null;
   order: number;
   featured: boolean;
   published: boolean;
@@ -90,6 +94,19 @@ function validateSections(value: unknown): ProjectSectionInput[] | string {
   return sections;
 }
 
+/** Array of non-empty trimmed strings, or an error message if malformed. */
+function validateFeatures(value: unknown): string[] | string {
+  if (value === undefined || value === null) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    return 'Фічі мають бути масивом';
+  }
+
+  return value.filter(isNonEmptyString).map((feature) => feature.trim());
+}
+
 /**
  * Validates and normalizes the create/update payload for a project.
  * Shared by the POST (create) and PATCH (update) admin API routes.
@@ -121,6 +138,10 @@ export function validateProjectInput(body: unknown): ValidationResult {
     linkLabelEn,
     linkNoteUk,
     linkNoteEn,
+    featuresUk,
+    featuresEn,
+    githubUrl,
+    storybookUrl,
     order,
     featured,
     published,
@@ -153,10 +174,34 @@ export function validateProjectInput(body: unknown): ValidationResult {
     return { error: 'Посилання має починатися з http:// або https://' };
   }
 
+  const normalizedGithubUrl = optionalText(githubUrl);
+
+  if (normalizedGithubUrl !== null && !/^https?:\/\//.test(normalizedGithubUrl)) {
+    return { error: 'Посилання на GitHub має починатися з http:// або https://' };
+  }
+
+  const normalizedStorybookUrl = optionalText(storybookUrl);
+
+  if (normalizedStorybookUrl !== null && !/^https?:\/\//.test(normalizedStorybookUrl)) {
+    return { error: 'Посилання на Storybook має починатися з http:// або https://' };
+  }
+
   const normalizedSections = validateSections(sections);
 
   if (typeof normalizedSections === 'string') {
     return { error: normalizedSections };
+  }
+
+  const normalizedFeaturesUk = validateFeatures(featuresUk);
+
+  if (typeof normalizedFeaturesUk === 'string') {
+    return { error: normalizedFeaturesUk };
+  }
+
+  const normalizedFeaturesEn = validateFeatures(featuresEn);
+
+  if (typeof normalizedFeaturesEn === 'string') {
+    return { error: normalizedFeaturesEn };
   }
 
   return {
@@ -182,6 +227,10 @@ export function validateProjectInput(body: unknown): ValidationResult {
       linkLabelEn: optionalText(linkLabelEn),
       linkNoteUk: optionalText(linkNoteUk),
       linkNoteEn: optionalText(linkNoteEn),
+      featuresUk: normalizedFeaturesUk,
+      featuresEn: normalizedFeaturesEn,
+      githubUrl: normalizedGithubUrl,
+      storybookUrl: normalizedStorybookUrl,
       order,
       featured: featured === true,
       published: published !== false,

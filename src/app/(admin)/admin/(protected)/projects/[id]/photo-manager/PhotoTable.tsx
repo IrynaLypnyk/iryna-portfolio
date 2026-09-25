@@ -34,7 +34,7 @@ export function PhotoTable({
             <tr>
               <th className={`${photoTableHeadCellStyles} w-32`}>Зображення</th>
               <th className={`${photoTableHeadCellStyles} w-36`}>Обкладинка</th>
-              <th className={photoTableHeadCellStyles}>Підписи</th>
+              <th className={photoTableHeadCellStyles}>Підписи, посилання та опис у галереї</th>
               <th className={`${photoTableHeadCellStyles} w-36`}>Дії</th>
             </tr>
           </thead>

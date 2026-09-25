@@ -7,6 +7,9 @@ export type PhotoRow = {
   isProjectCover: boolean;
   captionUk: string | null;
   captionEn: string | null;
+  linkUrl: string | null;
+  descriptionUk: string | null;
+  descriptionEn: string | null;
 };
 
 export type PhotoManagerProps = {
@@ -17,7 +20,13 @@ export type PhotoManagerProps = {
 
 export type EditableFields = Pick<
   PhotoRow,
-  'orderInProject' | 'isProjectCover' | 'captionUk' | 'captionEn'
+  | 'orderInProject'
+  | 'isProjectCover'
+  | 'captionUk'
+  | 'captionEn'
+  | 'linkUrl'
+  | 'descriptionUk'
+  | 'descriptionEn'
 >;
 
 export type EditablePhoto = PhotoRow & {

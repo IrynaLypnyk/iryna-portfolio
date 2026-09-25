@@ -62,6 +62,12 @@ model Project {
   linkNoteUk  String?
   linkNoteEn  String?
 
+  featuresUk String[] @default([])
+  featuresEn String[] @default([])
+
+  githubUrl    String?
+  storybookUrl String?
+
   order     Int     @default(0)
   featured  Boolean @default(false)
   published Boolean @default(true)
@@ -132,6 +138,10 @@ model Photo {
 
   captionUk String?
   captionEn String?
+
+  linkUrl       String?
+  descriptionUk String?
+  descriptionEn String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

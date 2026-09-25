@@ -10,7 +10,6 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
     include: {
       photos: {
         orderBy: [{ isProjectCover: 'desc' }, { orderInProject: 'asc' }, { id: 'asc' }],
-        take: 1,
         include: { asset: true, assetUk: true },
       },
     },
@@ -22,6 +21,26 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
     const title = isUkrainian ? project.titleUk : project.titleEn;
     const cover = project.photos[0];
     const asset = cover && (isUkrainian ? (cover.assetUk ?? cover.asset) : cover.asset);
+
+    const photos = project.photos.flatMap((photo) => {
+      const photoAsset = isUkrainian ? (photo.assetUk ?? photo.asset) : photo.asset;
+
+      if (!photoAsset) {
+        return [];
+      }
+
+      return [
+        {
+          id: photo.id,
+          src: getImageUrl(photoAsset.src),
+          width: photoAsset.width,
+          height: photoAsset.height,
+          alt: (isUkrainian ? photo.captionUk : photo.captionEn) || title,
+          linkUrl: photo.linkUrl,
+          description: isUkrainian ? photo.descriptionUk : photo.descriptionEn,
+        },
+      ];
+    });
 
     return {
       slug: project.slug,
@@ -43,8 +62,16 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
               width: asset.width,
               height: asset.height,
               alt: (isUkrainian ? cover.captionUk : cover.captionEn) || title,
+              linkUrl: cover.linkUrl,
+              description: isUkrainian ? cover.descriptionUk : cover.descriptionEn,
             }
           : null,
+      features: isUkrainian ? project.featuresUk : project.featuresEn,
+      externalUrl: project.externalUrl,
+      linkLabel: isUkrainian ? project.linkLabelUk : project.linkLabelEn,
+      githubUrl: project.githubUrl,
+      storybookUrl: project.storybookUrl,
+      photos,
     };
   });
 }

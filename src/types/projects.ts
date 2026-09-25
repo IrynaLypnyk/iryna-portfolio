@@ -17,14 +17,18 @@ export type ProjectData = {
   featured: boolean;
   order: number;
   coverPhoto: Photo<string> | null;
+  features: string[];
+  externalUrl: string | null;
+  linkLabel: string | null;
+  githubUrl: string | null;
+  storybookUrl: string | null;
+  photos: Photo<string>[];
 };
 
 /** A localized case study with its sections, photos, and next project. */
 export type ProjectDetail = ProjectData & {
   index: string;
   lead: string;
-  externalUrl: string | null;
-  linkLabel: string | null;
   linkNote: string | null;
   sections: {
     id: string;
@@ -33,7 +37,6 @@ export type ProjectDetail = ProjectData & {
     body: string;
     body2: string | null;
   }[];
-  photos: Photo<string>[];
   next: { slug: string; title: string } | null;
 };
 
@@ -48,4 +51,8 @@ export type Photo<TText> = {
   width: number;
   height: number;
   alt: TText;
+  /** Where a gallery thumbnail links out to, if anywhere. */
+  linkUrl: string | null;
+  /** Short caption shown on hover in the case-study gallery. */
+  description: TText | null;
 };
