@@ -71,7 +71,7 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
     >
       <div
         className={cn(
-          'group -pr-(--page-pad-right) relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] md:grid-cols-[minmax(160px,220px)_minmax(0,1fr)_auto]',
+          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] pr-(--page-pad-right) md:grid-cols-[minmax(160px,220px)_minmax(0,1fr)_auto]',
           expandable && 'cursor-pointer'
         )}
       >

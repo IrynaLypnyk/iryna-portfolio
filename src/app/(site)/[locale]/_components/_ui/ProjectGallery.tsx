@@ -22,16 +22,6 @@ export function ProjectGallery({ photos }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  function scrollBy(direction: -1 | 1) {
-    const track = trackRef.current;
-
-    if (!track) {
-      return;
-    }
-
-    track.scrollBy({ left: direction * track.clientWidth * 0.9, behavior: 'smooth' });
-  }
-
   // Memoized so this array keeps a stable reference across re-renders that
   // don't touch `photos` — the lightbox resets its own current slide back to
   // its opening index whenever it receives a new slides array reference, so
@@ -80,17 +70,24 @@ export function ProjectGallery({ photos }: Props) {
             </button>
 
             {(photo.description || photo.linkUrl) && (
-              <>
+              <p>
                 {photo.description && (
-                  <p className="text-app-muted max-w-full leading-snug">{photo.description}</p>
-                )}
-
+                  <span className="text-app-muted max-w-full leading-snug">
+                    {photo.description}
+                  </span>
+                )}{' '}
                 {photo.linkUrl && (
-                  <AppLink href={photo.linkUrl} external arrow="right" color="blueBright">
+                  <AppLink
+                    href={photo.linkUrl}
+                    external
+                    arrow="right"
+                    color="blueBright"
+                    className="inline-flex"
+                  >
                     {t('demoLabel')}
                   </AppLink>
                 )}
-              </>
+              </p>
             )}
           </div>
         ))}
