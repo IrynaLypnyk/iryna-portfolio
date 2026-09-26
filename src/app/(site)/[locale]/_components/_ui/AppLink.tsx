@@ -49,7 +49,7 @@ export function AppLink({
     'inline-flex w-fit items-center gap-2 transition-colors',
     variant === 'underline' &&
       'border-b border-app-accent-light/80 pb-1.2 hover:border-app-accent-bright',
-    fontMono ? 'font-mono uppercase text-[13px] tracking-wide' : 'font-sans text-base',
+    fontMono ? 'font-mono uppercase text-[13px] tracking-widest' : 'font-sans text-base',
     COLOR_CLASSNAME[color],
     className
   );

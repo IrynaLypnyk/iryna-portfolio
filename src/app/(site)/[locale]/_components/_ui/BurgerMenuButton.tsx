@@ -46,7 +46,7 @@ export function BurgerMenuButton({ isMenuOpen, toggleMobileMenu }: Props) {
                 />
 
                 <motion.span
-                  className="bg-app-accent-bright absolute top-1/2 right-0 h-0.5 rounded-full"
+                  className="bg-app-accent-bright absolute top-1/2 right-0 h-0.5"
                   variants={{
                     closed: {
                       x: 0,

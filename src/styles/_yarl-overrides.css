@@ -1,0 +1,33 @@
+.yarl__root {
+  --yarl__color_backdrop: var(--color-app-page);
+}
+
+.yarl__container {
+  background: var(--yarl__color_backdrop);
+}
+
+.yarl__slide {
+  padding-top: 70px !important;
+}
+
+.yarl__slide_captions_container,
+.yarl__slide_title_container {
+  background: unset !important;
+}
+
+/*.yarl__slide_title {*/
+/*  font-family: var(--font-sans);*/
+/*}*/
+
+.yarl__thumbnails_thumbnail {
+  opacity: 0.55;
+  transition: opacity 250ms ease;
+}
+
+.yarl__thumbnails_thumbnail_active {
+  opacity: 1;
+}
+
+.yarl__button {
+  filter: none !important;
+}

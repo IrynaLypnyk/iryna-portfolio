@@ -12,6 +12,7 @@
   },
   "Navigation": {
     "projects": "Проєкти",
+    "playground": "Playground",
     "about": "Про мене",
     "contact": "Контакти"
   },
@@ -32,7 +33,7 @@
   },
   "Work": {
     "title": "Вибрані проєкти",
-    "description": "Тут проєкти, над якими я працювала або продовжую працювати.",
+    "description": "Проєкти, над якими я працювала або продовжую працювати.",
     "labelRole": "РОЛЬ",
     "labelStack": "STACK",
     "labelStatus": "СТАТУС",

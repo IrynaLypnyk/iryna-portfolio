@@ -1,12 +1,11 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ImageFrame } from './ImageFrame';
 import { AppLink } from './AppLink';
 import { ImageLightbox, type GalleryImage } from '@/components/ImageLightbox';
 import type { Photo } from '@/types/projects';
+import Image from 'next/image';
 
 type Props = {
   photos: Photo<string>[];
@@ -58,64 +57,65 @@ export function ProjectGallery({ photos }: Props) {
     <div data-component="ProjectGallery" className="grid gap-3">
       <div
         ref={trackRef}
-        className="flex snap-x snap-mandatory items-start gap-3 overflow-x-auto pb-1"
+        className="scrollbar-hide flex snap-x snap-mandatory items-start gap-3 overflow-x-auto pb-1"
       >
         {photos.map((photo, index) => (
-          <div key={photo.id} className="grid w-[55%] shrink-0 snap-start gap-1.5 sm:w-[30%]">
+          <div
+            key={photo.id}
+            className="flex max-w-107.5 min-w-0 shrink-0 snap-start flex-col gap-1.5"
+          >
             <button
               type="button"
               onClick={() => setLightboxIndex(index)}
               aria-label={t('openPhoto', { index: index + 1, count: photos.length })}
               className="cursor-zoom-in"
             >
-              <ImageFrame photo={photo} sizes="(min-width: 768px) 25vw, 50vw" className="w-full" />
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                className="h-75 w-auto"
+              />
             </button>
 
             {(photo.description || photo.linkUrl) && (
-              <div className="grid gap-0.5">
+              <>
                 {photo.description && (
-                  <p className="text-app-muted text-[12.5px] leading-snug text-pretty">
-                    {photo.description}
-                  </p>
+                  <p className="text-app-muted max-w-full leading-snug">{photo.description}</p>
                 )}
 
                 {photo.linkUrl && (
-                  <AppLink
-                    href={photo.linkUrl}
-                    external
-                    arrow="upRight"
-                    color="blue"
-                    className="text-[12.5px]"
-                  >
+                  <AppLink href={photo.linkUrl} external arrow="right" color="blueBright">
                     {t('demoLabel')}
                   </AppLink>
                 )}
-              </div>
+              </>
             )}
           </div>
         ))}
       </div>
 
-      {photos.length > 1 && (
-        <div className="flex gap-2">
-          <button
-            type="button"
-            aria-label={t('galleryPrev')}
-            onClick={() => scrollBy(-1)}
-            className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"
-          >
-            <ChevronLeft size={16} strokeWidth={1.75} />
-          </button>
-          <button
-            type="button"
-            aria-label={t('galleryNext')}
-            onClick={() => scrollBy(1)}
-            className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"
-          >
-            <ChevronRight size={16} strokeWidth={1.75} />
-          </button>
-        </div>
-      )}
+      {/*{photos.length > 1 && (*/}
+      {/*  <div className="flex gap-2">*/}
+      {/*    <button*/}
+      {/*      type="button"*/}
+      {/*      aria-label={t('galleryPrev')}*/}
+      {/*      onClick={() => scrollBy(-1)}*/}
+      {/*      className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"*/}
+      {/*    >*/}
+      {/*      <ChevronLeft size={16} strokeWidth={1.75} />*/}
+      {/*    </button>*/}
+      {/*    <button*/}
+      {/*      type="button"*/}
+      {/*      aria-label={t('galleryNext')}*/}
+      {/*      onClick={() => scrollBy(1)}*/}
+      {/*      className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"*/}
+      {/*    >*/}
+      {/*      <ChevronRight size={16} strokeWidth={1.75} />*/}
+      {/*    </button>*/}
+      {/*  </div>*/}
+      {/*)}*/}
 
       <ImageLightbox
         photos={slides}

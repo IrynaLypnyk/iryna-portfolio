@@ -9,7 +9,8 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
 import { CloseIcon } from '@/assets/icons';
-import { ArrowHorizontalLong } from '@/components/ArrowHorizontalLong';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 
 type ImageCaption = {
   title?: string;
@@ -88,11 +89,11 @@ export const ImageLightbox = ({
           showThumbnails
             ? {
                 position: 'bottom',
-                width: 52,
+                width: 72,
                 height: 52,
                 gap: 10,
                 border: 0,
-                borderRadius: 8,
+                borderRadius: 0,
                 padding: 0,
                 imageFit: 'cover',
                 vignette: true,
@@ -101,22 +102,20 @@ export const ImageLightbox = ({
         }
         render={{
           iconPrev: () => (
-            <ArrowHorizontalLong
-              direction="left"
-              width={90}
-              strokeWidth={2}
-              className="text-accent-pale hover:text-paper hidden md:inline-block"
-            />
+            <ActionBox>
+              <ArrowLeft width={90} strokeWidth={1.5} className="hidden md:inline-block" />
+            </ActionBox>
           ),
           iconNext: () => (
-            <ArrowHorizontalLong
-              direction="right"
-              width={90}
-              strokeWidth={2}
-              className="text-accent-pale hover:text-paper hidden md:inline-block"
-            />
+            <ActionBox>
+              <ArrowRight width={90} strokeWidth={1.5} className="hidden md:inline-block" />
+            </ActionBox>
           ),
-          iconClose: () => <CloseIcon className="h-9 w-9" />,
+          iconClose: () => (
+            <span className="text-app-muted hover:text-app-accent-bright">
+              <CloseIcon className="h-9 w-9" />
+            </span>
+          ),
         }}
       />
       {/*
@@ -133,7 +132,7 @@ export const ImageLightbox = ({
         (currentCaption.title || currentCaption.subtitle) &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="pointer-events-none fixed inset-x-0 top-0 z-[10000] bg-black/50 px-4 py-3">
+          <div className="bg-app-page/30 pointer-events-none fixed inset-x-0 top-0 z-10000 px-4 py-3">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={currentIndex}
@@ -141,17 +140,16 @@ export const ImageLightbox = ({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.18 }}
+                className="max-w-80"
               >
-                <p className="text-[14px] leading-none font-bold tracking-tight text-white uppercase sm:text-[16px]">
+                <p className="text-app-text">
                   {currentCaption.title}
-                  <span className="text-accent-pale ml-3 text-[12px] font-bold tracking-widest normal-case">
-                    {currentIndex + 1} / {currentCaption.photosCount ?? photos.length}
+                  <span className="text-app-text ml-3 normal-case">
+                    {currentIndex + 1}&nbsp;/&nbsp;{currentCaption.photosCount ?? photos.length}
                   </span>
                 </p>
                 {currentCaption.subtitle && (
-                  <p className="text-accent-pale mt-0.5 text-[14px] font-semibold tracking-wide">
-                    {currentCaption.subtitle}
-                  </p>
+                  <p className="text-app-text mt-0.5">{currentCaption.subtitle}</p>
                 )}
               </motion.div>
             </AnimatePresence>

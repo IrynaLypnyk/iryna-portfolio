@@ -13,6 +13,8 @@ import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGal
 import { routes } from '@/constants/routes';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
+import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
+import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 
 type Props = {
   project: ProjectData;
@@ -41,54 +43,35 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
     project.storybookUrl && { href: project.storybookUrl, label: t('storybookLabel') },
   ].filter((link): link is { href: string; label: string } => Boolean(link));
 
-  if (links.length > 0) {
-    meta.push({
-      label: t('labelLinks'),
-      value: (
-        // Sits above the card's full-cover toggle button (see below) so these
-        // links stay independently clickable instead of triggering expand/collapse.
-        <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
-          {links.map((link) => (
-            <AppLink
-              key={link.label}
-              href={link.href}
-              external
-              arrow="upRight"
-              color="blue"
-              fontMono
-              className="text-[12px]"
-            >
-              {link.label}
-            </AppLink>
-          ))}
-        </div>
-      ),
-    });
-  }
-
   const expandedMeta: MetaItem[] = [];
 
   if (project.status) {
-    expandedMeta.push({ label: t('labelStatus'), value: project.status });
+    meta.push({ label: t('labelStatus'), value: project.status });
   }
 
   if (project.yearLabel) {
-    expandedMeta.push({ label: t('labelYear'), value: project.yearLabel });
+    meta.push({ label: t('labelYear'), value: project.yearLabel });
   }
 
+  if (project.features.length > 0) {
+    expandedMeta.push({
+      label: t('labelFeatures'),
+      value: <ProjectFeatures features={project.features} />,
+    });
+  }
   const expandable = project.features.length > 0 || project.photos.length > 1;
 
   return (
     <article
       data-component="ProjectArticle"
       className={cn(
-        'border-app-line grid gap-5 border-b',
+        'border-app-line -mr-(--page-pad-right) grid gap-7 overflow-visible border-b',
         isLast ? 'pb-[clamp(32px,6vh,64px)]' : 'pb-[clamp(28px,5vh,56px)]'
       )}
     >
       <div
         className={cn(
-          'group relative grid items-center gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] md:grid-cols-[minmax(160px,220px)_minmax(0,1fr)_auto]',
+          'group -pr-(--page-pad-right) relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] md:grid-cols-[minmax(160px,220px)_minmax(0,1fr)_auto]',
           expandable && 'cursor-pointer'
         )}
       >
@@ -99,7 +82,7 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
             aria-controls={panelId}
             aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
             onClick={() => setOpen((current) => !current)}
-            className="absolute inset-0 z-0 border-0 bg-transparent p-0"
+            className="absolute inset-0 z-0 cursor-pointer border-0 bg-transparent p-0"
           />
         )}
 
@@ -120,8 +103,8 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
 
           <h3
             className={cn(
-              'text-[clamp(22px,2.6vw,34px)] leading-tight font-medium tracking-wide text-pretty transition-colors',
-              expandable && 'group-hover:text-app-accent'
+              'text-[clamp(22px,2.6vw,34px)] leading-tight font-medium tracking-normal text-pretty transition-colors',
+              expandable && 'group-hover:text-app-ink'
             )}
           >
             {project.title}
@@ -129,16 +112,30 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
 
           <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
-          <MetaList items={meta} />
+          <MetaList items={meta} variant="compact" labelColor="blue" />
+
+          {links.length > 0 && (
+            <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
+              {links.map((link) => (
+                <AppLink
+                  key={link.label}
+                  href={link.href}
+                  external
+                  arrow="upRight"
+                  color="black"
+                  variant="underline"
+                >
+                  {link.label}
+                </AppLink>
+              ))}
+            </div>
+          )}
         </div>
 
         {expandable && (
-          <div
-            aria-hidden="true"
-            className="border-app-accent-bright text-app-accent-bright group-hover:bg-app-accent-bright flex h-9 w-9 shrink-0 items-center justify-center border transition-colors group-hover:text-white md:justify-self-end"
-          >
-            {open ? <Minus size={16} strokeWidth={1.75} /> : <Plus size={16} strokeWidth={1.75} />}
-          </div>
+          <ActionBox>
+            {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
+          </ActionBox>
         )}
       </div>
 
@@ -150,52 +147,53 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="overflow-hidden"
+            className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7"
           >
-            <div className="grid gap-6 pb-2">
-              {expandedMeta.length > 0 && <MetaList items={expandedMeta} />}
-
-              {project.features.length > 0 && (
-                <div className="grid gap-3">
-                  <Kicker as="h4">{t('labelFeatures')}</Kicker>
-                  <ProjectFeatures features={project.features} />
-                </div>
+            <div className="grid gap-6 pb-4">
+              {expandedMeta.length > 0 && (
+                <MetaList
+                  items={expandedMeta}
+                  labelColor="blue"
+                  variant="panel"
+                  labelWidth={130}
+                  className="pb-4"
+                />
               )}
 
               {project.photos.length > 1 && (
                 <div className="grid gap-3">
-                  <Kicker as="h4">{t('labelGallery')}</Kicker>
+                  <Label color="blue">{t('labelGallery')}</Label>
                   <ProjectGallery photos={project.photos} />
                 </div>
               )}
 
-              <div className="border-app-line mt-2 border-t pt-5">
-                <AppLink
-                  href={routes.project(project.slug)}
-                  internal
-                  variant="plain"
-                  arrow="right"
-                  color="blueBright"
-                >
-                  {t('caseCta')}
-                </AppLink>
-              </div>
+              {/*<div className="border-app-line mt-2 border-t pt-5">*/}
+              {/*  <AppLink*/}
+              {/*    href={routes.project(project.slug)}*/}
+              {/*    internal*/}
+              {/*    variant="plain"*/}
+              {/*    arrow="right"*/}
+              {/*    color="blueBright"*/}
+              {/*  >*/}
+              {/*    {t('caseCta')}*/}
+              {/*  </AppLink>*/}
+              {/*</div>*/}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {!expandable && (
-        <AppLink
-          href={routes.project(project.slug)}
-          internal
-          variant="plain"
-          arrow="right"
-          color="blueBright"
-        >
-          {t('caseCta')}
-        </AppLink>
-      )}
+      {/*{!expandable && (*/}
+      {/*  <AppLink*/}
+      {/*    href={routes.project(project.slug)}*/}
+      {/*    internal*/}
+      {/*    variant="plain"*/}
+      {/*    arrow="right"*/}
+      {/*    color="blueBright"*/}
+      {/*  >*/}
+      {/*    {t('caseCta')}*/}
+      {/*  </AppLink>*/}
+      {/*)}*/}
     </article>
   );
 }

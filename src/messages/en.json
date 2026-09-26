@@ -12,6 +12,7 @@
   },
   "Navigation": {
     "projects": "Projects",
+    "playground": "Playground",
     "about": "About",
     "contact": "Contact"
   },
@@ -31,8 +32,8 @@
     "metaStatus": "Open to opportunities"
   },
   "Work": {
-    "title": "Latest work",
-    "description": "Here, you’ll find projects I’ve worked on or continue to develop.",
+    "title": "Selected work",
+    "description": "Projects I’ve worked on or continue to develop.",
     "labelRole": "ROLE",
     "labelStack": "STACK",
     "labelStatus": "STATUS",

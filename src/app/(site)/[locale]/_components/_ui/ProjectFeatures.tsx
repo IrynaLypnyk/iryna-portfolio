@@ -10,8 +10,8 @@ export function ProjectFeatures({ features }: Props) {
       className="grid gap-x-6 gap-y-2.5 text-[15px] sm:grid-cols-2"
     >
       {features.map((feature) => (
-        <li key={feature} className="text-app-muted flex gap-2.5">
-          <span aria-hidden="true" className="bg-app-accent mt-2.5 h-1 w-1 shrink-0 rounded-full" />
+        <li key={feature} className="text-app-muted flex items-center gap-2.5">
+          <span aria-hidden="true" className="bg-app-accent-bright h-2 w-2 shrink-0" />
           {feature}
         </li>
       ))}

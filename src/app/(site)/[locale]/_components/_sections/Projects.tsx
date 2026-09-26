@@ -6,6 +6,7 @@ import type { ProjectData } from '@/types/projects';
 import { MoreWorkRow } from '@/app/(site)/[locale]/_components/_layouts/MoreWorkRow';
 import { ProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
+import { SectionIntro } from '@/app/(site)/[locale]/_components/_ui/SectionIntro';
 
 type Props = {
   projects: ProjectData[];
@@ -20,8 +21,7 @@ export function Projects({ projects }: Props) {
   return (
     <Section id={anchors.projects}>
       <SectionHeader index="01" title={t('title')} />
-
-      <p className="text-app-text pb-8 font-mono text-[17px]">{t('description')}</p>
+      <SectionIntro>{t('description')}</SectionIntro>
 
       {featured.length === 0 && moreWork.length === 0 && (
         <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>

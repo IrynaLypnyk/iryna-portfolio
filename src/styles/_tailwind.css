@@ -60,6 +60,7 @@
   --tracking-tight: -0.02em; /* large display */
   --tracking-normal: 0;
   --tracking-wide: 0.08em; /* mono eyebrows, uppercase */
+  --tracking-widest: 0.12em; /* mono eyebrows, uppercase */
 
   /* ---- App Colors ---- */
   --color-app-page: var(--ivory);

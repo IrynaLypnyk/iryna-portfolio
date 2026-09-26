@@ -23,7 +23,7 @@ export function About() {
 
   return (
     <Section id={anchors.about}>
-      <SectionHeader index="02" title={t('title')} />
+      <SectionHeader index="03" title={t('title')} />
       <div className="grid items-start gap-[clamp(32px,6vw,88px)] md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
         <figure className="m-0 grid gap-3">
           <div className="bg-shell relative aspect-4/5 w-full">

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 type Props = {
   index: string;
   title: string;
+  subtitle?: string;
   className?: string;
 };
 export function SectionHeader({ index, title, className }: Props) {

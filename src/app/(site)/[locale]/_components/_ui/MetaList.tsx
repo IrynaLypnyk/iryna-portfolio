@@ -10,7 +10,8 @@ export type MetaItem = {
 type Props = {
   items: MetaItem[];
   /** Width of the `<dt>` column for the row variants. 68px in project blocks, 116px in About. */
-  labelWidth?: number;
+  labelWidth?: number | string;
+  columnGap?: number | string;
   /**
    * `compact` — mono rows inside a project block.
    * `roomy`   — body-size rows in About.
@@ -24,6 +25,7 @@ type Props = {
 export function MetaList({
   items,
   labelWidth = 68,
+  columnGap,
   variant = 'compact',
   labelColor = 'gray',
   className,
@@ -66,8 +68,13 @@ export function MetaList({
       {items.map((item) => (
         <div
           key={item.label}
-          className="grid gap-3"
-          style={{ gridTemplateColumns: `${labelWidth}px minmax(0, 1fr)` }}
+          className={`grid gap-[${columnGap}]`}
+          style={{
+            gridTemplateColumns:
+              labelWidth !== undefined
+                ? `${typeof labelWidth === 'number' ? `${labelWidth}px` : labelWidth} minmax(0, 1fr)`
+                : undefined,
+          }}
         >
           <dt
             className={cn(

@@ -9,7 +9,7 @@ import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
 
 const contactAppLinkProps = {
   arrow: 'right',
-  color: 'black',
+  color: 'gray',
   variant: 'underline',
   arrowPosition: 'after',
 } satisfies Pick<AppLinkProps, 'arrow' | 'color' | 'variant' | 'arrowPosition'>;
@@ -22,12 +22,12 @@ export function Contact() {
       id={anchors.contact}
       // className="pt-[clamp(88px,16vh,196px)] pb-[clamp(64px,10vh,120px)]"
     >
-      <SectionHeader index="03" title={t('title')} className="mb-[clamp(40px,7vh,84px)]" />
+      <SectionHeader index="04" title={t('title')} className="mb-[clamp(40px,7vh,84px)]" />
 
       <div className="grid items-start gap-[clamp(36px,7vw,96px)] md:grid-cols-2">
         <div className="grid gap-7">
           <div className="grid gap-4.5">
-            <Kicker className="tracking-wide">{t('lead')}</Kicker>
+            <Kicker className="text-app-ink font-medium tracking-wide">{t('lead')}</Kicker>
 
             <div className="text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-tight font-medium tracking-normal">
               {t('pitch1')}

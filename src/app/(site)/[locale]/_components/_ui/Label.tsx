@@ -12,7 +12,7 @@ export function Label({
     <span
       data-component="Label"
       className={cn(
-        'font-mono text-[11.5px] tracking-wide uppercase',
+        'font-mono text-[11.5px] tracking-widest uppercase',
         color === 'gray' ? 'text-app-text' : 'text-app-accent-bright'
       )}
     >

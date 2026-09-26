@@ -50,6 +50,10 @@ html {
   );
 }
 
+.site--blurred {
+  filter: blur(8px);
+}
+
 @keyframes spinner-svg-rotate {
   from {
     transform: rotate(-90deg);
