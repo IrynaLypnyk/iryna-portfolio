@@ -6,7 +6,7 @@
     "prepare": "husky",
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "prisma generate && npm run check && next build && npm run db:migrate:vercel",
+    "vercel-build": "prisma generate && npm run check && npm run db:migrate:vercel && next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "next typegen && tsc --noEmit",
