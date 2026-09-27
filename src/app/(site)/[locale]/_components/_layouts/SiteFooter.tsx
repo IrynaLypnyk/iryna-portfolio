@@ -3,7 +3,6 @@ import { PageContainer } from '@/app/(site)/[locale]/_components/_ui/PageContain
 import { LocaleSwitcher } from '@/app/(site)/[locale]/_components/_ui/LocaleSwitcher';
 import { PLAYLIST_URL, SUPPORT_UKRAINE_URL } from '@/constants/contacts';
 import { SupportMark } from '@/app/(site)/[locale]/_components/_ui/SupportMark';
-import { TextLink } from '@/app/(site)/[locale]/_components/_ui/TextLink';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
 export function SiteFooter() {

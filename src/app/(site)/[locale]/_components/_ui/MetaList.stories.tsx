@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { MetaList } from './MetaList';
-import { TextLink } from './TextLink';
 
 const meta = {
   title: 'UI/MetaList',
