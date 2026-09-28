@@ -47,7 +47,7 @@ export function MetaList({
             <dt>
               <Label color={labelColor}>{item.label}</Label>
             </dt>
-            <dd className="text-app-muted m-0 text-base">{item.value}</dd>
+            <dd className="text-app-muted m-0 ml-1 text-base">{item.value}</dd>
           </div>
         ))}
       </dl>
@@ -84,7 +84,7 @@ export function MetaList({
           >
             <Label color={labelColor}>{item.label}</Label>
           </dt>
-          <dd className={cn('m-0')}>{item.value}</dd>
+          <dd className={cn('m-0 ml-1')}>{item.value}</dd>
         </div>
       ))}
     </dl>

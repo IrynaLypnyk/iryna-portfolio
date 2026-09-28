@@ -1,5 +1,6 @@
 'use client';
 
+import { MouseEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { headerNavItems } from '@/constants/navigation';
@@ -7,6 +8,22 @@ import { cn } from '@/lib/utils';
 
 export function SectionNav({ activeId }: { activeId: string }) {
   const t = useTranslations('Navigation');
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    const section = document.getElementById(id);
+
+    // Section exists => we're already on the homepage.
+    if (!section) return;
+
+    event.preventDefault();
+
+    section.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+
+    window.history.pushState(null, '', `#${id}`);
+  };
 
   return (
     <div className="flex items-center gap-[clamp(14px,3vw,34px)]">
@@ -17,12 +34,11 @@ export function SectionNav({ activeId }: { activeId: string }) {
           <Link
             key={item.id}
             href={item.href}
-            aria-current={isActive ? 'true' : undefined}
+            onClick={(event) => handleClick(event, item.id)}
+            aria-current={isActive ? 'page' : undefined}
             className={cn(
-              'text-app-muted transition-colors',
-              isActive
-                ? 'border-app-accent text-app-ink border-b font-semibold'
-                : 'text-app-muted hover:text-app-ink border-transparent'
+              'text-app-muted border-b border-transparent transition-colors',
+              isActive ? 'border-app-accent text-app-ink font-semibold' : 'hover:text-app-ink'
             )}
           >
             {t(item.labelKey)}

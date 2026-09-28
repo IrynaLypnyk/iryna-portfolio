@@ -56,6 +56,9 @@ export function AppLink({
   const arrowIcon = ARROWS[arrow];
   const renderArrowIcon = arrowIcon ? <span aria-hidden="true">{arrowIcon}</span> : null;
 
+  const isAnchor = href.startsWith('#');
+  console.log({ isAnchor });
+
   const content = (
     <>
       {arrowPosition === 'before' && renderArrowIcon}
@@ -64,7 +67,7 @@ export function AppLink({
     </>
   );
 
-  if (internal) {
+  if (internal && !isAnchor) {
     return (
       <Link href={href} data-component="AppLink" className={classNames}>
         {content}

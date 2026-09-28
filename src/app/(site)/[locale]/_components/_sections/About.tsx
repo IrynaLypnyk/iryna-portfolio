@@ -35,9 +35,9 @@ export function About() {
               className="object-cover object-[50%_22%]"
             />
           </div>
-          <figcaption className="text-app-muted font-mono text-[11.5px] tracking-wide">
-            {t('photoCaption')}
-          </figcaption>
+          {/*<figcaption className="text-app-muted font-mono text-[11.5px] tracking-wide">*/}
+          {/*  {t('photoCaption')}*/}
+          {/*</figcaption>*/}
         </figure>
 
         <div className="grid max-w-155 gap-5">

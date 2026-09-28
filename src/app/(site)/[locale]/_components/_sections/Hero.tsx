@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
-import { anchors, routes } from '@/constants/routes';
+import { anchors } from '@/constants/routes';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
@@ -26,7 +26,7 @@ export function Hero() {
             <p>{t('body', { role })}</p>
           </div>
           <AppLink
-            href={`${routes.home}#${anchors.projects}`}
+            href={`#${anchors.projects}`}
             fontMono={true}
             arrow="right"
             arrowPosition="before"

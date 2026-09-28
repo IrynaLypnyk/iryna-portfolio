@@ -1,3 +1,4 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import { Kicker } from '@/app/(site)/[locale]/_components/_ui/Kicker';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
@@ -6,6 +7,7 @@ import { ContactForm } from '@/app/(site)/[locale]/_components/_layouts/ContactF
 import { CONTACT_INFO, SOCIAL_LINKS } from '@/constants/contacts';
 import { anchors } from '@/constants/routes';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
+import { useState } from 'react';
 
 const contactAppLinkProps = {
   arrow: 'right',
@@ -16,6 +18,14 @@ const contactAppLinkProps = {
 
 export function Contact() {
   const t = useTranslations('Contact');
+  const [copied, setCopied] = useState(false);
+
+  async function copyEmail() {
+    await navigator.clipboard.writeText(CONTACT_INFO.email);
+    setCopied(true);
+
+    setTimeout(() => setCopied(false), 1500);
+  }
 
   return (
     <Section
@@ -38,16 +48,27 @@ export function Contact() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-6">
-            <AppLink href={`mailto:${CONTACT_INFO.email}`} {...contactAppLinkProps}>
-              {t('emailMe')}
-            </AppLink>
-            <AppLink href={SOCIAL_LINKS.linkedin} external {...contactAppLinkProps}>
-              LinkedIn
-            </AppLink>
-            <AppLink href={SOCIAL_LINKS.github} external {...contactAppLinkProps}>
-              GitHub
-            </AppLink>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap gap-6">
+              <AppLink href={SOCIAL_LINKS.linkedin} external {...contactAppLinkProps}>
+                LinkedIn
+              </AppLink>
+              <AppLink href={SOCIAL_LINKS.github} external {...contactAppLinkProps}>
+                GitHub
+              </AppLink>
+              <div className="flex gap-2">
+                <AppLink href={`mailto:${CONTACT_INFO.email}`} {...contactAppLinkProps}>
+                  {t('emailMe')}
+                </AppLink>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="text-app-muted/70 hover:text-app-accent-bright cursor-pointer font-mono text-[10px] tracking-[0.14em] uppercase"
+                >
+                  {copied ? 'Copied' : 'Copy email'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
