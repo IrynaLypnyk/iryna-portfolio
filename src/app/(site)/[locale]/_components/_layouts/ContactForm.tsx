@@ -82,7 +82,7 @@ export function ContactForm() {
     status === 'sending'
       ? t('sending')
       : status === 'success'
-        ? t('success')
+        ? t('success', { name: submittedName })
         : status === 'error'
           ? t('error')
           : '';
