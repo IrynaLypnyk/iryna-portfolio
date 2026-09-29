@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     const safeMessage = escapeHtml(message).replaceAll('\n', '<br />');
 
     const { error } = await resend.emails.send({
-      from: 'Portfolio <onboarding@resend.dev>',
+      from: 'Iryna Lypnyk Portfolio <hello@irynalypnyk.com>',
       to: [contactEmail],
       replyTo: email,
       subject: `Portfolio contact from ${name}`,
