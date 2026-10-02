@@ -5,10 +5,6 @@ import { AdminMediaPreview } from './AdminMediaPreview';
 const meta: Meta<typeof AdminMediaPreview> = {
   title: 'Admin/AdminMediaPreview',
   component: AdminMediaPreview,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-  },
   args: {
     src: '/storybook/logo.png',
     alt: '',

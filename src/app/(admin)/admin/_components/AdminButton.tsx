@@ -13,6 +13,7 @@ type CommonProps = {
   tone?: AdminButtonTone;
   size?: AdminButtonSize;
   startIcon?: ReactNode;
+  endIcon?: ReactNode;
 };
 
 type AsButton = CommonProps &
@@ -75,6 +76,7 @@ export function AdminButton({
   tone = 'default',
   size = 'md',
   startIcon,
+  endIcon,
   className,
   children,
   onClickAction,
@@ -93,6 +95,7 @@ export function AdminButton({
     <>
       {startIcon}
       {children}
+      {endIcon}
     </>
   );
 

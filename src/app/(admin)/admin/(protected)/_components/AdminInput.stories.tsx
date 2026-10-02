@@ -5,10 +5,6 @@ import { AdminInput } from './AdminInput';
 const meta: Meta<typeof AdminInput> = {
   title: 'Admin/AdminInput',
   component: AdminInput,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-  },
   args: {
     placeholder: 'sample-project',
     type: 'text',

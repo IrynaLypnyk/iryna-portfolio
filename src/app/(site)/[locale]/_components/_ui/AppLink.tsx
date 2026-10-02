@@ -57,7 +57,6 @@ export function AppLink({
   const renderArrowIcon = arrowIcon ? <span aria-hidden="true">{arrowIcon}</span> : null;
 
   const isAnchor = href.startsWith('#');
-  console.log({ isAnchor });
 
   const content = (
     <>

@@ -3,13 +3,15 @@ import { LoginForm } from './_components/LoginForm';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { LogoIcon } from '@/assets/icons';
+import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
 
 const MotionLoginForm = motion.create(LoginForm);
 
 export default function LoginPage() {
   return (
     <Suspense>
-      <div className="flex min-h-screen flex-col items-center bg-neutral-50">
+      <div className="bg-app-page flex min-h-screen flex-col items-center">
         <div
           className="pointer-events-none fixed inset-0 opacity-[0.035]"
           style={{
@@ -19,16 +21,12 @@ export default function LoginPage() {
           }}
         />
         {/* Top bar */}
-        <header className="relative z-10 flex w-full items-center justify-between border-b border-neutral-200 px-6 py-6 sm:px-10 lg:px-16">
-          <div className="text-[10px] font-bold tracking-[0.5em] text-neutral-500 uppercase">
-            COMPANY_SHORT_NAME
+        <header className="border-app-line relative z-10 flex w-full items-center justify-between border-b px-6 py-6 sm:px-10 lg:px-16">
+          <div className="text-app-text flex items-center gap-2 text-[14px] font-bold tracking-[0.5em] uppercase">
+            <LogoIcon className="h-10 w-10" />
+            ADMIN
           </div>
-          <Link
-            href="/"
-            className="text-[10px] font-bold tracking-[0.4em] text-neutral-500 uppercase transition-colors duration-300 hover:text-neutral-900"
-          >
-            ← На сайт
-          </Link>
+          <OpenSiteButton />
         </header>
         <main className="relative z-10 flex w-full flex-1 items-center justify-center px-4 py-12">
           <MotionLoginForm

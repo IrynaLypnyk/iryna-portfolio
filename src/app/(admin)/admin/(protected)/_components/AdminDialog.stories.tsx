@@ -6,11 +6,6 @@ import { AdminDialog } from './AdminDialog';
 const meta: Meta<typeof AdminDialog> = {
   title: 'Admin/Dialogs/AdminDialog',
   component: AdminDialog,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-    layout: 'fullscreen',
-  },
   args: {
     title: 'Назва діалогу',
     description: 'Короткий опис або контекст дії.',

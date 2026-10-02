@@ -3,20 +3,13 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ExternalLink, FlaskConical, FolderKanban, Home, Images, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SITE_URL } from '@/lib/seo/config';
-import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import LogoutButton from './LogoutButton';
 import { routes } from '@/constants/routes';
 import { LogoIcon } from '@/assets/icons';
-
-const NAV_LINKS = [
-  { href: routes.admin.root, label: 'Головна', icon: Home },
-  { href: routes.admin.projects, label: 'Проєкти', icon: FolderKanban },
-  { href: routes.admin.experiments, label: 'Playground', icon: FlaskConical },
-  { href: routes.admin.media, label: 'Медіа', icon: Images },
-] as const;
+import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
+import { ADMIN_NAV_LINKS } from '@/app/(admin)/admin/constants';
+import { BurgerMenuButton } from '@/app/(site)/[locale]/_components/_ui/BurgerMenuButton';
 
 function isActive(pathname: string, href: string): boolean {
   if (href === routes.admin.root) {
@@ -29,7 +22,8 @@ function isActive(pathname: string, href: string): boolean {
 export function AdminNav() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const activeLink = NAV_LINKS.find(({ href }) => isActive(pathname, href));
+  const activeLink = ADMIN_NAV_LINKS.find(({ href }) => isActive(pathname, href));
+  const ActiveLinkIcon = activeLink?.icon;
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
@@ -49,7 +43,7 @@ export function AdminNav() {
       className="border-app-line bg-app-surface text-app-text sticky top-0 z-20 border-b"
       data-component="AdminNav"
     >
-      <div className="mx-auto hidden max-w-[1600px] items-center justify-between gap-4 px-6 py-3 lg:flex">
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-6 py-3">
         {/* Left: logo + nav */}
         <div className="flex min-w-0 items-center gap-6">
           {/* Logo */}
@@ -62,9 +56,9 @@ export function AdminNav() {
             </span>
           </div>
 
-          {/* Nav */}
-          <nav className="flex items-center gap-5">
-            {NAV_LINKS.map(({ href, label, icon: Icon }) => (
+          {/* Nav - desktop */}
+          <nav className="hidden items-center gap-5 md:flex">
+            {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
@@ -82,56 +76,29 @@ export function AdminNav() {
             ))}
           </nav>
         </div>
-
-        {/* Right: open site + logout */}
-        <div className="flex items-center gap-3">
-          <AdminButton
-            variant="ghost"
-            href={SITE_URL}
-            external
-            startIcon={<ExternalLink size={16} strokeWidth={1.75} />}
-          >
-            Відкрити сайт
-          </AdminButton>
-          <LogoutButton />
-        </div>
-      </div>
-
-      <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 lg:hidden">
-        <Link
-          href={routes.admin.root}
-          className="flex shrink-0 items-center"
-          aria-label="Admin dashboard"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <LogoIcon className="h-10 w-10" />
-        </Link>
-        <span className="min-w-0 truncate text-sm font-semibold text-neutral-900">
+        {/* Active nav - mobile */}
+        <span className="text-app-accent flex min-w-0 grow items-center justify-center gap-1 truncate text-sm font-semibold md:hidden">
+          {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1.5} /> : null}
           {activeLink?.label ?? 'Admin'}
         </span>
 
-        <button
-          type="button"
-          className="text-app-text hover:bg-app-accent-lightest active:bg-app-accent-lightest inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors"
-          aria-label={
-            isMobileMenuOpen ? 'Закрити меню адміністратора' : 'Відкрити меню адміністратора'
-          }
-          aria-controls="admin-mobile-menu"
-          aria-expanded={isMobileMenuOpen}
-          onClick={() => setIsMobileMenuOpen((current) => !current)}
-        >
-          {isMobileMenuOpen ? (
-            <X size={22} strokeWidth={1.75} />
-          ) : (
-            <Menu size={22} strokeWidth={1.75} />
-          )}
-        </button>
+        {/* Right: open site + logout */}
+        <div className="hidden items-center gap-3 md:flex">
+          <OpenSiteButton />
+          <LogoutButton />
+        </div>
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 md:hidden">
+          <BurgerMenuButton
+            isMenuOpen={isMobileMenuOpen}
+            toggleMobileMenu={() => setIsMobileMenuOpen((current) => !current)}
+          />
+        </div>
       </div>
 
       {isMobileMenuOpen && (
-        <div id="admin-mobile-menu" className="border-app-line border-t px-4 py-3 lg:hidden">
-          <nav className="flex flex-col gap-1" aria-label="Admin navigation">
-            {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+        <div id="admin-mobile-menu" className="border-app-line border-t px-4 py-3 md:hidden">
+          <nav className="flex flex-col gap-3" aria-label="Admin navigation">
+            {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => {
               const active = isActive(pathname, href);
 
               return (
@@ -145,26 +112,15 @@ export function AdminNav() {
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Icon size={16} strokeWidth={1.75} />
+                  <Icon size={16} strokeWidth={1.5} />
                   {label}
                 </Link>
               );
             })}
 
             <div className="border-app-line my-2 border-t" />
-
-            <a
-              href={SITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-app-text hover:bg-app-accent-lightest flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <ExternalLink size={16} strokeWidth={1.75} />
-              Відкрити сайт
-            </a>
-
-            <div className="px-0.5">
+            <div className="flex min-w-0 flex-wrap items-center">
+              <OpenSiteButton />
               <LogoutButton />
             </div>
           </nav>

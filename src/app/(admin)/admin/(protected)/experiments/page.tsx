@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { ExperimentDeleteButton } from './_components/ExperimentDeleteButton';
+import { AdminTag } from '@/app/(admin)/admin/(protected)/_components/AdminTag';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,19 +44,13 @@ export default async function AdminExperimentsListPage() {
                       >
                         {experiment.titleEn}
                       </Link>
-                      <p className="mt-0.5 font-mono text-xs text-neutral-500">{experiment.slug}</p>
+                      <p className="text-app-muted mt-0.5 font-mono text-xs">{experiment.slug}</p>
                     </td>
-                    <td className="px-3 py-3 text-neutral-600">{experiment.order}</td>
+                    <td className="text-app-muted px-3 py-3">{experiment.order}</td>
                     <td className="px-3 py-3">
-                      <span
-                        className={
-                          experiment.published
-                            ? 'rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800'
-                            : 'rounded-full bg-neutral-200 px-2 py-0.5 text-xs text-neutral-600'
-                        }
-                      >
+                      <AdminTag color={experiment.published ? 'success' : 'warning'}>
                         {experiment.published ? 'Опубліковано' : 'Чернетка'}
-                      </span>
+                      </AdminTag>
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex gap-2">

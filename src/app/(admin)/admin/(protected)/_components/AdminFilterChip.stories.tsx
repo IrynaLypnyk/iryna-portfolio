@@ -6,10 +6,6 @@ import { AdminFilterChip } from './AdminFilterChip';
 const meta: Meta<typeof AdminFilterChip> = {
   title: 'Admin/AdminFilterChip',
   component: AdminFilterChip,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-  },
   args: {
     children: 'Усі',
     active: false,

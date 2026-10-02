@@ -5,10 +5,6 @@ import { AdminSelect } from './AdminSelect';
 const meta: Meta<typeof AdminSelect> = {
   title: 'Admin/AdminSelect',
   component: AdminSelect,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-  },
   args: {
     value: 'apartment',
     onChange: () => {},

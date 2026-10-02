@@ -69,16 +69,22 @@
   --color-app-text: var(--gray-dark);
   --color-app-on-dark: var(--white);
   --color-app-muted: var(--gray);
+  --color-app-disabled: var(--gray-light);
   --color-app-accent: var(--blue);
   --color-app-accent-lightest: var(--blue-sky);
   --color-app-accent-light: var(--blue-light);
   --color-app-accent-bright: var(--azure);
   --color-app-accent-dark: var(--blue-dark);
-  --color-app-disabled: var(--gray-light);
 
   --color-app-danger: var(--color-red-600);
+  --color-app-danger-light: var(--color-red-50);
   --color-app-danger-dark: var(--color-red-700);
   --color-app-success: var(--color-green-300);
+  --color-app-success-dark: var(--color-green-800);
+  --color-app-success-light: var(--color-green-50);
+  --color-app-warning: var(--color-orange-300);
+  --color-app-warning-dark: var(--color-orange-800);
+  --color-app-warning-light: var(--color-yellow-50);
   --color-app-yellow: var(--yellow);
   --color-app-violet: var(--violet);
   --color-app-violet-light: var(--violet-light);

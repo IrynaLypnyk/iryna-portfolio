@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { ProjectDeleteButton } from './_components/ProjectDeleteButton';
+import { AdminTag } from '@/app/(admin)/admin/(protected)/_components/AdminTag';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,20 +56,10 @@ export default async function AdminProjectsListPage() {
                     <td className="px-3 py-3 text-neutral-600">{project._count.photos}</td>
                     <td className="px-3 py-3">
                       <div className="flex flex-wrap gap-1.5 text-xs">
-                        {project.featured && (
-                          <span className="rounded-full bg-neutral-900 px-2 py-0.5 text-white">
-                            Вибране
-                          </span>
-                        )}
-                        <span
-                          className={
-                            project.published
-                              ? 'rounded-full bg-green-100 px-2 py-0.5 text-green-800'
-                              : 'rounded-full bg-neutral-200 px-2 py-0.5 text-neutral-600'
-                          }
-                        >
+                        {project.featured && <AdminTag color="info">Вибране</AdminTag>}
+                        <AdminTag color={project.published ? 'success' : 'info'}>
                           {project.published ? 'Опубліковано' : 'Чернетка'}
-                        </span>
+                        </AdminTag>
                       </div>
                     </td>
                     <td className="px-3 py-3">

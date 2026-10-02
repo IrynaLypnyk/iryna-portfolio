@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { routes } from '@/constants/routes';
 import { AdminMediaPreview } from '@/app/(admin)/admin/(protected)/_components/AdminMediaPreview';
+import { AdminTag } from '@/app/(admin)/admin/(protected)/_components/AdminTag';
 
 export type MediaLibraryItem = {
   id: string;
@@ -93,13 +94,9 @@ export function MediaTable({ items }: MediaTableProps) {
 
               <td className="px-4 py-3">
                 {item.usageCount > 0 ? (
-                  <span className="inline-flex rounded-full bg-neutral-900 px-2.5 py-1 text-xs font-medium whitespace-nowrap text-white">
-                    Використовується · {item.usageCount}
-                  </span>
+                  <AdminTag color="warning">Використовується · {item.usageCount}</AdminTag>
                 ) : (
-                  <span className="inline-flex rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium whitespace-nowrap text-neutral-600">
-                    Не використовується
-                  </span>
+                  <AdminTag color="info">Не використовується</AdminTag>
                 )}
               </td>
             </tr>

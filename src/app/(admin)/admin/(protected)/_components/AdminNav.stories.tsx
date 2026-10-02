@@ -7,10 +7,7 @@ import { AdminNav } from './AdminNav';
 const meta: Meta<typeof AdminNav> = {
   title: 'Admin/AdminNav',
   component: AdminNav,
-  tags: ['autodocs'],
   parameters: {
-    backgrounds: { default: 'light' },
-    layout: 'fullscreen',
     nextjs: {
       appDirectory: true,
       navigation: {

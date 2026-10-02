@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { sans, mono } from '@/fonts';
+import { sans } from '@/fonts';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,9 +41,9 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default async function AdminLayout({ children }: Props) {
+export default function AdminLayout({ children }: Props) {
   return (
-    <html lang="uk" suppressHydrationWarning className={cn(sans.variable, mono.variable)}>
+    <html lang="uk" suppressHydrationWarning className={sans.variable}>
       <body className="text-app-text bg-app-page/30 flex min-h-screen flex-col font-sans antialiased">
         {children}
         <Toaster />

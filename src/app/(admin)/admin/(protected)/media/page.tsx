@@ -153,7 +153,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
 
   return (
     <main className="px-6 py-10 text-neutral-900">
-      <div className="mx-auto max-w-[1300px]">
+      <div className="mx-auto max-w-325">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold">Медіафайли</h1>
           <p className="mt-2 text-sm text-neutral-600">{mediaItems.length} файлів</p>
@@ -164,21 +164,8 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
             const isActive = tab.value === usageFilter;
 
             return (
-              <AdminFilterChip
-                key={tab.value}
-                href={tab.href}
-                active={isActive}
-                className="h-10 px-4 text-sm"
-              >
-                {tab.label}
-                <span
-                  className={[
-                    'ml-2 text-xs',
-                    isActive ? 'text-neutral-300' : 'text-neutral-500',
-                  ].join(' ')}
-                >
-                  {tab.count}
-                </span>
+              <AdminFilterChip key={tab.value} href={tab.href} active={isActive}>
+                {tab.label}&nbsp;{tab.count}
               </AdminFilterChip>
             );
           })}

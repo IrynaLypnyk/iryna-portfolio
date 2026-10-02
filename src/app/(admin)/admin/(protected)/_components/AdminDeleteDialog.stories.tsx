@@ -5,11 +5,6 @@ import { AdminDeleteDialog } from './AdminDeleteDialog';
 const meta: Meta<typeof AdminDeleteDialog> = {
   title: 'Admin/Dialogs/AdminDeleteDialog',
   component: AdminDeleteDialog,
-  tags: ['autodocs'],
-  parameters: {
-    backgrounds: { default: 'light' },
-    layout: 'fullscreen',
-  },
   args: {
     title: 'Видалити запис?',
     description: 'Цю дію неможливо скасувати.',

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { apiRoutes, routes } from '@/constants/routes';
 import { useConfirmLeave } from './UnsavedChangesProvider';
+import { LogOut } from 'lucide-react';
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -33,7 +34,12 @@ export default function LogoutButton() {
   };
 
   return (
-    <AdminButton variant="ghost" onClickAction={handleLogout} disabled={loading}>
+    <AdminButton
+      variant="ghost"
+      onClickAction={handleLogout}
+      disabled={loading}
+      endIcon={<LogOut size={16} strokeWidth={1.5} />}
+    >
       {loading ? 'Виходимо...' : 'Вийти'}
     </AdminButton>
   );
