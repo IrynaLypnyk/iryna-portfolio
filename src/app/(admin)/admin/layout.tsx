@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { sans } from '@/fonts';
 
 export const dynamic = 'force-dynamic';

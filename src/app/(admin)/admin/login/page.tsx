@@ -1,7 +1,6 @@
 'use client';
 import { LoginForm } from './_components/LoginForm';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { Suspense } from 'react';
 import { LogoIcon } from '@/assets/icons';
 import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
