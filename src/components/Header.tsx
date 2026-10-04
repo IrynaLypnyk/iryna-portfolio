@@ -9,7 +9,7 @@ export function Header({
   rightContent,
   logoHref = routes.home,
   containerClass = 'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-6 py-3',
-  headerClass = 'border-app-line bg-app-page/70 sticky top-0 z-10 border-b backdrop-blur-sm',
+  headerClass = 'border-app-line bg-app-page/70 sticky top-0 z-20 border-b backdrop-blur-sm',
 }: {
   title: ReactNode;
   nav: ReactNode;
