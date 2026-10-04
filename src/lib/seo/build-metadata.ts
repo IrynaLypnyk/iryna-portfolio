@@ -1,7 +1,7 @@
 import { SITE_CONTENT } from '@/constants/site';
 import type { LocaleType } from '@/i18n/routing';
 import type { Metadata } from 'next';
-import { DEFAULT_OG_IMAGE, buildAlternates } from './config';
+import { DEFAULT_OG_IMAGE, buildAlternates, SITE_URL } from './config';
 
 type BuildPageMetadataParams = {
   locale: LocaleType;
@@ -27,6 +27,7 @@ export function buildPageMetadata({
 
   const fullTitle = absoluteTitle ? title : `${title} | ${siteName}`;
   const pageDescription = description ?? SITE_CONTENT[locale].siteDescription;
+  const absoluteImageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
@@ -38,14 +39,14 @@ export function buildPageMetadata({
       url: alternates.canonical,
       title: fullTitle,
       description: pageDescription,
-      images: [{ url: image }],
+      images: [{ url: absoluteImageUrl }],
     },
 
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description: pageDescription,
-      images: [image],
+      images: [absoluteImageUrl],
     },
     ...(noIndex && {
       robots: {
