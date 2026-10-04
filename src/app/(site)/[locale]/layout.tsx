@@ -72,6 +72,15 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
 
     manifest: '/favicon/site.webmanifest',
 
+    openGraph: {
+      type: 'website',
+      siteName,
+      url: buildLocaleUrl(currentLocale),
+      title: `${siteName} — ${siteTitle}`,
+      description: siteDescription,
+      images: [{ url: `${SITE_URL}/images/og/default-og.jpeg` }],
+    },
+
     robots: IS_SITE_LIVE
       ? {
           index: true,
