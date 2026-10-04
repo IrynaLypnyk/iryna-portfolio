@@ -15,7 +15,7 @@ export function Hero() {
       <div className="grid items-start gap-[clamp(32px,6vw,84px)] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
         <div className="grid gap-[clamp(24px,3.4vh,40px)]">
           <div className="text-app-muted flex items-center gap-3 font-mono text-xs tracking-wide">
-            <div className="bg-app-accent-bright h-px w-8"></div>
+            <div className="vj;tbg-app-accent-bright h-px w-8"></div>
             <span className="text-ink">{t('kicker')}</span>
           </div>
 
