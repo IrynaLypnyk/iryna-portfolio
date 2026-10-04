@@ -150,7 +150,7 @@ export function PhotoTableRow({
             disabled={status === 'saving' || status === 'deleting'}
             startIcon={<Trash2 size={14} strokeWidth={1.75} />}
           >
-            {status === 'deleting' ? 'Deleting…' : 'Видалити'}
+            {status === 'deleting' ? 'Deleting…' : 'Delete'}
           </AdminButton>
         </div>
       </td>

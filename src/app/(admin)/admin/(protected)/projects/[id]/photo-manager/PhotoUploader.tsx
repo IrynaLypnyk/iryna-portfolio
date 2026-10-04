@@ -179,7 +179,7 @@ function UploadStatusText({ item }: { item: UploadItem }) {
 
   return (
     <span className="ml-auto flex-shrink-0 text-xs text-red-600">
-      {item.errorMessage ?? 'помилка'}
+      {item.errorMessage ?? 'error'}
     </span>
   );
 }

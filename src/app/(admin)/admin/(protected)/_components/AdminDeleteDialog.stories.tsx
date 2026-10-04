@@ -6,7 +6,7 @@ const meta: Meta<typeof AdminDeleteDialog> = {
   title: 'Admin/Dialogs/AdminDeleteDialog',
   component: AdminDeleteDialog,
   args: {
-    title: 'Видалити запис?',
+    title: 'Delete запис?',
     description: 'Цю дію неможливо скасувати.',
     isDeleting: false,
     onConfirmAction: () => {},

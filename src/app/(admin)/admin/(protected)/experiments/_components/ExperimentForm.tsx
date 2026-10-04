@@ -246,7 +246,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
           Discard changes
         </AdminButton>
         <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
-          {isSaving ? 'Saving…' : mode === 'create' ? 'Створити експеримент' : 'Save changes'}
+          {isSaving ? 'Saving…' : mode === 'create' ? 'Create experiment' : 'Save changes'}
         </AdminButton>
       </div>
     </form>

@@ -56,7 +56,7 @@ export default async function AdminProjectsListPage() {
                     <td className="px-3 py-3 text-neutral-600">{project._count.photos}</td>
                     <td className="px-3 py-3">
                       <div className="flex flex-wrap gap-1.5 text-xs">
-                        {project.featured && <AdminTag color="info">Вибране</AdminTag>}
+                        {project.featured && <AdminTag color="info">Featured</AdminTag>}
                         <AdminTag color={project.published ? 'success' : 'info'}>
                           {project.published ? 'Published' : 'Draft'}
                         </AdminTag>

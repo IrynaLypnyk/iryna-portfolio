@@ -42,7 +42,7 @@ export const SolidSmall: Story = {
 
 export const SolidDanger: Story = {
   name: 'Solid (danger)',
-  args: { tone: 'danger', children: 'Видалити' },
+  args: { tone: 'danger', children: 'Delete' },
 };
 
 // ─── Outline ──────────────────────────────────────────────────────────────────
@@ -58,13 +58,13 @@ export const OutlineSmall: Story = {
 
 export const OutlineDanger: Story = {
   name: 'Outline (danger)',
-  args: { variant: 'outline', tone: 'danger', children: 'Видалити' },
+  args: { variant: 'outline', tone: 'danger', children: 'Delete' },
 };
 
 // ─── Ghost ────────────────────────────────────────────────────────────────────
 
 export const Ghost: Story = {
-  args: { variant: 'ghost', children: 'Вийти' },
+  args: { variant: 'ghost', children: 'Logout' },
 };
 
 // ─── Icon + text ──────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ export const OutlineDangerWithIcon: Story = {
     tone: 'danger',
     size: 'sm',
     startIcon: <Trash2 size={14} strokeWidth={1.75} aria-hidden="true" />,
-    children: 'Видалити',
+    children: 'Delete',
   },
 };
 

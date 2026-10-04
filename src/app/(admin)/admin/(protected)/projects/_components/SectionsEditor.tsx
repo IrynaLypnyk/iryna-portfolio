@@ -99,7 +99,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
                 type="button"
                 variant="icon"
                 size="sm"
-                aria-label="Вгору"
+                aria-label="Up"
                 disabled={index === 0}
                 onClickAction={() => move(index, -1)}
               >
@@ -109,7 +109,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
                 type="button"
                 variant="icon"
                 size="sm"
-                aria-label="Вниз"
+                aria-label="Down"
                 disabled={index === sections.length - 1}
                 onClickAction={() => move(index, 1)}
               >

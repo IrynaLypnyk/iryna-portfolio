@@ -40,7 +40,7 @@ export default function LogoutButton() {
       disabled={loading}
       endIcon={<LogOut size={16} strokeWidth={1.5} />}
     >
-      {loading ? 'Виходимо...' : 'Вийти'}
+      {loading ? 'Logging out…...' : 'Logout'}
     </AdminButton>
   );
 }
