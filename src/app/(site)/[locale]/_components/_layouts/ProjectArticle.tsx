@@ -63,13 +63,13 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
     <article
       data-component="ProjectArticle"
       className={cn(
-        'border-app-line -mr-(--page-pad-right) grid gap-7 overflow-visible border-b',
+        'border-app-line -mr-(--page-pad-right) grid gap-7 overflow-visible border-t last:border-b',
         isLast ? 'pb-[clamp(32px,6vh,64px)]' : 'pb-[clamp(28px,5vh,56px)]'
       )}
     >
       <div
         className={cn(
-          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] pr-(--page-pad-right) md:grid-cols-[minmax(160px,220px)_minmax(0,1fr)_auto]',
+          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] pr-(--page-pad-right) md:grid-cols-[minmax(0,1fr)_minmax(160px,220px)_auto]',
           expandable && 'cursor-pointer'
         )}
       >
@@ -80,17 +80,9 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
             aria-controls={panelId}
             aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
             onClick={() => setOpen((current) => !current)}
-            className="absolute inset-0 z-0 cursor-pointer border-0 bg-transparent p-0"
+            className="absolute inset-0 z-10 cursor-pointer border-0 bg-transparent p-0"
           />
         )}
-
-        <ImageFrame
-          photo={project.coverPhoto}
-          placeholder={t('coverPlaceholder', { title: project.shortLabel })}
-          priority={index === 1}
-          sizes="(min-width: 768px) 20vw, 40vw"
-          className="aspect-4/3"
-        />
 
         <div className="grid gap-4">
           <div className="text-app-muted flex items-baseline gap-3 font-mono text-xs tracking-wide">
@@ -110,7 +102,7 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
 
           <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
-          <MetaList items={meta} variant="compact" labelColor="blue" />
+          <MetaList items={meta} variant="roomy" labelColor="gray" />
 
           {links.length > 0 && (
             <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
@@ -129,6 +121,14 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
             </div>
           )}
         </div>
+
+        <ImageFrame
+          photo={project.coverPhoto}
+          placeholder={t('coverPlaceholder', { title: project.shortLabel })}
+          priority={index === 1}
+          sizes="(min-width: 768px) 20vw, 40vw"
+          className="aspect-4/3"
+        />
 
         {expandable && (
           <ActionBox>
@@ -152,7 +152,7 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
                 <MetaList
                   items={expandedMeta}
                   labelColor="blue"
-                  variant="panel"
+                  variant="compact"
                   labelWidth={130}
                   className="pb-4"
                 />
