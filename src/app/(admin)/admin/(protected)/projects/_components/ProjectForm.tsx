@@ -14,6 +14,7 @@ import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/Admin
 import { apiRoutes, routes } from '@/constants/routes';
 import { SectionsEditor, type SectionDraft } from './SectionsEditor';
 import { FeaturesEditor, type FeatureDraft } from './FeaturesEditor';
+import { StackInput } from './StackInput';
 
 /** Every field is held as a string so the inputs stay controlled. */
 type FormState = {
@@ -96,7 +97,7 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
     leadEn: project.leadEn,
     roleUk: project.roleUk,
     roleEn: project.roleEn,
-    stack: project.stack ?? '',
+    stack: (project.stack ?? '').split(' · ').join(', '),
     statusUk: project.statusUk ?? '',
     statusEn: project.statusEn ?? '',
     yearLabel: project.yearLabel ?? '',
@@ -182,6 +183,11 @@ export function ProjectForm({ mode, project }: Props) {
 
     const payload = {
       ...form,
+      stack: form.stack
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .join(' · '),
       order: Number(form.order || 0),
       // `key` is a client-only React identity; the server rebuilds order from
       // array position.
@@ -350,11 +356,9 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label className="sm:col-span-2">
           <span className={labelStyles}>{"Стек (необов'язково)"}</span>
-          <AdminInput
-            type="text"
+          <StackInput
             value={form.stack}
-            onChange={(event) => updateField('stack', event.target.value)}
-            placeholder="React · TypeScript · Redux"
+            onChange={(value: string) => updateField('stack', value)}
           />
         </label>
 
