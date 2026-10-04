@@ -28,7 +28,7 @@ export function Header({
           </Link>
         </div>
         <nav className="flex items-center gap-[clamp(14px,3vw,34px)]">{nav}</nav>
-        {rightContent && <div className="flex items-center gap-3">{rightContent}</div>}
+        {rightContent && <div className="hidden items-center gap-3 md:flex">{rightContent}</div>}
       </div>
     </header>
   );

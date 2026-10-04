@@ -19,11 +19,11 @@ export function Hero() {
             <span className="text-ink">{t('kicker')}</span>
           </div>
 
-          <h1 className="text-app-ink text-[clamp(40px,5vw,72px)] leading-[0.92] font-semibold tracking-[-0.04em]">
+          <h1 className="text-app-text text-[clamp(44px,8vw,96px)] leading-[0.92] font-medium tracking-[-0.04em]">
             {t('name')}
           </h1>
 
-          <div className="text-app-ink text-[clamp(24px,3vw,40px)] leading-[1.12] font-semibold tracking-[-0.03em]">
+          <div className="text-app-ink text-[clamp(24px,3.5vw,46px)] leading-[1.12] font-semibold tracking-[-0.03em]">
             <p>{t('statement.part1')}</p>
             <p>{t('statement.part2')}</p>
             <p>

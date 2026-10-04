@@ -68,44 +68,46 @@ export function AdminNav() {
           </>
         }
         rightContent={
-          <div className="hidden items-center gap-3 md:flex">
+          <>
             <OpenSiteButton />
             <LogoutButton />
-          </div>
+          </>
         }
         logoHref={routes.admin.root}
         headerClass="border-app-line bg-app-surface text-app-text sticky top-0 z-20 border-b"
       />
 
-      <MobileMenuContainer isMenuOpen={isMobileMenuOpen}>
-        <nav className="flex flex-col gap-3 px-4 py-3" aria-label="Admin navigation">
-          {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => {
-            const active = isActive(pathname, href);
+      {isMobileMenuOpen && (
+        <MobileMenuContainer isMenuOpen={isMobileMenuOpen}>
+          <nav className="flex flex-col gap-3 px-4 py-3" aria-label="Admin navigation">
+            {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => {
+              const active = isActive(pathname, href);
 
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  active ? 'bg-app-accent-lightest' : 'hover:bg-app-accent-lightest'
-                )}
-                aria-current={active ? 'page' : undefined}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Icon size={16} strokeWidth={1.5} />
-                {label}
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                    active ? 'bg-app-accent-lightest' : 'hover:bg-app-accent-lightest'
+                  )}
+                  aria-current={active ? 'page' : undefined}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Icon size={16} strokeWidth={1.5} />
+                  {label}
+                </Link>
+              );
+            })}
 
-          <div className="border-app-line my-2 border-t" />
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <OpenSiteButton />
-            <LogoutButton />
-          </div>
-        </nav>
-      </MobileMenuContainer>
+            <div className="border-app-line my-2 border-t" />
+            <div className="flex min-w-0 flex-wrap items-center">
+              <OpenSiteButton />
+              <LogoutButton />
+            </div>
+          </nav>
+        </MobileMenuContainer>
+      )}
     </>
   );
 }

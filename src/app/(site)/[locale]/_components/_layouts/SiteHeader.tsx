@@ -12,7 +12,8 @@ import { cn } from '@/lib/utils';
 import { LogoIcon } from '@/assets/icons';
 
 export function SiteHeader() {
-  const t = useTranslations('Common');
+  const tCommon = useTranslations('Common');
+  const tNav = useTranslations('Navigation');
   const [activeId, setActiveId] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const ACTIVATION_POINT = 0.42;
@@ -64,11 +65,11 @@ export function SiteHeader() {
               <LogoIcon className="h-10 w-10" />
               <span className="flex flex-wrap items-baseline gap-2">
                 <span className="text-app-text text-[16px] leading-5 font-semibold tracking-[-0.01em]">
-                  {t('name')}
+                  {tCommon('name')}
                 </span>
                 <span className="text-app-muted caption text-[12px] leading-5">/</span>
                 <span className="text-app-muted caption text-[12px] leading-5 tracking-wide">
-                  {t('role')}
+                  {tCommon('role')}
                 </span>
               </span>
             </Link>
@@ -105,7 +106,7 @@ export function SiteHeader() {
                   isActive ? 'text-app-accent' : 'text-app-muted'
                 )}
               >
-                {t(item.labelKey)}
+                {tNav(item.labelKey)}
               </Link>
             );
           })}
