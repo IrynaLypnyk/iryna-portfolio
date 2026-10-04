@@ -57,7 +57,7 @@ export function PhotoTable({
 
         {items.length === 0 && (
           <div className="p-10 text-center text-sm text-neutral-500">
-            Поки що немає фото. Натисніть «Завантажити фото», щоб додати перший файл.
+            Поки що немає фото. Натисніть «Upload photo», щоб додати перший файл.
           </div>
         )}
       </div>

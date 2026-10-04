@@ -106,10 +106,10 @@ export function ExperimentForm({ mode, experiment }: Props) {
       const result = (await response.json()) as { message?: string; experiment?: DbExperiment };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося зберегти експеримент');
+        throw new Error(result.message || 'Failed to save experiment');
       }
 
-      toast.success(mode === 'create' ? 'Експеримент створено' : 'Експеримент оновлено');
+      toast.success(mode === 'create' ? 'Experiment created' : 'Experiment updated');
       setSavedSnapshot(currentSnapshot);
 
       if (mode === 'create' && result.experiment) {
@@ -118,7 +118,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         router.refresh();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти експеримент');
+      toast.error(error instanceof Error ? error.message : 'Failed to save experiment');
     } finally {
       setIsSaving(false);
     }
@@ -199,7 +199,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"Демо (необов'язково)"}</span>
+          <span className={labelStyles}>{'Demo (optional)'}</span>
           <AdminInput
             type="url"
             value={form.demoUrl}

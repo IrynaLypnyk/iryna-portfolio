@@ -18,8 +18,8 @@ export function ConfirmReorderExitDialog({
 }: Props) {
   return (
     <AdminDialog
-      title="Зберегти новий порядок?"
-      description="Ви змінили порядок фото. Зберегти зміни перед виходом?"
+      title="Save new order?"
+      description="You changed the photo order. Save changes before leaving?"
       onCloseAction={onCancelAction}
       closeDisabled={isSaving}
     >
@@ -29,7 +29,7 @@ export function ConfirmReorderExitDialog({
           disabled={isSaving}
           className="w-full justify-center"
         >
-          {isSaving ? 'Збереження…' : 'Зберегти і вийти'}
+          {isSaving ? 'Saving…' : 'Save and exit'}
         </AdminButton>
         <AdminButton
           variant="outline"

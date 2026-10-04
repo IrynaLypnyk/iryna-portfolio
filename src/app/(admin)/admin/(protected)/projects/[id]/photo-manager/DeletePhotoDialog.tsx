@@ -13,7 +13,7 @@ type Props = {
 export function DeletePhotoDialog({ photo, onConfirmAction, onCancelAction }: Props) {
   return (
     <AdminDeleteDialog
-      title="Видалити фото?"
+      title="Delete photo?"
       description="Якщо це фото більше ніде не використовується, файл також буде видалений з ImageKit."
       onConfirmAction={onConfirmAction}
       onCancelAction={onCancelAction}

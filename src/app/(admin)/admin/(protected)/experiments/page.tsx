@@ -49,7 +49,7 @@ export default async function AdminExperimentsListPage() {
                     <td className="text-app-muted px-3 py-3">{experiment.order}</td>
                     <td className="px-3 py-3">
                       <AdminTag color={experiment.published ? 'success' : 'warning'}>
-                        {experiment.published ? 'Опубліковано' : 'Чернетка'}
+                        {experiment.published ? 'Published' : 'Draft'}
                       </AdminTag>
                     </td>
                     <td className="px-3 py-3">

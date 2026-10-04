@@ -124,7 +124,7 @@ export function PhotoTableRow({
                 hasUnsavedChanges ? 'bg-amber-500 text-neutral-950 hover:bg-amber-400' : ''
               }
             >
-              {status === 'saving' ? 'Збереження…' : 'Зберегти зміни'}
+              {status === 'saving' ? 'Saving…' : 'Save changes'}
             </AdminButton>
           ) : (
             <span className="text-xs text-neutral-400">✓ Збережено</span>
@@ -137,7 +137,7 @@ export function PhotoTableRow({
               type="button"
               onClickAction={() => onResetDraftAction(item)}
             >
-              Скасувати
+              Cancel
             </AdminButton>
           )}
 
@@ -150,7 +150,7 @@ export function PhotoTableRow({
             disabled={status === 'saving' || status === 'deleting'}
             startIcon={<Trash2 size={14} strokeWidth={1.75} />}
           >
-            {status === 'deleting' ? 'Видалення…' : 'Видалити'}
+            {status === 'deleting' ? 'Deleting…' : 'Видалити'}
           </AdminButton>
         </div>
       </td>

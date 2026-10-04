@@ -49,7 +49,7 @@ export function ProjectDeleteButton({ id, title }: Props) {
         disabled={isDeleting}
         startIcon={<Trash2 size={14} strokeWidth={1.75} />}
       >
-        {isDeleting ? 'Видалення…' : 'Delete'}
+        {isDeleting ? 'Deleting…' : 'Delete'}
       </AdminButton>
 
       {isConfirming && (

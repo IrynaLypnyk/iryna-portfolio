@@ -87,7 +87,7 @@ export function PhotoUploader({
               onClickAction={onSaveOrderAction}
               disabled={isSavingOrder}
             >
-              {isSavingOrder ? 'Збереження…' : 'Зберегти порядок'}
+              {isSavingOrder ? 'Saving…' : 'Save order'}
             </AdminButton>
             <AdminButton variant="outline" onClickAction={handleExitClick} disabled={isSavingOrder}>
               ← Назад до таблиці
@@ -97,7 +97,7 @@ export function PhotoUploader({
           /* Normal mode toolbar */
           <div className="flex flex-wrap gap-2">
             <AdminButton onClickAction={handleFilePickerClick} disabled={isUploading}>
-              {isUploading ? 'Завантаження…' : 'Завантажити фото'}
+              {isUploading ? 'Завантаження…' : 'Upload photo'}
             </AdminButton>
             <AdminButton
               variant="outline"
@@ -117,7 +117,7 @@ export function PhotoUploader({
 
             {!isUploading && (
               <AdminButton variant="ghost" size="sm" onClickAction={dismissUploadStatus}>
-                Закрити
+                Close
               </AdminButton>
             )}
           </div>

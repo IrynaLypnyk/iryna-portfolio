@@ -58,7 +58,7 @@ export default async function AdminProjectsListPage() {
                       <div className="flex flex-wrap gap-1.5 text-xs">
                         {project.featured && <AdminTag color="info">Вибране</AdminTag>}
                         <AdminTag color={project.published ? 'success' : 'info'}>
-                          {project.published ? 'Опубліковано' : 'Чернетка'}
+                          {project.published ? 'Published' : 'Draft'}
                         </AdminTag>
                       </div>
                     </td>
