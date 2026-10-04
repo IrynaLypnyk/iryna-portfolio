@@ -1,5 +1,10 @@
 # Iryna Lypnyk Portfolio Website
 
+My personal portfolio website showcasing my professional experience, selected projects, experiments and current work as a software developer.
+
+**Live site:** [irynalypnyk.com](https://irynalypnyk.com)  
+**Storybook:** [https://irynalypnyk-storybook.vercel.app/](https://irynalypnyk-storybook.vercel.app/)
+
 ## Stack
 
 - Next.js App Router
@@ -14,16 +19,14 @@
 - Storybook
 - Vercel
 
-## Important note
-
 ## Project structure
 
 - `src/app/(site)` — public website routes
 - `src/app/(admin)` — admin panel routes
 - `src/app/api/admin` — admin API routes
 - `src/components` — shared UI components
-- `src/lib` — utilities, data access, auth helpers, and shared logic
-- `prisma` — database schema, migrations, and seed logic
+- `src/lib` — utilities, data access, auth helpers and shared logic
+- `prisma` — database schema, migrations and seed logic
 - `public` — static assets
 
 ## Getting started
@@ -63,11 +66,11 @@ NEXT_PUBLIC_APP_URL=
 ALLOWED_ADMIN_EMAILS=
 ```
 
-Do not commit .env.local.
+Do not commit `.env.local`.
 
 ## Database
 
-Generate Prisma client:
+Generate the Prisma client:
 
 ```bash
 npx prisma generate
@@ -93,10 +96,10 @@ npx prisma db seed
 
 ## Deployment
 
-The project is deployed on Vercel.
+The website and Storybook are deployed on Vercel.
 
-Production environment variables must be configured in the Vercel project settings.
+Production environment variables must be configured in the corresponding Vercel project settings.
 
 ## Documentation
 
-Project-specific notes and technical references should be kept in `docs/`.
+Project-specific notes and technical references are kept in `docs/`.
