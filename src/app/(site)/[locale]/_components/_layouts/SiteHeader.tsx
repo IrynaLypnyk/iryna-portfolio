@@ -68,20 +68,25 @@ export function SiteHeader() {
       >
         <PageContainer className="flex min-h-(--header-height) items-center justify-between gap-1 md:gap-6">
           <div className="flex items-center gap-3">
-            <Link href={routes.home}>
+            <Link href={routes.home} className="flex items-center gap-2">
               <LogoIcon className="h-10 w-10" />
+              <span className="flex flex-wrap items-baseline gap-2">
+                <span className="text-app-text text-[16px] leading-5 font-semibold tracking-[-0.01em]">
+                  {t('name')}
+                </span>
+                <span className="text-app-muted caption text-[12px] leading-5">/</span>
+                <span className="text-app-muted caption text-[12px] leading-5 tracking-wide">
+                  {t('role')}
+                </span>
+              </span>
             </Link>
-            <span className="flex flex-wrap items-baseline gap-1 md:gap-2.5">
-              <span className="text-app-text text-[18px] leading-5 font-medium">{t('name')}</span>
-              <span className="text-app-muted caption leading-5">{t('role')}</span>
-            </span>
           </div>
 
           <nav className="flex items-center gap-[clamp(14px,3vw,34px)]">
             <div className="hidden md:block">
               <SectionNav activeId={activeId} />
             </div>
-            <div className="-mr-2 md:hidden">
+            <div className="md:hidden">
               <BurgerMenuButton isMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
               <MobileNav
                 isMenuOpen={isMobileMenuOpen}

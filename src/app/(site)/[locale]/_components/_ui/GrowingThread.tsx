@@ -122,7 +122,7 @@ export function GrowingThread() {
   return (
     <div
       data-component="GrowingThread"
-      className="pointer-events-none fixed top-0 left-5 z-2 hidden h-screen w-15 overflow-visible md:block xl:left-10"
+      className="pointer-events-none fixed top-0 left-1 z-2 hidden h-screen w-15 overflow-visible md:block lg:left-2 xl:left-3"
     >
       <svg
         aria-hidden="true"
