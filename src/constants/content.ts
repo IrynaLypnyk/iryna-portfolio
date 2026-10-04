@@ -7,8 +7,8 @@ type PersonContent = {
 };
 
 export const JOB_TITLE = {
-  en: 'Web developer',
-  uk: 'Веб розробник',
+  en: 'Frontend Engineer',
+  uk: 'Frontend Engineer',
 } satisfies Record<LocaleType, string>;
 
 export const PERSON_CONTENT = {

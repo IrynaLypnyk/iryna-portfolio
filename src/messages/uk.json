@@ -1,8 +1,8 @@
 {
-  "Subtitle": "{role} with 7+ years of experience building production web applications with React and TypeScript, now working across the stack with Next.js, PostgreSQL and Prisma",
+  "Subtitle": "{role} із понад 7 роками досвіду розробки production-вебзастосунків, зараз розвиваюся у напрямі full-stack product development.",
   "Common": {
     "name": "Ірина Липник",
-    "role": "Software Developer",
+    "role": "Frontend Engineer",
     "stack": "React · TypeScript · Next.js · PostgreSQL",
     "switchLanguage": "Перемкнути мову",
     "close": "Закрити",
@@ -17,18 +17,21 @@
     "contact": "Контакти"
   },
   "Hero": {
+    "kicker": "PORTFOLIO",
+    "name": "Ірина Липник",
     "statement": {
-      "part1": "Cтворюю спокійні,",
-      "part2": "швидкі",
-      "part3": "інтерфейси",
-      "part4": "для вебу"
+      "part1": "Продумані інтерфейси.",
+      "part2": "Реальні продукти.",
+      "part3": "Ретельно побудовано."
     },
-    "body": "{role} з фокусом на продуманий UX, масштабовану UI-архітектуру та продукти з використанням ШІ.",
+    "body": "{role} із понад 7 роками досвіду розробки production-вебзастосунків, зараз розвиваюся у напрямі full-stack product development.",
     "location": "Тонбридж, UK · Київ, Україна",
     "cta": "Переглянути проєкти",
     "labelExperience": "Досвід",
+    "labelExpanding": "Розвиваюсь",
     "labelLocation": "Локація",
-    "metaExperience": "7+ років у розробці production web applications",
+    "metaExperience": "7+ років production",
+    "metaExpanding": "Next.js · PostgreSQL · Prisma",
     "metaStatus": "Відкрита до нових можливостей"
   },
   "Work": {

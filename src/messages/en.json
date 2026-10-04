@@ -2,7 +2,7 @@
   "Subtitle": "{role} with 7+ years of experience building production web applications with React and TypeScript, now working across the stack with Next.js, PostgreSQL and Prisma",
   "Common": {
     "name": "Iryna Lypnyk",
-    "role": "Software Developer",
+    "role": "Frontend Engineer",
     "stack": "React · TypeScript · Next.js · PostgreSQL",
     "switchLanguage": "Switch language",
     "close": "Close",
@@ -17,18 +17,21 @@
     "contact": "Contact"
   },
   "Hero": {
+    "kicker": "PORTFOLIO",
+    "name": "Iryna Lypnyk",
     "statement": {
-      "part1": "I build calm,",
-      "part2": " fast",
-      "part3": "interfaces",
-      "part4": "for the web"
+      "part1": "Thoughtful interfaces.",
+      "part2": "Real products.",
+      "part3": "Carefully built."
     },
-    "body": "{role} focused on thoughtful UX, scalable UI architecture, and AI-assisted products",
+    "body": "{role} with 7+ years of experience building production web applications, now expanding into full-stack product development.",
     "location": "Tonbridge, UK · Kyiv, Ukraine",
     "cta": "View my projects",
     "labelExperience": "Experience",
+    "labelExpanding": "Expanding",
     "labelLocation": "Location",
-    "metaExperience": "7+ years building production web applications",
+    "metaExperience": "7+ years production",
+    "metaExpanding": "Next.js · PostgreSQL · Prisma",
     "metaStatus": "Open to opportunities"
   },
   "Work": {
