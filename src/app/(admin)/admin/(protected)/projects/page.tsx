@@ -19,7 +19,7 @@ export default async function AdminProjectsListPage() {
     <main className="px-6 py-10">
       <div className="mx-auto max-w-350">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-3xl font-semibold text-neutral-900">Проєкти</h1>
+          <h1 className="text-3xl font-semibold text-neutral-900">Projects</h1>
           <AdminButton href={routes.admin.projectNew}>Новий проєкт</AdminButton>
         </div>
 
@@ -28,11 +28,11 @@ export default async function AdminProjectsListPage() {
             <table className="w-full min-w-200 border-separate border-spacing-0 text-sm">
               <thead>
                 <tr>
-                  <th className={headCellStyles}>Назва</th>
+                  <th className={headCellStyles}>Name</th>
                   <th className={`${headCellStyles} w-32`}>Мітка</th>
                   <th className={`${headCellStyles} w-24`}>Порядок</th>
                   <th className={`${headCellStyles} w-28`}>Фото</th>
-                  <th className={`${headCellStyles} w-40`}>Стан</th>
+                  <th className={`${headCellStyles} w-40`}>Status</th>
                   <th className={`${headCellStyles} w-44`}>Дії</th>
                 </tr>
               </thead>
@@ -69,7 +69,7 @@ export default async function AdminProjectsListPage() {
                           size="sm"
                           href={routes.admin.project(project.id)}
                         >
-                          Редагувати
+                          Edit
                         </AdminButton>
                         <ProjectDeleteButton id={project.id} title={project.titleEn} />
                       </div>

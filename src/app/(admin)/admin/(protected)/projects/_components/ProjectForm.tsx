@@ -210,10 +210,10 @@ export function ProjectForm({ mode, project }: Props) {
       const result = (await response.json()) as { message?: string; project?: DbProject };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося зберегти проєкт');
+        throw new Error(result.message || 'Failed to save project');
       }
 
-      toast.success(mode === 'create' ? 'Проєкт створено' : 'Проєкт оновлено');
+      toast.success(mode === 'create' ? 'Project created' : 'Project updated');
       // Only mark the submitted values as saved; edits made during the request remain dirty.
       setSavedSnapshot(currentSnapshot);
 
@@ -223,7 +223,7 @@ export function ProjectForm({ mode, project }: Props) {
         router.refresh();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти проєкт');
+      toast.error(error instanceof Error ? error.message : 'Failed to save project');
     } finally {
       setIsSaving(false);
     }
@@ -244,7 +244,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Коротка мітка</span>
+          <span className={labelStyles}>Short label</span>
           <AdminInput
             type="text"
             required
@@ -355,7 +355,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label className="sm:col-span-2">
-          <span className={labelStyles}>{"Стек (необов'язково)"}</span>
+          <span className={labelStyles}>{'Stack (optional)'}</span>
           <StackInput
             value={form.stack}
             onChange={(value: string) => updateField('stack', value)}
@@ -363,7 +363,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"Статус (UA, необов'язково)"}</span>
+          <span className={labelStyles}>{'Status (UA, optional)'}</span>
           <AdminInput
             type="text"
             value={form.statusUk}
@@ -373,7 +373,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"Статус (EN, необов'язково)"}</span>
+          <span className={labelStyles}>{'Status (EN, optional)'}</span>
           <AdminInput
             type="text"
             value={form.statusEn}
@@ -383,7 +383,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"Рік (необов'язково)"}</span>
+          <span className={labelStyles}>{'Year (optional)'}</span>
           <AdminInput
             type="text"
             value={form.yearLabel}
@@ -393,7 +393,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Порядок</span>
+          <span className={labelStyles}>Order</span>
           <AdminInput
             type="number"
             required
@@ -403,7 +403,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label className="sm:col-span-2">
-          <span className={labelStyles}>{"Зовнішнє посилання (необов'язково)"}</span>
+          <span className={labelStyles}>{'External link (optional)'}</span>
           <AdminInput
             type="url"
             value={form.externalUrl}
@@ -451,7 +451,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"GitHub (необов'язково)"}</span>
+          <span className={labelStyles}>{'GitHub (optional)'}</span>
           <AdminInput
             type="url"
             value={form.githubUrl}
@@ -461,7 +461,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"Storybook (необов'язково)"}</span>
+          <span className={labelStyles}>{'Storybook (optional)'}</span>
           <AdminInput
             type="url"
             value={form.storybookUrl}
@@ -478,7 +478,7 @@ export function ProjectForm({ mode, project }: Props) {
               onChange={(event) => updateField('featured', event.target.checked)}
               className="h-4 w-4"
             />
-            У «Вибраних проєктах»
+            In Featured projects
           </label>
 
           <label className="flex items-center gap-2 text-sm text-neutral-700">
@@ -488,7 +488,7 @@ export function ProjectForm({ mode, project }: Props) {
               onChange={(event) => updateField('published', event.target.checked)}
               className="h-4 w-4"
             />
-            Опубліковано
+            Published
           </label>
         </div>
       </div>
@@ -499,7 +499,7 @@ export function ProjectForm({ mode, project }: Props) {
 
       <div className="flex flex-wrap items-center justify-end gap-3">
         <span role="status" className="text-app-danger mr-auto text-sm">
-          {isDirty ? 'Є незбережені зміни' : ''}
+          {isDirty ? 'Unsaved changes' : ''}
         </span>
         <AdminButton
           variant="outline"
@@ -509,10 +509,10 @@ export function ProjectForm({ mode, project }: Props) {
           }}
           disabled={isSaving}
         >
-          Скасувати зміни
+          Discard changes
         </AdminButton>
         <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
-          {isSaving ? 'Збереження…' : mode === 'create' ? 'Створити проєкт' : 'Зберегти зміни'}
+          {isSaving ? 'Saving…' : mode === 'create' ? 'Create project' : 'Save changes'}
         </AdminButton>
       </div>
     </form>

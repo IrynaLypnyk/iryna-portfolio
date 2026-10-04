@@ -26,14 +26,14 @@ export function ExperimentDeleteButton({ id, title }: Props) {
       const result = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося видалити експеримент');
+        throw new Error(result.message || 'Failed to delete експеримент');
       }
 
-      toast.success('Експеримент видалено');
+      toast.success('Experiment deleted');
       setIsConfirming(false);
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося видалити експеримент');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete експеримент');
     } finally {
       setIsDeleting(false);
     }
@@ -49,12 +49,12 @@ export function ExperimentDeleteButton({ id, title }: Props) {
         disabled={isDeleting}
         startIcon={<Trash2 size={14} strokeWidth={1.75} />}
       >
-        {isDeleting ? 'Видалення…' : 'Видалити'}
+        {isDeleting ? 'Видалення…' : 'Delete'}
       </AdminButton>
 
       {isConfirming && (
         <AdminDeleteDialog
-          title={`Видалити «${title}»?`}
+          title={`Delete «${title}»?`}
           description="Цю дію неможливо скасувати."
           isDeleting={isDeleting}
           onConfirmAction={handleDelete}

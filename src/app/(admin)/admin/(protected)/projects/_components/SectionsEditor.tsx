@@ -120,7 +120,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
                 variant="icon"
                 tone="danger"
                 size="sm"
-                aria-label="Видалити секцію"
+                aria-label="Delete секцію"
                 onClickAction={() => remove(section.key)}
               >
                 <Trash2 size={14} strokeWidth={1.75} />

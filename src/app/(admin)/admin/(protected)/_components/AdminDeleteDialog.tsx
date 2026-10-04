@@ -20,7 +20,7 @@ export function AdminDeleteDialog({
   description,
   children,
   isDeleting = false,
-  confirmLabel = 'Видалити',
+  confirmLabel = 'Delete',
   onConfirmAction,
   onCancelAction,
 }: AdminDeleteDialogProps) {
@@ -38,7 +38,7 @@ export function AdminDeleteDialog({
             onClickAction={onCancelAction}
             disabled={isDeleting}
           >
-            Скасувати
+            Cancel
           </AdminButton>
           <AdminButton
             variant="solid"

@@ -27,9 +27,9 @@ export default async function AdminExperimentsListPage() {
             <table className="w-full min-w-200 border-separate border-spacing-0 text-sm">
               <thead>
                 <tr>
-                  <th className={headCellStyles}>Назва</th>
+                  <th className={headCellStyles}>Name</th>
                   <th className={`${headCellStyles} w-24`}>Порядок</th>
-                  <th className={`${headCellStyles} w-40`}>Стан</th>
+                  <th className={`${headCellStyles} w-40`}>Status</th>
                   <th className={`${headCellStyles} w-44`}>Дії</th>
                 </tr>
               </thead>
@@ -59,7 +59,7 @@ export default async function AdminExperimentsListPage() {
                           size="sm"
                           href={routes.admin.experiment(experiment.id)}
                         >
-                          Редагувати
+                          Edit
                         </AdminButton>
                         <ExperimentDeleteButton id={experiment.id} title={experiment.titleEn} />
                       </div>

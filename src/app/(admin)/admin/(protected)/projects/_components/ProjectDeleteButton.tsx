@@ -26,14 +26,14 @@ export function ProjectDeleteButton({ id, title }: Props) {
       const result = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося видалити проєкт');
+        throw new Error(result.message || 'Failed to delete проєкт');
       }
 
-      toast.success('Проєкт видалено');
+      toast.success('Project deleted');
       setIsConfirming(false);
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося видалити проєкт');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete проєкт');
     } finally {
       setIsDeleting(false);
     }
@@ -49,12 +49,12 @@ export function ProjectDeleteButton({ id, title }: Props) {
         disabled={isDeleting}
         startIcon={<Trash2 size={14} strokeWidth={1.75} />}
       >
-        {isDeleting ? 'Видалення…' : 'Видалити'}
+        {isDeleting ? 'Видалення…' : 'Delete'}
       </AdminButton>
 
       {isConfirming && (
         <AdminDeleteDialog
-          title={`Видалити «${title}»?`}
+          title={`Delete «${title}»?`}
           description="Разом із проєктом будуть видалені всі його фото. Цю дію неможливо скасувати."
           isDeleting={isDeleting}
           onConfirmAction={handleDelete}

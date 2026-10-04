@@ -139,7 +139,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Порядок</span>
+          <span className={labelStyles}>Order</span>
           <AdminInput
             type="number"
             required
@@ -149,7 +149,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Назва (UA)</span>
+          <span className={labelStyles}>Title (UA)</span>
           <AdminInput
             type="text"
             required
@@ -159,7 +159,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Назва (EN)</span>
+          <span className={labelStyles}>Title (EN)</span>
           <AdminInput
             type="text"
             required
@@ -189,7 +189,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label className="sm:col-span-2">
-          <span className={labelStyles}>{"Стек (необов'язково)"}</span>
+          <span className={labelStyles}>{'Stack (optional)'}</span>
           <AdminInput
             type="text"
             value={form.stack}
@@ -209,7 +209,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{"GitHub (необов'язково)"}</span>
+          <span className={labelStyles}>{'GitHub (optional)'}</span>
           <AdminInput
             type="url"
             value={form.githubUrl}
@@ -226,14 +226,14 @@ export function ExperimentForm({ mode, experiment }: Props) {
               onChange={(event) => updateField('published', event.target.checked)}
               className="h-4 w-4"
             />
-            Опубліковано
+            Published
           </label>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-3">
         <span role="status" className="text-app-danger mr-auto text-sm">
-          {isDirty ? 'Є незбережені зміни' : ''}
+          {isDirty ? 'Unsaved changes' : ''}
         </span>
         <AdminButton
           variant="outline"
@@ -243,10 +243,10 @@ export function ExperimentForm({ mode, experiment }: Props) {
           }}
           disabled={isSaving}
         >
-          Скасувати зміни
+          Discard changes
         </AdminButton>
         <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
-          {isSaving ? 'Збереження…' : mode === 'create' ? 'Створити експеримент' : 'Зберегти зміни'}
+          {isSaving ? 'Saving…' : mode === 'create' ? 'Створити експеримент' : 'Save changes'}
         </AdminButton>
       </div>
     </form>

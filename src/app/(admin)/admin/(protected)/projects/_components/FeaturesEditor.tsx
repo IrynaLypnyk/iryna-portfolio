@@ -123,7 +123,7 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
               variant="icon"
               tone="danger"
               size="sm"
-              aria-label="Видалити"
+              aria-label="Delete"
               onClickAction={() => remove(feature.key)}
             >
               <Trash2 size={14} strokeWidth={1.75} />
