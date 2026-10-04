@@ -8,7 +8,7 @@ function normalizeSiteUrl(url: string): string {
 
 export const SITE_URL = normalizeSiteUrl(process.env.NEXT_PUBLIC_APP_URL || FALLBACK_SITE_URL);
 
-export const DEFAULT_OG_IMAGE = '/images/og/default-og.jpeg';
+export const DEFAULT_OG_IMAGE = '/images/og/og-image.png';
 
 /**
  * Controls whether search engines may index the site.

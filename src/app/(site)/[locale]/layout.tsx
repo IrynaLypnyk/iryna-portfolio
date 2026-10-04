@@ -1,6 +1,6 @@
 import { JsonLd } from '@/app/(site)/[locale]/_components/_seo/JsonLd';
 import { routing, type LocaleType } from '@/i18n/routing';
-import { SITE_URL, IS_SITE_LIVE, buildLocaleUrl } from '@/lib/seo/config';
+import { SITE_URL, IS_SITE_LIVE, buildLocaleUrl, DEFAULT_OG_IMAGE } from '@/lib/seo/config';
 import { buildPersonJsonLd, buildWebSiteJsonLd } from '@/lib/seo/json-ld';
 import { cn } from '@/lib/utils';
 import '@/styles/index.css';
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
       url: buildLocaleUrl(currentLocale),
       title: `${siteName} — ${siteTitle}`,
       description: siteDescription,
-      images: [{ url: `${SITE_URL}/images/og/default-og.jpeg` }],
+      images: [{ url: `${SITE_URL}${DEFAULT_OG_IMAGE}` }],
     },
 
     robots: IS_SITE_LIVE
