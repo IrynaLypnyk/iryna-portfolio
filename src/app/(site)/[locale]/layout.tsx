@@ -17,6 +17,7 @@ import { SiteFooter } from '@/app/(site)/[locale]/_components/_layouts/SiteFoote
 import { PageContainer } from '@/app/(site)/[locale]/_components/_ui/PageContainer';
 import { anchors } from '@/constants/routes';
 import { BackToTopButton } from '@/app/(site)/[locale]/_components/_ui/BackToTopButton';
+import { SectionNav } from '@/app/(site)/[locale]/_components/_ui/SectionNav';
 
 export const viewport: Viewport = {
   width: 'device-width',
