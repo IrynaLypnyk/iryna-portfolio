@@ -41,7 +41,7 @@ export const LinkActive: Story = {
   args: {
     href: routes.admin.media,
     active: true,
-    children: 'Використовуються',
+    children: 'Used',
   },
 };
 

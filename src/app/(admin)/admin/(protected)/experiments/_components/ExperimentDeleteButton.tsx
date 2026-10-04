@@ -55,7 +55,7 @@ export function ExperimentDeleteButton({ id, title }: Props) {
       {isConfirming && (
         <AdminDeleteDialog
           title={`Delete «${title}»?`}
-          description="Цю дію неможливо скасувати."
+          description="This action cannot be undone."
           isDeleting={isDeleting}
           onConfirmAction={handleDelete}
           onCancelAction={() => setIsConfirming(false)}

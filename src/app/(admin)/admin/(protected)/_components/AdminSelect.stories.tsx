@@ -18,9 +18,9 @@ export const Default: Story = {
   render: (args) => (
     <AdminSelect {...args}>
       <option value="">— Не вибрано —</option>
-      <option value="apartment">Квартира</option>
-      <option value="house">Будинок</option>
-      <option value="commercial">Комерційний простір</option>
+      <option value="apartment">Apartment</option>
+      <option value="house">House</option>
+      <option value="commercial">Commercial space</option>
     </AdminSelect>
   ),
 };
@@ -32,8 +32,8 @@ export const Empty: Story = {
   render: (args) => (
     <AdminSelect {...args}>
       <option value="">— Не вибрано —</option>
-      <option value="apartment">Квартира</option>
-      <option value="house">Будинок</option>
+      <option value="apartment">Apartment</option>
+      <option value="house">House</option>
     </AdminSelect>
   ),
 };
@@ -44,8 +44,8 @@ export const Disabled: Story = {
   },
   render: (args) => (
     <AdminSelect {...args}>
-      <option value="apartment">Квартира</option>
-      <option value="house">Будинок</option>
+      <option value="apartment">Apartment</option>
+      <option value="house">House</option>
     </AdminSelect>
   ),
 };

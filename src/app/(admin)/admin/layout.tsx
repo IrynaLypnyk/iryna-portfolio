@@ -19,7 +19,7 @@ const { siteName } = SITE_CONTENT.uk;
 
 // Admin panel must never be indexed, regardless of the public site's launch/index state.
 export const metadata: Metadata = {
-  title: `Адмін-панель | ${siteName}`,
+  title: `Admin Panel | ${siteName}`,
   icons: {
     icon: [
       { url: '/favicon/favicon.ico' },

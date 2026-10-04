@@ -94,9 +94,9 @@ export function MediaTable({ items }: MediaTableProps) {
 
               <td className="px-4 py-3">
                 {item.usageCount > 0 ? (
-                  <AdminTag color="warning">Використовується · {item.usageCount}</AdminTag>
+                  <AdminTag color="warning">Used in · {item.usageCount}</AdminTag>
                 ) : (
-                  <AdminTag color="info">Не використовується</AdminTag>
+                  <AdminTag color="info">Not used</AdminTag>
                 )}
               </td>
             </tr>

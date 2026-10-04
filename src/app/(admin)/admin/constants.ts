@@ -4,26 +4,26 @@ import { FlaskConical, FolderKanban, Home, Images } from 'lucide-react';
 export const ADMIN_NAV_LINKS = [
   {
     href: routes.admin.root,
-    label: 'Головна',
+    label: 'Dashboard',
     icon: Home,
-    description: 'Огляд і швидкий доступ до розділів',
+    description: 'Overview and quick access to sections',
   },
   {
     href: routes.admin.projects,
-    label: 'Проєкти',
+    label: 'Projects',
     icon: FolderKanban,
-    description: 'Керування проєктами портфоліо, їхнім контентом і зображеннями',
+    description: 'Manage portfolio projects, their content and images',
   },
   {
     href: routes.admin.experiments,
-    label: 'Експерименти',
+    label: 'Experiments',
     icon: FlaskConical,
-    description: 'Керування інтерактивними демо та експериментальними роботами',
+    description: 'Manage interactive demos and experimental work',
   },
   {
     href: routes.admin.media,
-    label: 'Медіа',
+    label: 'Media',
     icon: Images,
-    description: 'Перегляд і керування завантаженими зображеннями та медіафайлами',
+    description: 'View and manage uploaded images and media files',
   },
 ] as const;

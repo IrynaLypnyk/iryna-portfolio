@@ -40,7 +40,7 @@ export function AdminDialog({
       >
         <button
           type="button"
-          aria-label="Закрити"
+          aria-label="Close"
           disabled={closeDisabled}
           onClick={onCloseAction}
           className="absolute top-3 right-3 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-40"

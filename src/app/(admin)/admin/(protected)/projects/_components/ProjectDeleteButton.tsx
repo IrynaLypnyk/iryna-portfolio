@@ -55,7 +55,7 @@ export function ProjectDeleteButton({ id, title }: Props) {
       {isConfirming && (
         <AdminDeleteDialog
           title={`Delete «${title}»?`}
-          description="Разом із проєктом будуть видалені всі його фото. Цю дію неможливо скасувати."
+          description="Разом із проєктом будуть видалені всі його фото. This action cannot be undone."
           isDeleting={isDeleting}
           onConfirmAction={handleDelete}
           onCancelAction={() => setIsConfirming(false)}

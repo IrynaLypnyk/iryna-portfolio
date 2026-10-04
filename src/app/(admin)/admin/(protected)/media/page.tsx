@@ -139,7 +139,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
     },
     {
       value: 'used',
-      label: 'Використовуються',
+      label: 'Used',
       count: usedCount,
       href: `${routes.admin.media}?usage=used`,
     },

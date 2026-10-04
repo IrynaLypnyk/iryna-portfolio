@@ -38,7 +38,7 @@ export function ConfirmReorderExitDialog({
           disabled={isSaving}
           className="w-full justify-center"
         >
-          Logout без збереження
+          Logout without saving
         </AdminButton>
         <AdminButton
           variant="ghost"
