@@ -4,8 +4,8 @@
   :root {
     /* Defaults for CSS tooling and pages without next/font classes.
        Unlayered next/font classes take precedence over these fallbacks. */
-    --font-onest: 'Onest', Arial, sans-serif;
-    --font-jetbrains: 'JetBrains Mono', 'Courier New', monospace;
+    --font-manrope: 'Manrope', Arial, sans-serif;
+    --font-ibm-plex-mono: 'IBM Plex Mono', 'Courier New', monospace;
   }
 }
 
@@ -45,8 +45,8 @@
 
 /* Resolve next/font variables where the utility is used. */
 @theme inline {
-  --font-sans: var(--font-onest);
-  --font-mono: var(--font-jetbrains);
+  --font-sans: var(--font-manrope);
+  --font-mono: var(--font-ibm-plex-mono);
 }
 
 @theme {

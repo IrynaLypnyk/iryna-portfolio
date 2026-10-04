@@ -1,15 +1,15 @@
-import { Onest, JetBrains_Mono } from 'next/font/google';
+import { Manrope, IBM_Plex_Mono } from 'next/font/google';
 
-export const sans = Onest({
+export const sans = Manrope({
   subsets: ['latin', 'cyrillic-ext'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-onest',
+  variable: '--font-manrope',
   display: 'swap',
 });
 
-export const mono = JetBrains_Mono({
+export const mono = IBM_Plex_Mono({
   subsets: ['latin', 'cyrillic-ext'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-jetbrains',
+  variable: '--font-ibm-plex-mono',
   display: 'swap',
 });
