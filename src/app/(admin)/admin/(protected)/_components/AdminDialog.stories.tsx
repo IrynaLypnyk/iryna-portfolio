@@ -8,7 +8,7 @@ const meta: Meta<typeof AdminDialog> = {
   component: AdminDialog,
   args: {
     title: 'Назва діалогу',
-    description: 'Короткий опис або контекст дії.',
+    description: 'Короткий опис or контекст дії.',
     onCloseAction: () => {},
   },
 };
