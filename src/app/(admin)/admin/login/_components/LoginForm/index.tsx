@@ -151,7 +151,7 @@ export function LoginForm() {
                 fill="#EA4335"
               />
             </svg>
-            Sign in через Google
+            Sign in with Google
           </>
         )}
       </AdminButton>

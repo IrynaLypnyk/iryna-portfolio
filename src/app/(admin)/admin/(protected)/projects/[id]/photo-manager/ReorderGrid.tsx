@@ -71,7 +71,7 @@ export function ReorderGrid({ items, onReorderChangeAction }: Props) {
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-4" data-component="ReorderGrid">
       <p className="mb-4 text-sm text-neutral-500">
-        Перетягуйте фото, щоб змінити порядок. Збережіть через кнопку у тулбарі.
+        Drag photos to reorder. Save using the toolbar button.
       </p>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
