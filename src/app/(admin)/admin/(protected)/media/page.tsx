@@ -133,7 +133,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
   }[] = [
     {
       value: 'all',
-      label: 'Усі',
+      label: 'All',
       count: mediaItems.length,
       href: routes.admin.media,
     },
@@ -145,7 +145,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
     },
     {
       value: 'unused',
-      label: 'Не використовуються',
+      label: 'Not used',
       count: unusedCount,
       href: `${routes.admin.media}?usage=unused`,
     },

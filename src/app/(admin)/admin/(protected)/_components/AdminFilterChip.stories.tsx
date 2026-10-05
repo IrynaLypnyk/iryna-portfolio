@@ -7,7 +7,7 @@ const meta: Meta<typeof AdminFilterChip> = {
   title: 'Admin/AdminFilterChip',
   component: AdminFilterChip,
   args: {
-    children: 'Усі',
+    children: 'All',
     active: false,
   },
 };
