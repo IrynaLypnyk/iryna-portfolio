@@ -65,7 +65,7 @@ export function LoginForm() {
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
           <LogIn className="h-8 w-8" />
         </div>
-        <h1 className="text-2xl font-bold uppercase">Вхід в адмін-панель</h1>
+        <h1 className="text-2xl font-bold uppercase">Admin Panel Login</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -94,7 +94,7 @@ export function LoginForm() {
             htmlFor="password"
             className="block text-xs font-semibold tracking-wider text-neutral-500 uppercase"
           >
-            Пароль
+            Password
           </label>
           <AdminInput
             id="password"
@@ -109,7 +109,7 @@ export function LoginForm() {
         </div>
 
         <AdminButton type="submit" className="mt-6 w-full" disabled={isLoading || isGoogleLoading}>
-          {isLoading ? 'Вхід...' : 'Увійти'}
+          {isLoading ? 'Signing in…' : 'Sign in'}
         </AdminButton>
       </form>
 
@@ -151,7 +151,7 @@ export function LoginForm() {
                 fill="#EA4335"
               />
             </svg>
-            Увійти через Google
+            Sign in через Google
           </>
         )}
       </AdminButton>
