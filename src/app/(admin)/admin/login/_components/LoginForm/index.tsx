@@ -117,7 +117,7 @@ export function LoginForm() {
       <div className="my-6 flex items-center gap-4">
         <div className="h-px flex-1 bg-neutral-200" />
         <span className="text-[10px] font-bold tracking-[0.3em] text-neutral-400 uppercase">
-          або
+          or
         </span>
         <div className="h-px flex-1 bg-neutral-200" />
       </div>
