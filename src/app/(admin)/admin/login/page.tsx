@@ -2,15 +2,16 @@
 import { LoginForm } from './_components/LoginForm';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
-import { LogoIcon } from '@/assets/icons';
+import { Header } from '@/components/Header';
 import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
+import { routes } from '@/constants/routes';
 
 const MotionLoginForm = motion.create(LoginForm);
 
 export default function LoginPage() {
   return (
     <Suspense>
-      <div className="bg-app-page flex min-h-screen flex-col items-center">
+      <div className="bg-app-page/60 text-app-text flex min-h-screen flex-col">
         <div
           className="pointer-events-none fixed inset-0 opacity-[0.035]"
           style={{
@@ -19,15 +20,18 @@ export default function LoginPage() {
             backgroundSize: '60px 60px',
           }}
         />
-        {/* Top bar */}
-        <header className="border-app-line relative z-10 flex w-full items-center justify-between border-b px-6 py-6 sm:px-10 lg:px-16">
-          <div className="text-app-text flex items-center gap-2 text-[14px] font-bold tracking-[0.5em] uppercase">
-            <LogoIcon className="h-10 w-10" />
-            ADMIN
-          </div>
-          <OpenSiteButton />
-        </header>
-        <main className="relative z-10 flex w-full flex-1 items-center justify-center px-4 py-12">
+        <Header
+          title={
+            <span className="flex flex-wrap items-baseline gap-1 md:gap-2.5">
+              <span className="text-app-text text-[18px] leading-5 font-medium">Admin</span>
+            </span>
+          }
+          nav={<div className="hidden md:block" />}
+          rightContent={<OpenSiteButton />}
+          logoHref={routes.admin.login}
+          headerClass="border-app-line bg-app-page text-app-text sticky top-0 z-20 border-b"
+        />
+        <main className="z-25 flex flex-1 items-center justify-center px-4 py-12">
           <MotionLoginForm
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
