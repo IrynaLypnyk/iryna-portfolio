@@ -255,7 +255,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Назва (UA)</span>
+          <span className={labelStyles}>Title (UA)</span>
           <AdminInput
             type="text"
             required
@@ -265,7 +265,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Назва (EN)</span>
+          <span className={labelStyles}>Title (EN)</span>
           <AdminInput
             type="text"
             required

@@ -57,7 +57,7 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
         const authJson = await authResponse.json();
 
         if (!authResponse.ok) {
-          throw new Error(authJson.message ?? 'Не вдалося отримати параметри завантаження');
+          throw new Error(authJson.message ?? 'Failed to get upload parameters');
         }
 
         const imageKitResult = await upload({
@@ -73,7 +73,7 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
         });
 
         if (!imageKitResult.fileId) {
-          throw new Error('ImageKit не повернув fileId');
+          throw new Error('ImageKit did not return fileId');
         }
 
         const response = await fetch(apiRoutes.admin.projectPhotoUpload(projectId), {

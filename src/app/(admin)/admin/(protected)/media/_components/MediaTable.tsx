@@ -41,7 +41,7 @@ export function MediaTable({ items }: MediaTableProps) {
             <th className="w-28 px-4 py-3">Preview</th>
             <th className="px-4 py-3">File</th>
             <th className="w-64 px-4 py-3">Projects</th>
-            <th className="w-36 px-4 py-3">Завантажено</th>
+            <th className="w-36 px-4 py-3">Uploaded</th>
             <th className="w-44 px-4 py-3">Статус</th>
           </tr>
         </thead>

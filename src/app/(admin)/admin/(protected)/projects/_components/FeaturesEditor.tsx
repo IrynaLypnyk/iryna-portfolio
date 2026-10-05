@@ -55,20 +55,20 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-neutral-900">Ключові фічі</h3>
+        <h3 className="text-xl font-semibold text-neutral-900">Key features</h3>
         <AdminButton
           type="button"
           variant="outline"
           onClickAction={() => onChangeAction([...features, createFeatureDraft()])}
           startIcon={<Plus size={14} strokeWidth={1.75} />}
         >
-          Додати фічу
+          Add feature
         </AdminButton>
       </div>
 
       {features.length === 0 && (
         <p className="rounded-xl border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">
-          Фіч немає. Секція «Key features» на картці проєкту не покажеться.
+          No features. Section &quot;Key features&quot; on project card will not be shown.
         </p>
       )}
 

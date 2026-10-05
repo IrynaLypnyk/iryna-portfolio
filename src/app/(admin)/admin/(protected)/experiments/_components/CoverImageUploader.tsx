@@ -50,7 +50,7 @@ export function CoverImageUploader({ experimentId, cover, onCoverChangeAction }:
       const authJson = await authResponse.json();
 
       if (!authResponse.ok) {
-        throw new Error(authJson.message ?? 'Не вдалося отримати параметри завантаження');
+        throw new Error(authJson.message ?? 'Failed to get upload parameters');
       }
 
       const imageKitResult = await upload({
@@ -66,7 +66,7 @@ export function CoverImageUploader({ experimentId, cover, onCoverChangeAction }:
       });
 
       if (!imageKitResult.fileId) {
-        throw new Error('ImageKit не повернув fileId');
+        throw new Error('ImageKit did not return fileId');
       }
 
       const response = await fetch(apiRoutes.admin.experimentCoverUpload(experimentId), {
@@ -78,13 +78,13 @@ export function CoverImageUploader({ experimentId, cover, onCoverChangeAction }:
       const json = (await response.json()) as { cover?: CoverImage; message?: string };
 
       if (!response.ok || !json.cover) {
-        throw new Error(json.message ?? 'Не вдалося зберегти обкладинку');
+        throw new Error(json.message ?? 'Failed to save cover');
       }
 
       onCoverChangeAction(json.cover);
-      toast.success('Обкладинку оновлено');
+      toast.success('Cover updated');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося завантажити обкладинку');
+      toast.error(error instanceof Error ? error.message : 'Failed to upload cover');
     } finally {
       setIsUploading(false);
     }
@@ -101,7 +101,7 @@ export function CoverImageUploader({ experimentId, cover, onCoverChangeAction }:
         />
       ) : (
         <div className="flex h-20 w-28 shrink-0 items-center justify-center rounded-lg border border-dashed border-neutral-300 text-center text-[11px] text-neutral-400">
-          Немає обкладинки
+          No cover
         </div>
       )}
 
@@ -121,7 +121,7 @@ export function CoverImageUploader({ experimentId, cover, onCoverChangeAction }:
           onClickAction={() => fileInputRef.current?.click()}
           startIcon={<Upload size={14} strokeWidth={1.75} />}
         >
-          {isUploading ? 'Завантаження…' : cover ? 'Замінити обкладинку' : 'Завантажити обкладинку'}
+          {isUploading ? 'Uploading…' : cover ? 'Replace cover' : 'Upload cover'}
         </AdminButton>
       </div>
     </div>

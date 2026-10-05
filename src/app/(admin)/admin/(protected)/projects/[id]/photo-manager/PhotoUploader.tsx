@@ -97,7 +97,7 @@ export function PhotoUploader({
           /* Normal mode toolbar */
           <div className="flex flex-wrap gap-2">
             <AdminButton onClickAction={handleFilePickerClick} disabled={isUploading}>
-              {isUploading ? 'Завантаження…' : 'Upload photo'}
+              {isUploading ? 'Uploading…' : 'Upload photo'}
             </AdminButton>
             <AdminButton
               variant="outline"
