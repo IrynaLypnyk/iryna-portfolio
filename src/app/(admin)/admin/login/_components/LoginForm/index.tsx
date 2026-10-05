@@ -47,13 +47,13 @@ export function LoginForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Помилка входу');
+        throw new Error(data.message || 'Login failed');
       }
 
-      toast.success('Успішний вхід');
+      toast.success('Login successful');
       window.location.href = routes.admin.root;
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Помилка входу');
+      toast.error(error instanceof Error ? error.message : 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +130,7 @@ export function LoginForm() {
         disabled={isLoading || isGoogleLoading}
       >
         {isGoogleLoading ? (
-          'Завантаження...'
+          'Loading…'
         ) : (
           <>
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
