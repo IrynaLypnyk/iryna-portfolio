@@ -82,7 +82,7 @@ export function PhotoTableRow({
           <AdminInput
             type="url"
             value={item.draft.linkUrl ?? ''}
-            placeholder="Посилання для галереї (необов'язково)"
+            placeholder="Посилання для галереї (optional)"
             aria-label="Посилання для галереї"
             className="sm:col-span-2"
             onChange={(event) =>

@@ -295,7 +295,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Контекст на головній (UA)</span>
+          <span className={labelStyles}>Home context (UA)</span>
           <AdminTextarea
             required
             rows={3}
@@ -305,7 +305,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Контекст на головній (EN)</span>
+          <span className={labelStyles}>Home context (EN)</span>
           <AdminTextarea
             required
             rows={3}
@@ -335,7 +335,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Роль (UA)</span>
+          <span className={labelStyles}>Role (UA)</span>
           <AdminInput
             type="text"
             required
@@ -345,7 +345,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Роль (EN)</span>
+          <span className={labelStyles}>Role (EN)</span>
           <AdminInput
             type="text"
             required
@@ -413,7 +413,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Підпис посилання (UA)</span>
+          <span className={labelStyles}>Link label (UA)</span>
           <AdminInput
             type="text"
             value={form.linkLabelUk}
@@ -423,7 +423,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Підпис посилання (EN)</span>
+          <span className={labelStyles}>Link label (EN)</span>
           <AdminInput
             type="text"
             value={form.linkLabelEn}
@@ -433,7 +433,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Примітка до посилань (UA)</span>
+          <span className={labelStyles}>Link note (UA)</span>
           <AdminTextarea
             rows={2}
             value={form.linkNoteUk}
@@ -442,7 +442,7 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Примітка до посилань (EN)</span>
+          <span className={labelStyles}>Link note (EN)</span>
           <AdminTextarea
             rows={2}
             value={form.linkNoteEn}

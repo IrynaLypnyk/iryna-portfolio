@@ -38,9 +38,9 @@ export function MediaTable({ items }: MediaTableProps) {
       <table className="w-full min-w-[900px] border-collapse text-sm">
         <thead className="bg-neutral-100 text-left">
           <tr>
-            <th className="w-28 px-4 py-3">Превʼю</th>
-            <th className="px-4 py-3">Файл</th>
-            <th className="w-64 px-4 py-3">Проєкти</th>
+            <th className="w-28 px-4 py-3">Preview</th>
+            <th className="px-4 py-3">File</th>
+            <th className="w-64 px-4 py-3">Projects</th>
             <th className="w-36 px-4 py-3">Завантажено</th>
             <th className="w-44 px-4 py-3">Статус</th>
           </tr>

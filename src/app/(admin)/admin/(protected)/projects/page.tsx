@@ -29,9 +29,9 @@ export default async function AdminProjectsListPage() {
               <thead>
                 <tr>
                   <th className={headCellStyles}>Name</th>
-                  <th className={`${headCellStyles} w-32`}>Мітка</th>
+                  <th className={`${headCellStyles} w-32`}>Label</th>
                   <th className={`${headCellStyles} w-24`}>Order</th>
-                  <th className={`${headCellStyles} w-28`}>Фото</th>
+                  <th className={`${headCellStyles} w-28`}>Photo</th>
                   <th className={`${headCellStyles} w-40`}>Status</th>
                   <th className={`${headCellStyles} w-44`}>Actions</th>
                 </tr>

@@ -74,7 +74,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           onClickAction={() => onChangeAction([...sections, createSectionDraft()])}
           startIcon={<Plus size={14} strokeWidth={1.75} />}
         >
-          Додати секцію
+          Add section
         </AdminButton>
       </div>
 
@@ -129,7 +129,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </div>
 
           <label>
-            <span className={labelStyles}>Заголовок (UA)</span>
+            <span className={labelStyles}>Heading (UA)</span>
             <AdminInput
               type="text"
               required
@@ -139,7 +139,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </label>
 
           <label>
-            <span className={labelStyles}>Заголовок (EN)</span>
+            <span className={labelStyles}>Heading (EN)</span>
             <AdminInput
               type="text"
               required
@@ -149,7 +149,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </label>
 
           <label>
-            <span className={labelStyles}>Абзац 1 (UA)</span>
+            <span className={labelStyles}>Paragraph 1 (UA)</span>
             <AdminTextarea
               required
               rows={3}
@@ -159,7 +159,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </label>
 
           <label>
-            <span className={labelStyles}>Абзац 1 (EN)</span>
+            <span className={labelStyles}>Paragraph 1 (EN)</span>
             <AdminTextarea
               required
               rows={3}
@@ -169,7 +169,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </label>
 
           <label>
-            <span className={labelStyles}>{"Абзац 2 (UA, необов'язково)"}</span>
+            <span className={labelStyles}>{'Paragraph 2 (UA, optional)'}</span>
             <AdminTextarea
               rows={3}
               value={section.body2Uk}
@@ -178,7 +178,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
           </label>
 
           <label>
-            <span className={labelStyles}>{"Абзац 2 (EN, необов'язково)"}</span>
+            <span className={labelStyles}>{'Paragraph 2 (EN, optional)'}</span>
             <AdminTextarea
               rows={3}
               value={section.body2En}

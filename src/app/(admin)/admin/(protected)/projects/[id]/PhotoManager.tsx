@@ -131,7 +131,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
         )
       );
 
-      toast.success('Фото збережено');
+      toast.success('Photo збережено');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти фото');
     } finally {
@@ -168,7 +168,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
       }
 
       setItems((current) => current.filter((currentItem) => currentItem.id !== item.id));
-      toast.success('Фото видалено');
+      toast.success('Photo видалено');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Не вдалося видалити фото');
       setStatuses((current) => ({ ...current, [item.id]: 'idle' }));

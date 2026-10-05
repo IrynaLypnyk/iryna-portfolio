@@ -13,7 +13,7 @@ export function ExperimentCoverSection({ experimentId, initialCover }: Props) {
 
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-5">
-      <h2 className="mb-4 text-xl font-semibold text-neutral-900">Обкладинка</h2>
+      <h2 className="mb-4 text-xl font-semibold text-neutral-900">Cover</h2>
       <CoverImageUploader
         experimentId={experimentId}
         cover={cover}

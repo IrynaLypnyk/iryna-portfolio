@@ -10,7 +10,7 @@ export function OpenSiteButton() {
       external
       endIcon={<ExternalLink size={16} strokeWidth={1.5} />}
     >
-      На сайт
+      Visit site
     </AdminButton>
   );
 }

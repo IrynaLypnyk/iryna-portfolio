@@ -32,9 +32,9 @@ export function PhotoTable({
         <table className="w-full min-w-200 border-separate border-spacing-0 text-sm">
           <thead className="text-left">
             <tr>
-              <th className={`${photoTableHeadCellStyles} w-32`}>Зображення</th>
-              <th className={`${photoTableHeadCellStyles} w-36`}>Обкладинка</th>
-              <th className={photoTableHeadCellStyles}>Підписи, посилання та опис у галереї</th>
+              <th className={`${photoTableHeadCellStyles} w-32`}>Image</th>
+              <th className={`${photoTableHeadCellStyles} w-36`}>Cover</th>
+              <th className={photoTableHeadCellStyles}>Labels, links and description in gallery</th>
               <th className={`${photoTableHeadCellStyles} w-36`}>Actions</th>
             </tr>
           </thead>

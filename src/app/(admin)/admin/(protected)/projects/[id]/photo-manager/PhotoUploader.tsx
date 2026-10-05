@@ -104,7 +104,7 @@ export function PhotoUploader({
               onClickAction={onEnterReorderAction}
               disabled={isUploading}
             >
-              Змінити порядок
+              Reorder
             </AdminButton>
           </div>
         )}
