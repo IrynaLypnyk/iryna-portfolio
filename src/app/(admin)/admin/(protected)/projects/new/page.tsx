@@ -12,10 +12,10 @@ export default async function NewProjectPage() {
           href={routes.admin.projects}
           className="text-sm text-neutral-500 hover:text-neutral-900"
         >
-          ← Усі проєкти
+          ← All projects
         </Link>
 
-        <h1 className="mt-3 mb-8 text-3xl font-semibold text-neutral-900">Новий проєкт</h1>
+        <h1 className="mt-3 mb-8 text-3xl font-semibold text-neutral-900">New project</h1>
 
         <ProjectForm mode="create" />
       </div>

@@ -169,7 +169,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Опис (UA)</span>
+          <span className={labelStyles}>Description (UA)</span>
           <AdminTextarea
             required
             rows={3}
@@ -179,7 +179,7 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Опис (EN)</span>
+          <span className={labelStyles}>Description (EN)</span>
           <AdminTextarea
             required
             rows={3}

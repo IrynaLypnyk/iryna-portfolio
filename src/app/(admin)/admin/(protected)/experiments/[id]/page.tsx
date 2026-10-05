@@ -34,7 +34,7 @@ export default async function EditExperimentPage({ params }: Props) {
             href={routes.admin.experiments}
             className="text-sm text-neutral-500 hover:text-neutral-900"
           >
-            ← Усі експерименти
+            ← All experiments
           </Link>
 
           <h1 className="mt-3 mb-8 text-3xl font-semibold text-neutral-900">

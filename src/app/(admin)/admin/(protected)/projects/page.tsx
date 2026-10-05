@@ -20,7 +20,7 @@ export default async function AdminProjectsListPage() {
       <div className="mx-auto max-w-350">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-3xl font-semibold text-neutral-900">Projects</h1>
-          <AdminButton href={routes.admin.projectNew}>Новий проєкт</AdminButton>
+          <AdminButton href={routes.admin.projectNew}>New project</AdminButton>
         </div>
 
         <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
@@ -30,10 +30,10 @@ export default async function AdminProjectsListPage() {
                 <tr>
                   <th className={headCellStyles}>Name</th>
                   <th className={`${headCellStyles} w-32`}>Мітка</th>
-                  <th className={`${headCellStyles} w-24`}>Порядок</th>
+                  <th className={`${headCellStyles} w-24`}>Order</th>
                   <th className={`${headCellStyles} w-28`}>Фото</th>
                   <th className={`${headCellStyles} w-40`}>Status</th>
-                  <th className={`${headCellStyles} w-44`}>Дії</th>
+                  <th className={`${headCellStyles} w-44`}>Actions</th>
                 </tr>
               </thead>
 
@@ -81,7 +81,7 @@ export default async function AdminProjectsListPage() {
           </div>
 
           {projects.length === 0 && (
-            <div className="p-10 text-center text-sm text-neutral-500">Поки що немає проєктів.</div>
+            <div className="p-10 text-center text-sm text-neutral-500">No projects yet.</div>
           )}
         </div>
       </div>

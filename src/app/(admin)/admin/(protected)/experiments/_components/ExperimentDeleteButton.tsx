@@ -26,14 +26,14 @@ export function ExperimentDeleteButton({ id, title }: Props) {
       const result = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Failed to delete експеримент');
+        throw new Error(result.message || 'Failed to delete experiment');
       }
 
       toast.success('Experiment deleted');
       setIsConfirming(false);
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete експеримент');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete experiment');
     } finally {
       setIsDeleting(false);
     }

@@ -55,7 +55,7 @@ export default async function EditProjectPage({ params }: Props) {
           href={routes.admin.projects}
           className="text-sm text-neutral-500 hover:text-neutral-900"
         >
-          ← Усі проєкти
+          ← All projects
         </Link>
 
         <h1 className="mt-3 mb-8 text-3xl font-semibold text-neutral-900">

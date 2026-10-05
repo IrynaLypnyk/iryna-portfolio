@@ -67,7 +67,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
 
       setReorderItems(reordered);
       setItems(reordered);
-      toast.success('Порядок збережено');
+      toast.success('Order збережено');
       return true;
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти порядок');

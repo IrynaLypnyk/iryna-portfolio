@@ -19,7 +19,7 @@ export default async function AdminExperimentsListPage() {
       <div className="mx-auto max-w-350">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-3xl font-semibold text-neutral-900">Playground</h1>
-          <AdminButton href={routes.admin.experimentNew}>Новий експеримент</AdminButton>
+          <AdminButton href={routes.admin.experimentNew}>New experiment</AdminButton>
         </div>
 
         <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
@@ -28,9 +28,9 @@ export default async function AdminExperimentsListPage() {
               <thead>
                 <tr>
                   <th className={headCellStyles}>Name</th>
-                  <th className={`${headCellStyles} w-24`}>Порядок</th>
+                  <th className={`${headCellStyles} w-24`}>Order</th>
                   <th className={`${headCellStyles} w-40`}>Status</th>
-                  <th className={`${headCellStyles} w-44`}>Дії</th>
+                  <th className={`${headCellStyles} w-44`}>Actions</th>
                 </tr>
               </thead>
 
@@ -71,9 +71,7 @@ export default async function AdminExperimentsListPage() {
           </div>
 
           {experiments.length === 0 && (
-            <div className="p-10 text-center text-sm text-neutral-500">
-              Поки що немає експериментів.
-            </div>
+            <div className="p-10 text-center text-sm text-neutral-500">No experiments yet.</div>
           )}
         </div>
       </div>

@@ -73,7 +73,7 @@ export const WithIcon: Story = {
   name: 'Solid + icon',
   args: {
     startIcon: <Plus size={16} strokeWidth={2} aria-hidden="true" />,
-    children: 'Новий проєкт',
+    children: 'New project',
   },
 };
 
@@ -147,7 +147,7 @@ export const AsLink: Story = {
   args: {
     variant: 'outline',
     href: routes.admin.projectNew,
-    children: 'Новий проєкт',
+    children: 'New project',
   },
 };
 
