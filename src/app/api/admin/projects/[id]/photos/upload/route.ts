@@ -8,6 +8,7 @@ import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import { getImageKitFolder } from '@/lib/imagekit/getImageKitFolder';
 import { prisma } from '@/lib/prisma';
 import { getImageValidationError } from '@/lib/media/image-policy';
+import type { PhotoRow } from '@/app/(admin)/admin/(protected)/projects/[id]/photo-manager/types';
 
 type Params = {
   params: Promise<{ id: string }>;
@@ -157,7 +158,10 @@ export async function POST(request: NextRequest, { params }: Params) {
           isProjectCover: photo.isProjectCover,
           captionUk: photo.captionUk,
           captionEn: photo.captionEn,
-        },
+          linkUrl: photo.linkUrl,
+          descriptionUk: photo.descriptionUk,
+          descriptionEn: photo.descriptionEn,
+        } satisfies PhotoRow,
       },
       { status: 201 }
     );
