@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { MoveUpRight } from 'lucide-react';
 
 const linkStyles =
-  'hover:text-app-accent-bright active:text-app-accent-dark transition-colors inline-flex items-center transition-colors';
+  'hover:text-app-accent-bright active:text-app-accent-dark transition-colors inline-flex items-center transition-colors text-app-accent';
 
 type Props = {
   href: string;
