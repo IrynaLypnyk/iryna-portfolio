@@ -79,10 +79,12 @@ export function MetaList({
           <dt
             className={cn(
               'text-app-muted',
-              isRoomy ? 'pt-0.5 font-mono text-[2px] tracking-wide uppercase' : 'tracking-label'
+              isRoomy ? 'pt-0.5 font-mono text-[14px] tracking-tight uppercase' : 'tracking-label'
             )}
           >
-            <Label color={labelColor}>{item.label}</Label>
+            <Label color={labelColor} variant={isRoomy ? 'roomy' : 'compact'}>
+              {item.label}
+            </Label>
           </dt>
           <dd className={cn('m-0 ml-2')}>{item.value}</dd>
         </div>

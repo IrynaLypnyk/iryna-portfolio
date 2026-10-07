@@ -4,6 +4,7 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useProjectMeta } from '@/hooks/useProjectMeta';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
@@ -22,15 +23,10 @@ type Props = {
 
 export function RecentProjectArticle({ project, index }: Props) {
   const t = useTranslations('Work');
-  const tMetadata = useTranslations('ProjectMetadata');
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
-  const meta: MetaItem[] = [{ label: t('labelRole'), value: project.role }];
-
-  if (project.stack) {
-    meta.push({ label: t('labelStack'), value: project.stack });
-  }
+  const meta = useProjectMeta(project);
 
   const links = [
     project.externalUrl && {
@@ -42,15 +38,6 @@ export function RecentProjectArticle({ project, index }: Props) {
   ].filter((link): link is { href: string; label: string } => Boolean(link));
 
   const expandedMeta: MetaItem[] = [];
-
-  meta.push(
-    { label: tMetadata('labelType'), value: tMetadata(`types.${project.type}`) },
-    { label: tMetadata('labelStatus'), value: tMetadata(`statuses.${project.status}`) }
-  );
-
-  if (project.yearLabel) {
-    meta.push({ label: t('labelYear'), value: project.yearLabel });
-  }
 
   if (project.features.length > 0) {
     expandedMeta.push({
@@ -105,7 +92,7 @@ export function RecentProjectArticle({ project, index }: Props) {
 
           <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
-          <MetaList items={meta} variant="compact" labelColor="gray" />
+          <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
 
           {links.length > 0 && (
             <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">

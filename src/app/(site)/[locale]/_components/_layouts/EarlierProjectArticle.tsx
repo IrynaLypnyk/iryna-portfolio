@@ -4,7 +4,8 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
+import { useProjectMeta } from '@/hooks/useProjectMeta';
+import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
 import { cn } from '@/lib/utils';
@@ -23,15 +24,7 @@ export function EarlierProjectArticle({ project }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
-  const expandedMeta: MetaItem[] = [{ label: t('labelRole'), value: project.role }];
-
-  if (project.stack) {
-    expandedMeta.push({ label: t('labelStack'), value: project.stack });
-  }
-
-  if (project.yearLabel) {
-    expandedMeta.push({ label: t('labelYear'), value: project.yearLabel });
-  }
+  const expandedMeta = useProjectMeta(project);
 
   const links = [
     project.externalUrl && {
