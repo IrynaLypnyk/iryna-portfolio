@@ -2,7 +2,6 @@ import { useTranslations } from 'next-intl';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
 import { anchors } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';
-import { MoreWorkRow } from '@/app/(site)/[locale]/_components/_layouts/MoreWorkRow';
 import { RecentProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/RecentProjectArticle';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
 import { EarlierProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/EarlierProjectArticle';
@@ -44,9 +43,6 @@ export function Projects({ projects }: Props) {
             subtitleTag="h4"
           />
 
-          {/*{moreWork.map((project, position) => (*/}
-          {/*  <MoreWorkRow key={project.slug} project={project} />*/}
-          {/*))}*/}
           <div>
             {moreWork.map((project, position) => (
               <EarlierProjectArticle key={project.slug} project={project} index={position + 1} />
