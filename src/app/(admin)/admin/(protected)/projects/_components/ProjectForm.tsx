@@ -9,8 +9,7 @@ import {
   useConfirmLeave,
   useUnsavedChanges,
 } from '@/app/(admin)/admin/(protected)/_components/UnsavedChangesProvider';
-import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
-import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/AdminTextarea';
+import { ProjectField, validateProjectControl } from './ProjectField';
 import { apiRoutes, routes } from '@/constants/routes';
 import { SectionsEditor, type SectionDraft } from './SectionsEditor';
 import { FeaturesEditor, type FeatureDraft } from './FeaturesEditor';
@@ -161,6 +160,8 @@ export function ProjectForm({ mode, project }: Props) {
   const [features, setFeatures] = useState<FeatureDraft[]>(() =>
     toFeatureDrafts(project?.featuresUk ?? [], project?.featuresEn ?? [])
   );
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [saveError, setSaveError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form, sections, features));
   const currentSnapshot = snapshot(form, sections, features);
@@ -169,13 +170,33 @@ export function ProjectForm({ mode, project }: Props) {
   const confirmLeave = useConfirmLeave();
 
   function updateField<Key extends keyof FormState>(key: Key, value: FormState[Key]) {
+    setFieldErrors((current) => ({ ...current, [key]: '' }));
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (isSaving) {
+      return;
+    }
+
+    const formElement = event.currentTarget;
+    setSaveError('');
+    setFieldErrors({});
+    for (const control of Array.from(formElement.elements)) {
+      if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) {
+        validateProjectControl(control);
+      }
+    }
+    if (!formElement.checkValidity()) {
+      const firstInvalid = formElement.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+        ':invalid'
+      );
+      firstInvalid?.focus();
+      const message = firstInvalid?.validationMessage || 'Please correct the highlighted fields.';
+      setSaveError(message);
+      toast.error('Changes not saved', { description: message });
       return;
     }
 
@@ -207,13 +228,24 @@ export function ProjectForm({ mode, project }: Props) {
         body: JSON.stringify(payload),
       });
 
-      const result = (await response.json()) as { message?: string; project?: DbProject };
+      const result = (await response.json().catch(() => ({}))) as {
+        message?: string;
+        field?: string;
+        project?: DbProject;
+      };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Failed to save project');
+        if (result.field) {
+          setFieldErrors({ [result.field]: result.message || 'Check this value.' });
+          const control = formElement.elements.namedItem(result.field);
+          if (control instanceof HTMLElement) control.focus();
+        }
+        throw new Error(
+          result.message || 'The server could not save the project. Please try again.'
+        );
       }
 
-      toast.success(mode === 'create' ? 'Project created' : 'Project updated');
+      toast.success(mode === 'create' ? 'Project created and saved' : 'Changes saved');
       // Only mark the submitted values as saved; edits made during the request remain dirty.
       setSavedSnapshot(currentSnapshot);
 
@@ -223,31 +255,44 @@ export function ProjectForm({ mode, project }: Props) {
         router.refresh();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to save project');
+      const message =
+        error instanceof TypeError
+          ? 'Could not reach the server. Check your connection and try again.'
+          : error instanceof Error
+            ? error.message
+            : 'Please try saving again.';
+      setSaveError(message);
+      toast.error('Changes not saved', { description: message });
     } finally {
       setIsSaving(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form noValidate onSubmit={handleSubmit} className="space-y-8">
       <div className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5 sm:grid-cols-2">
         <label>
           <span className={labelStyles}>Slug</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="slug"
+            error={fieldErrors.slug}
             value={form.slug}
             onChange={(event) => updateField('slug', event.target.value)}
+            pattern="[a-z0-9]+(-[a-z0-9]+)*"
+            title="Use lowercase letters, numbers and single hyphens, for example sample-project."
             placeholder="sample-project"
           />
         </label>
 
         <label>
           <span className={labelStyles}>Short label</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="shortLabel"
+            error={fieldErrors.shortLabel}
             value={form.shortLabel}
             onChange={(event) => updateField('shortLabel', event.target.value)}
             placeholder="HELSI"
@@ -256,9 +301,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Title (UA)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="titleUk"
+            error={fieldErrors.titleUk}
             value={form.titleUk}
             onChange={(event) => updateField('titleUk', event.target.value)}
           />
@@ -266,9 +313,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Title (EN)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="titleEn"
+            error={fieldErrors.titleEn}
             value={form.titleEn}
             onChange={(event) => updateField('titleEn', event.target.value)}
           />
@@ -276,9 +325,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Підзаголовок (UA)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="subtitleUk"
+            error={fieldErrors.subtitleUk}
             value={form.subtitleUk}
             onChange={(event) => updateField('subtitleUk', event.target.value)}
           />
@@ -286,9 +337,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Підзаголовок (EN)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="subtitleEn"
+            error={fieldErrors.subtitleEn}
             value={form.subtitleEn}
             onChange={(event) => updateField('subtitleEn', event.target.value)}
           />
@@ -296,9 +349,12 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Home context (UA)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             required
             rows={3}
+            name="contextUk"
+            error={fieldErrors.contextUk}
             value={form.contextUk}
             onChange={(event) => updateField('contextUk', event.target.value)}
           />
@@ -306,9 +362,12 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Home context (EN)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             required
             rows={3}
+            name="contextEn"
+            error={fieldErrors.contextEn}
             value={form.contextEn}
             onChange={(event) => updateField('contextEn', event.target.value)}
           />
@@ -316,9 +375,12 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Лід case study (UA)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             required
             rows={4}
+            name="leadUk"
+            error={fieldErrors.leadUk}
             value={form.leadUk}
             onChange={(event) => updateField('leadUk', event.target.value)}
           />
@@ -326,9 +388,12 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Лід case study (EN)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             required
             rows={4}
+            name="leadEn"
+            error={fieldErrors.leadEn}
             value={form.leadEn}
             onChange={(event) => updateField('leadEn', event.target.value)}
           />
@@ -336,9 +401,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Role (UA)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="roleUk"
+            error={fieldErrors.roleUk}
             value={form.roleUk}
             onChange={(event) => updateField('roleUk', event.target.value)}
           />
@@ -346,9 +413,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Role (EN)</span>
-          <AdminInput
+          <ProjectField
             type="text"
             required
+            name="roleEn"
+            error={fieldErrors.roleEn}
             value={form.roleEn}
             onChange={(event) => updateField('roleEn', event.target.value)}
           />
@@ -364,8 +433,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>{'Status (UA, optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="text"
+            name="statusUk"
+            error={fieldErrors.statusUk}
             value={form.statusUk}
             onChange={(event) => updateField('statusUk', event.target.value)}
             placeholder="У розробці"
@@ -374,8 +445,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>{'Status (EN, optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="text"
+            name="statusEn"
+            error={fieldErrors.statusEn}
             value={form.statusEn}
             onChange={(event) => updateField('statusEn', event.target.value)}
             placeholder="In development"
@@ -384,8 +457,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>{'Year (optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="text"
+            name="yearLabel"
+            error={fieldErrors.yearLabel}
             value={form.yearLabel}
             onChange={(event) => updateField('yearLabel', event.target.value)}
             placeholder="2019 — 2024"
@@ -394,9 +469,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Order</span>
-          <AdminInput
+          <ProjectField
             type="number"
             required
+            name="order"
+            error={fieldErrors.order}
             value={form.order}
             onChange={(event) => updateField('order', event.target.value)}
           />
@@ -404,8 +481,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label className="sm:col-span-2">
           <span className={labelStyles}>{'External link (optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="url"
+            name="externalUrl"
+            error={fieldErrors.externalUrl}
             value={form.externalUrl}
             onChange={(event) => updateField('externalUrl', event.target.value)}
             placeholder="https://example.com"
@@ -414,8 +493,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Link label (UA)</span>
-          <AdminInput
+          <ProjectField
             type="text"
+            name="linkLabelUk"
+            error={fieldErrors.linkLabelUk}
             value={form.linkLabelUk}
             onChange={(event) => updateField('linkLabelUk', event.target.value)}
             placeholder="Продукт онлайн"
@@ -424,8 +505,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Link label (EN)</span>
-          <AdminInput
+          <ProjectField
             type="text"
+            name="linkLabelEn"
+            error={fieldErrors.linkLabelEn}
             value={form.linkLabelEn}
             onChange={(event) => updateField('linkLabelEn', event.target.value)}
             placeholder="Live product"
@@ -434,8 +517,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Link note (UA)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             rows={2}
+            name="linkNoteUk"
+            error={fieldErrors.linkNoteUk}
             value={form.linkNoteUk}
             onChange={(event) => updateField('linkNoteUk', event.target.value)}
           />
@@ -443,8 +529,11 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>Link note (EN)</span>
-          <AdminTextarea
+          <ProjectField
+            multiline
             rows={2}
+            name="linkNoteEn"
+            error={fieldErrors.linkNoteEn}
             value={form.linkNoteEn}
             onChange={(event) => updateField('linkNoteEn', event.target.value)}
           />
@@ -452,8 +541,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>{'GitHub (optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="url"
+            name="githubUrl"
+            error={fieldErrors.githubUrl}
             value={form.githubUrl}
             onChange={(event) => updateField('githubUrl', event.target.value)}
             placeholder="https://github.com/user/repo"
@@ -462,8 +553,10 @@ export function ProjectForm({ mode, project }: Props) {
 
         <label>
           <span className={labelStyles}>{'Storybook (optional)'}</span>
-          <AdminInput
+          <ProjectField
             type="url"
+            name="storybookUrl"
+            error={fieldErrors.storybookUrl}
             value={form.storybookUrl}
             onChange={(event) => updateField('storybookUrl', event.target.value)}
             placeholder="https://example.storybook.io"
@@ -497,6 +590,14 @@ export function ProjectForm({ mode, project }: Props) {
 
       <FeaturesEditor features={features} onChangeAction={setFeatures} />
 
+      {saveError && (
+        <p
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+        >
+          Changes not saved. {saveError}
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-end gap-3">
         <span role="status" className="text-app-danger mr-auto text-sm">
           {isDirty ? 'Unsaved changes' : ''}

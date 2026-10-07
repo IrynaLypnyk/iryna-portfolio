@@ -10,7 +10,10 @@ type Props = {
 
 export function Section({ id, children, className }: Props) {
   return (
-    <section data-component="Section" className={cn('py-(--section-py)', className)}>
+    <section
+      data-component="Section"
+      className={cn('border-app-line border-t py-(--section-py)', className)}
+    >
       <div id={id} className="scroll-mt-(--header-height)">
         {children}
       </div>

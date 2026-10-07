@@ -35,8 +35,7 @@
     "metaStatus": "Open to opportunities"
   },
   "Work": {
-    "title": "Latest projects",
-    "description": "Projects I’ve worked on or continue to develop.",
+    "title": "Work",
     "labelRole": "ROLE",
     "labelStack": "STACK",
     "labelStatus": "STATUS",
@@ -54,8 +53,14 @@
     "demoLabel": "Live demo",
     "openPhoto": "Open photo {index} of {count}",
     "coverPlaceholder": "{title} — product screenshot",
-    "moreWork": "More work / Earlier work",
-    "archiveNote": "Earlier work is shown honestly with year, role and stack. Its value is the original design and frontend craft, not the framework.",
+    "recentWork": {
+      "title": "Recent Work",
+      "description": "Projects I'm currently working on or have worked on recently"
+    },
+    "moreWork": {
+      "title": "Previous Work",
+      "description": "Projects I worked on earlier"
+    },
     "empty": "Projects are being added. Check back shortly."
   },
   "Playground": {
@@ -84,7 +89,7 @@
     "currently": "building full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
     "learning": "AI-assisted development and practical ways to bring AI into real products",
     "outside": {
-      "p1": "to open source project ",
+      "p1": "to an open-source project ",
       "p2": "Women Coding Community"
     }
   },

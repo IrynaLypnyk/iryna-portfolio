@@ -29,7 +29,7 @@
 
   --grad-brand: linear-gradient(150deg, var(--blue) 0%, var(--violet) 100%);
 
-  --page-max: 1600px;
+  --page-max: 1400px;
   --header-height: 68px;
   --page-pad-left: 16px;
   --page-pad-right: 16px;

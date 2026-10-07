@@ -1,5 +1,5 @@
 .yarl__root {
-  --yarl__color_backdrop: var(--color-app-page);
+  --yarl__color_backdrop: var(--color-app-accent);
 }
 
 .yarl__container {

@@ -102,17 +102,17 @@ export const ImageLightbox = ({
         }
         render={{
           iconPrev: () => (
-            <ActionBox>
-              <ArrowLeft width={90} strokeWidth={1.5} className="hidden md:inline-block" />
+            <ActionBox colorMode="onDark">
+              <ArrowLeft width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
           iconNext: () => (
-            <ActionBox>
-              <ArrowRight width={90} strokeWidth={1.5} className="hidden md:inline-block" />
+            <ActionBox colorMode="onDark">
+              <ArrowRight width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
           iconClose: () => (
-            <span className="text-app-muted hover:text-app-accent-bright">
+            <span className="text-app-accent-lightest hover:text-app-on-dark">
               <CloseIcon className="h-9 w-9" />
             </span>
           ),
@@ -132,7 +132,7 @@ export const ImageLightbox = ({
         (currentCaption.title || currentCaption.subtitle) &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="bg-app-page/30 pointer-events-none fixed inset-x-0 top-0 z-10000 px-4 py-3">
+          <div className="pointer-events-none fixed inset-x-0 top-0 z-10000 bg-none px-4 py-3">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={currentIndex}
@@ -142,14 +142,14 @@ export const ImageLightbox = ({
                 transition={{ duration: 0.18 }}
                 className="max-w-80"
               >
-                <p className="text-app-text">
+                <p className="text-app-on-dark">
                   {currentCaption.title}
-                  <span className="text-app-text ml-3 normal-case">
+                  <span className="text-app-on-dark ml-3 normal-case">
                     {currentIndex + 1}&nbsp;/&nbsp;{currentCaption.photosCount ?? photos.length}
                   </span>
                 </p>
                 {currentCaption.subtitle && (
-                  <p className="text-app-text mt-0.5">{currentCaption.subtitle}</p>
+                  <p className="text-app-on-dark mt-0.5">{currentCaption.subtitle}</p>
                 )}
               </motion.div>
             </AnimatePresence>

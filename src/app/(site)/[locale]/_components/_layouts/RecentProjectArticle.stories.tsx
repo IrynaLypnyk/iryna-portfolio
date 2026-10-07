@@ -1,19 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { ProjectArticle } from './ProjectArticle';
+import { RecentProjectArticle } from './RecentProjectArticle';
 import { featuredProject, projectWithoutCover, sparseProject } from '@/storybook/fixtures';
 
 const meta = {
-  title: 'Layouts/ProjectArticle',
-  component: ProjectArticle,
+  title: 'Layouts/RecentProjectArticle',
+  component: RecentProjectArticle,
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
   args: { project: featuredProject, index: 1 },
   argTypes: {
     project: { control: false },
     index: { control: { type: 'number', min: 1, max: 20 } },
-    isLast: { control: 'boolean' },
   },
-} satisfies Meta<typeof ProjectArticle>;
+} satisfies Meta<typeof RecentProjectArticle>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -48,16 +47,13 @@ export const MinimalMeta: Story = {
 };
 
 /** The last article uses tighter bottom padding than the ones above it. */
-export const Last: Story = {
-  args: { isLast: true },
-};
 
 /** Two in sequence, the way `Projects` renders them. */
 export const Sequence: Story = {
   render: () => (
     <div>
-      <ProjectArticle project={featuredProject} index={1} />
-      <ProjectArticle project={projectWithoutCover} index={2} isLast />
+      <RecentProjectArticle project={featuredProject} index={1} />
+      <RecentProjectArticle project={projectWithoutCover} index={2} />
     </div>
   ),
 };

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
+import { MoveDown, MoveLeft, MoveRight, MoveUpRight } from 'lucide-react';
 
 export type AppLinkProps = {
   href: string;
@@ -19,10 +20,10 @@ export type AppLinkProps = {
 };
 
 const ARROWS = {
-  right: '→',
-  left: '←',
-  down: '↓',
-  upRight: '↗',
+  right: <MoveRight strokeWidth={1} className="h-4 w-4" />,
+  left: <MoveLeft strokeWidth={1} className="h-4 w-4" />,
+  down: <MoveDown strokeWidth={1} className="h-4 w-4" />,
+  upRight: <MoveUpRight strokeWidth={1} className="h-4 w-4" />,
   none: null,
 } as const;
 

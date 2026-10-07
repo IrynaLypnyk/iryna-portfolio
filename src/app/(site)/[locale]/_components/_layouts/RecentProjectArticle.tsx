@@ -18,10 +18,9 @@ type Props = {
   project: ProjectData;
   /** 1-based position, rendered as the "01" kicker. */
   index: number;
-  isLast?: boolean;
 };
 
-export function ProjectArticle({ project, index, isLast = false }: Props) {
+export function RecentProjectArticle({ project, index }: Props) {
   const t = useTranslations('Work');
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -59,38 +58,40 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
   }
   const expandable = project.features.length > 0 || project.photos.length > 1;
 
+  const showMoreButton = (
+    <button
+      type="button"
+      aria-expanded={open}
+      aria-controls={panelId}
+      aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
+      onClick={() => setOpen((current) => !current)}
+      className="cursor-pointer"
+    >
+      <ActionBox>
+        {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
+      </ActionBox>
+    </button>
+  );
+
   return (
     <article
       data-component="ProjectArticle"
       className={cn(
-        'border-app-line -mr-(--page-pad-right) grid gap-7 overflow-visible border-t last:border-b',
-        isLast ? 'pb-[clamp(32px,6vh,64px)]' : 'pb-[clamp(28px,5vh,56px)]'
+        'border-app-line grid gap-7 overflow-visible border-b pr-(--page-pad-right) pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
       )}
     >
       <div
         className={cn(
-          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] pr-(--page-pad-right) md:grid-cols-[minmax(0,1fr)_minmax(160px,220px)_auto]',
-          expandable && 'cursor-pointer'
+          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)]',
+          expandable
+            ? 'md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)]'
+            : 'md:grid-cols-[minmax(0,1fr)_minmax(160px,220px)]'
         )}
       >
-        {expandable && (
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={panelId}
-            aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
-            onClick={() => setOpen((current) => !current)}
-            className="absolute inset-0 z-10 cursor-pointer border-0 bg-transparent p-0"
-          />
-        )}
+        {/* only Desktop */}
+        {expandable && <div className="hidden md:inline-block">{showMoreButton}</div>}
 
         <div className="grid gap-4">
-          <div className="text-app-muted flex items-baseline gap-3 font-mono text-xs tracking-wide">
-            <span>{String(index).padStart(2, '0')}</span>
-            <span className="text-line">/</span>
-            <span className="text-ink">{project.shortLabel}</span>
-          </div>
-
           <h3
             className={cn(
               'text-[clamp(22px,2.6vw,34px)] leading-tight font-medium tracking-normal text-pretty transition-colors',
@@ -102,7 +103,7 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
 
           <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
-          <MetaList items={meta} variant="roomy" labelColor="gray" />
+          <MetaList items={meta} variant="compact" labelColor="gray" />
 
           {links.length > 0 && (
             <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
@@ -130,11 +131,8 @@ export function ProjectArticle({ project, index, isLast = false }: Props) {
           className="aspect-4/3"
         />
 
-        {expandable && (
-          <ActionBox>
-            {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
-          </ActionBox>
-        )}
+        {/* here only Mobile */}
+        {expandable && <div className="inline-block md:hidden">{showMoreButton}</div>}
       </div>
 
       <AnimatePresence initial={false}>

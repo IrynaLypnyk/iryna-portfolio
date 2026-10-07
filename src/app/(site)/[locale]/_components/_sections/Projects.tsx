@@ -1,12 +1,11 @@
 import { useTranslations } from 'next-intl';
-import { Kicker } from '@/app/(site)/[locale]/_components/_ui/Kicker';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
 import { anchors } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';
 import { MoreWorkRow } from '@/app/(site)/[locale]/_components/_layouts/MoreWorkRow';
-import { ProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle';
+import { RecentProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/RecentProjectArticle';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
-import { SectionIntro } from '@/app/(site)/[locale]/_components/_ui/SectionIntro';
+import { EarlierProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/EarlierProjectArticle';
 
 type Props = {
   projects: ProjectData[];
@@ -20,33 +19,39 @@ export function Projects({ projects }: Props) {
 
   return (
     <Section id={anchors.projects}>
-      <SectionHeader index="01" title={t('title')} />
-      <SectionIntro>{t('description')}</SectionIntro>
-
-      {featured.length === 0 && moreWork.length === 0 && (
-        <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>
-      )}
-
-      {featured.map((project, position) => (
-        <ProjectArticle
-          key={project.slug}
-          project={project}
-          index={position + 1}
-          isLast={position === featured.length - 1}
+      <div>
+        <SectionHeader
+          index="01"
+          title={t('recentWork.title')}
+          subtitle={t('recentWork.description')}
         />
-      ))}
 
-      {moreWork.length > 0 && (
-        <div className="border-app-line grid border-t pt-6">
-          <Kicker as="h4" className="mb-2 font-medium">
-            {t('moreWork')}
-          </Kicker>
-
-          {moreWork.map((project) => (
-            <MoreWorkRow key={project.slug} project={project} />
+        {featured.length === 0 && moreWork.length === 0 && (
+          <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>
+        )}
+        <div>
+          {featured.map((project, position) => (
+            <RecentProjectArticle key={project.slug} project={project} index={position + 1} />
           ))}
+        </div>
+      </div>
+      {moreWork.length > 0 && (
+        <div className="grid pt-6">
+          <SectionHeader
+            title={t('moreWork.title')}
+            subtitle={t('moreWork.description')}
+            titleTag="h3"
+            subtitleTag="h4"
+          />
 
-          <p className="text-app-muted mt-4.5 text-[13.5px]">{t('archiveNote')}</p>
+          {/*{moreWork.map((project, position) => (*/}
+          {/*  <MoreWorkRow key={project.slug} project={project} />*/}
+          {/*))}*/}
+          <div>
+            {moreWork.map((project, position) => (
+              <EarlierProjectArticle key={project.slug} project={project} index={position + 1} />
+            ))}
+          </div>
         </div>
       )}
     </Section>
