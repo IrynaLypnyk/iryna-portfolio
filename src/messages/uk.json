@@ -12,7 +12,7 @@
   },
   "Navigation": {
     "projects": "Проєкти",
-    "playground": "Playground",
+    "playground": "Експерименти",
     "about": "Про мене",
     "contact": "Контакти"
   },
@@ -35,7 +35,7 @@
     "metaStatus": "Відкрита до нових можливостей"
   },
   "Work": {
-    "title": "Вибрані проєкти",
+    "title": "Останні проєкти",
     "description": "Проєкти, над якими я працювала або продовжую працювати.",
     "labelRole": "РОЛЬ",
     "labelStack": "STACK",
@@ -59,7 +59,7 @@
     "empty": "Проєкти додаються. Завітайте трохи пізніше."
   },
   "Playground": {
-    "title": "Playground",
+    "title": "Експерименти",
     "intro": "Невеликі експерименти: AI, анімація, UI-ідеї та прототипи.",
     "expLabel": "EXP {index}",
     "demoLabel": "Демо",
