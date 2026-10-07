@@ -23,7 +23,7 @@ export function Hero() {
             {t('name')}
           </h1>
 
-          <div className="text-app-ink text-[clamp(24px,3.5vw,46px)] leading-[1.12] font-semibold tracking-[-0.03em]">
+          <div className="text-app-ink text-[clamp(24px,3.5vw,46px)] leading-[1.3] font-semibold tracking-[-0.03em]">
             <p>{t('statement.part1')}</p>
             <p>{t('statement.part2')}</p>
             <p>
