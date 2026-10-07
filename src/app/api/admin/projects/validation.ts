@@ -40,13 +40,22 @@ export type ProjectInput = {
 };
 
 type ValidationResult =
-  | { data: ProjectInput; error?: undefined }
-  | { data?: undefined; error: string };
+  | { data: ProjectInput; error?: undefined; field?: undefined }
+  | { data?: undefined; error: string; field?: string };
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
+}
+
+function isWebUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return ['http:', 'https:'].includes(url.protocol) && !!url.hostname;
+  } catch {
+    return false;
+  }
 }
 
 /** Trims an optional text field down to `string | null` (empty means "unset"). */
@@ -149,41 +158,57 @@ export function validateProjectInput(body: unknown): ValidationResult {
   } = body as Record<string, unknown>;
 
   if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug)) {
-    return { error: 'Slug має містити лише малі літери, цифри та дефіси' };
+    return { field: 'slug', error: 'Slug має містити лише малі літери, цифри та дефіси' };
   }
 
-  if (!isNonEmptyString(shortLabel)) return { error: "Поле «Коротка мітка» обов'язкове" };
-  if (!isNonEmptyString(titleUk)) return { error: "Поле «Назва (UA)» обов'язкове" };
-  if (!isNonEmptyString(titleEn)) return { error: "Поле «Назва (EN)» обов'язкове" };
-  if (!isNonEmptyString(subtitleUk)) return { error: "Поле «Підзаголовок (UA)» обов'язкове" };
-  if (!isNonEmptyString(subtitleEn)) return { error: "Поле «Підзаголовок (EN)» обов'язкове" };
-  if (!isNonEmptyString(contextUk)) return { error: "Поле «Контекст (UA)» обов'язкове" };
-  if (!isNonEmptyString(contextEn)) return { error: "Поле «Контекст (EN)» обов'язкове" };
-  if (!isNonEmptyString(leadUk)) return { error: "Поле «Лід (UA)» обов'язкове" };
-  if (!isNonEmptyString(leadEn)) return { error: "Поле «Лід (EN)» обов'язкове" };
-  if (!isNonEmptyString(roleUk)) return { error: "Поле «Роль (UA)» обов'язкове" };
-  if (!isNonEmptyString(roleEn)) return { error: "Поле «Роль (EN)» обов'язкове" };
+  if (!isNonEmptyString(shortLabel))
+    return { field: 'shortLabel', error: "Поле «Коротка мітка» обов'язкове" };
+  if (!isNonEmptyString(titleUk))
+    return { field: 'titleUk', error: "Поле «Назва (UA)» обов'язкове" };
+  if (!isNonEmptyString(titleEn))
+    return { field: 'titleEn', error: "Поле «Назва (EN)» обов'язкове" };
+  if (!isNonEmptyString(subtitleUk))
+    return { field: 'subtitleUk', error: "Поле «Підзаголовок (UA)» обов'язкове" };
+  if (!isNonEmptyString(subtitleEn))
+    return { field: 'subtitleEn', error: "Поле «Підзаголовок (EN)» обов'язкове" };
+  if (!isNonEmptyString(contextUk))
+    return { field: 'contextUk', error: "Поле «Контекст (UA)» обов'язкове" };
+  if (!isNonEmptyString(contextEn))
+    return { field: 'contextEn', error: "Поле «Контекст (EN)» обов'язкове" };
+  if (!isNonEmptyString(leadUk)) return { field: 'leadUk', error: "Поле «Лід (UA)» обов'язкове" };
+  if (!isNonEmptyString(leadEn)) return { field: 'leadEn', error: "Поле «Лід (EN)» обов'язкове" };
+  if (!isNonEmptyString(roleUk)) return { field: 'roleUk', error: "Поле «Роль (UA)» обов'язкове" };
+  if (!isNonEmptyString(roleEn)) return { field: 'roleEn', error: "Поле «Роль (EN)» обов'язкове" };
 
   if (typeof order !== 'number' || !Number.isInteger(order)) {
-    return { error: 'Порядок має бути цілим числом' };
+    return { field: 'order', error: 'Порядок має бути цілим числом' };
   }
 
   const normalizedUrl = optionalText(externalUrl);
 
-  if (normalizedUrl !== null && !/^https?:\/\//.test(normalizedUrl)) {
-    return { error: 'Посилання має починатися з http:// або https://' };
+  if (normalizedUrl !== null && !isWebUrl(normalizedUrl)) {
+    return {
+      field: 'externalUrl',
+      error: 'Enter a complete HTTP(S) link, for example https://example.com.',
+    };
   }
 
   const normalizedGithubUrl = optionalText(githubUrl);
 
-  if (normalizedGithubUrl !== null && !/^https?:\/\//.test(normalizedGithubUrl)) {
-    return { error: 'Посилання на GitHub має починатися з http:// або https://' };
+  if (normalizedGithubUrl !== null && !isWebUrl(normalizedGithubUrl)) {
+    return {
+      field: 'githubUrl',
+      error: 'Enter a complete HTTP(S) link, for example https://example.com.',
+    };
   }
 
   const normalizedStorybookUrl = optionalText(storybookUrl);
 
-  if (normalizedStorybookUrl !== null && !/^https?:\/\//.test(normalizedStorybookUrl)) {
-    return { error: 'Посилання на Storybook має починатися з http:// або https://' };
+  if (normalizedStorybookUrl !== null && !isWebUrl(normalizedStorybookUrl)) {
+    return {
+      field: 'storybookUrl',
+      error: 'Enter a complete HTTP(S) link, for example https://example.com.',
+    };
   }
 
   const normalizedSections = validateSections(sections);

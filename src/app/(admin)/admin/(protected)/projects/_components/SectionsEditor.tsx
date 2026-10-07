@@ -2,8 +2,7 @@
 
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
-import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
-import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/AdminTextarea';
+import { ProjectField } from './ProjectField';
 
 export type SectionDraft = {
   /** Stable key for React only — never sent to the API. */
@@ -130,7 +129,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>Heading (UA)</span>
-            <AdminInput
+            <ProjectField
               type="text"
               required
               value={section.titleUk}
@@ -140,7 +139,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>Heading (EN)</span>
-            <AdminInput
+            <ProjectField
               type="text"
               required
               value={section.titleEn}
@@ -150,7 +149,8 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>Paragraph 1 (UA)</span>
-            <AdminTextarea
+            <ProjectField
+              multiline
               required
               rows={3}
               value={section.bodyUk}
@@ -160,7 +160,8 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>Paragraph 1 (EN)</span>
-            <AdminTextarea
+            <ProjectField
+              multiline
               required
               rows={3}
               value={section.bodyEn}
@@ -170,7 +171,8 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>{'Paragraph 2 (UA, optional)'}</span>
-            <AdminTextarea
+            <ProjectField
+              multiline
               rows={3}
               value={section.body2Uk}
               onChange={(event) => update(section.key, 'body2Uk', event.target.value)}
@@ -179,7 +181,8 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
 
           <label>
             <span className={labelStyles}>{'Paragraph 2 (EN, optional)'}</span>
-            <AdminTextarea
+            <ProjectField
+              multiline
               rows={3}
               value={section.body2En}
               onChange={(event) => update(section.key, 'body2En', event.target.value)}

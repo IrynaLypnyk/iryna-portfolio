@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   const result = validateProjectInput(body);
 
   if ('error' in result) {
-    return NextResponse.json({ message: result.error }, { status: 400 });
+    return NextResponse.json({ message: result.error, field: result.field }, { status: 400 });
   }
 
   const { sections, ...fields } = result.data;
@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ project }, { status: 201 });
   } catch (error) {
     if (isUniqueConstraintError(error)) {
-      return NextResponse.json({ message: 'Проєкт з таким slug вже існує' }, { status: 409 });
+      return NextResponse.json(
+        { message: 'Проєкт з таким slug вже існує', field: 'slug' },
+        { status: 409 }
+      );
     }
 
     console.error('Failed to create project:', error);

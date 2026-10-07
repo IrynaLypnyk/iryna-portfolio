@@ -19,28 +19,30 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
 
   return projects.map((project) => {
     const title = isUkrainian ? project.titleUk : project.titleEn;
-    const cover = project.photos[0];
+    const cover = project.photos.find((photo) => photo.isProjectCover);
     const asset = cover && (isUkrainian ? (cover.assetUk ?? cover.asset) : cover.asset);
 
-    const photos = project.photos.flatMap((photo) => {
-      const photoAsset = isUkrainian ? (photo.assetUk ?? photo.asset) : photo.asset;
+    const photos = project.photos
+      .filter((photo) => !photo.isProjectCover)
+      .flatMap((photo) => {
+        const photoAsset = isUkrainian ? (photo.assetUk ?? photo.asset) : photo.asset;
 
-      if (!photoAsset) {
-        return [];
-      }
+        if (!photoAsset) {
+          return [];
+        }
 
-      return [
-        {
-          id: photo.id,
-          src: getImageUrl(photoAsset.src),
-          width: photoAsset.width,
-          height: photoAsset.height,
-          alt: (isUkrainian ? photo.captionUk : photo.captionEn) || title,
-          linkUrl: photo.linkUrl,
-          description: isUkrainian ? photo.descriptionUk : photo.descriptionEn,
-        },
-      ];
-    });
+        return [
+          {
+            id: photo.id,
+            src: getImageUrl(photoAsset.src),
+            width: photoAsset.width,
+            height: photoAsset.height,
+            alt: (isUkrainian ? photo.captionUk : photo.captionEn) || title,
+            linkUrl: photo.linkUrl,
+            description: isUkrainian ? photo.descriptionUk : photo.descriptionEn,
+          },
+        ];
+      });
 
     return {
       slug: project.slug,
