@@ -4,7 +4,6 @@ import { anchors } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';
 import { RecentProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/RecentProjectArticle';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
-import { EarlierProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/EarlierProjectArticle';
 
 type Props = {
   projects: ProjectData[];
@@ -45,7 +44,7 @@ export function Projects({ projects }: Props) {
 
           <div>
             {moreWork.map((project, position) => (
-              <EarlierProjectArticle key={project.slug} project={project} index={position + 1} />
+              <RecentProjectArticle key={project.slug} project={project} index={position + 1} />
             ))}
           </div>
         </div>
