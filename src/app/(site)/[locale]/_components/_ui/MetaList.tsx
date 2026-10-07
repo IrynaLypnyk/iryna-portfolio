@@ -24,7 +24,7 @@ type Props = {
 
 export function MetaList({
   items,
-  labelWidth = 68,
+  labelWidth = 'min-content',
   columnGap,
   variant = 'compact',
   labelColor = 'gray',
@@ -35,7 +35,7 @@ export function MetaList({
       <dl
         data-component="MetaList"
         className={cn(
-          'm-0 grid gap-6.5 gap-x-[clamp(20px,3vw,40px)]',
+          'm-0 grid gap-3 gap-x-[clamp(20px,3vw,40px)] md:gap-6.5',
           'border-app-line border-t pt-6.5',
           'md:grid-cols-1 md:border-t-0 md:border-l md:pt-0 md:pl-[clamp(20px,2.6vw,36px)]',
           'max-md:grid-cols-2 max-sm:grid-cols-1',
@@ -47,7 +47,7 @@ export function MetaList({
             <dt>
               <Label color={labelColor}>{item.label}</Label>
             </dt>
-            <dd className="text-app-muted m-0 text-base">{item.value}</dd>
+            <dd className="text-app-text m-0 text-base">{item.value}</dd>
           </div>
         ))}
       </dl>
@@ -68,7 +68,7 @@ export function MetaList({
       {items.map((item) => (
         <div
           key={item.label}
-          className={`grid gap-[${columnGap}]`}
+          className={`grid gap-${columnGap ? `[${columnGap}]` : 1}`}
           style={{
             gridTemplateColumns:
               labelWidth !== undefined

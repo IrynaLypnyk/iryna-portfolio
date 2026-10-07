@@ -4,7 +4,6 @@ import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
 import { ExperimentCard } from '@/app/(site)/[locale]/_components/_layouts/ExperimentCard';
 import { anchors } from '@/constants/routes';
 import type { ExperimentData } from '@/types/experiments';
-import { SectionIntro } from '@/app/(site)/[locale]/_components/_ui/SectionIntro';
 
 type Props = {
   experiments: ExperimentData[];
@@ -15,9 +14,7 @@ export function Playground({ experiments }: Props) {
 
   return (
     <Section id={anchors.playground}>
-      <SectionHeader index="02" title={t('title')} />
-
-      <SectionIntro>{t('intro')}</SectionIntro>
+      <SectionHeader index="02" title={t('title')} subtitle={t('intro')} />
 
       {experiments.length === 0 ? (
         <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>
