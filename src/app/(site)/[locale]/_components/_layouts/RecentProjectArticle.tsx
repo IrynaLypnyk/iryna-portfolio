@@ -22,6 +22,7 @@ type Props = {
 
 export function RecentProjectArticle({ project, index }: Props) {
   const t = useTranslations('Work');
+  const tMetadata = useTranslations('ProjectMetadata');
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
@@ -42,9 +43,10 @@ export function RecentProjectArticle({ project, index }: Props) {
 
   const expandedMeta: MetaItem[] = [];
 
-  if (project.status) {
-    meta.push({ label: t('labelStatus'), value: project.status });
-  }
+  meta.push(
+    { label: tMetadata('labelType'), value: tMetadata(`types.${project.type}`) },
+    { label: tMetadata('labelStatus'), value: tMetadata(`statuses.${project.status}`) }
+  );
 
   if (project.yearLabel) {
     meta.push({ label: t('labelYear'), value: project.yearLabel });

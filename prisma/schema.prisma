@@ -23,6 +23,18 @@ model Admin {
   updatedAt DateTime @updatedAt
 }
 
+enum ProjectType {
+  PERSONAL
+  TEAM
+}
+
+enum ProjectStatus {
+  LIVE
+  IN_DEVELOPMENT
+  COMPLETED
+  ARCHIVED
+}
+
 /// A portfolio case study.
 ///
 /// `featured` splits the home page: featured projects render as full
@@ -31,6 +43,9 @@ model Admin {
 model Project {
   id   String @id @default(cuid())
   slug String @unique
+
+  type   ProjectType   @default(PERSONAL)
+  status ProjectStatus @default(COMPLETED)
 
   shortLabel String
 

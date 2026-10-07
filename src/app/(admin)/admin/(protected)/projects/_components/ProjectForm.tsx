@@ -1,6 +1,10 @@
 'use client';
 
 import type { Project as DbProject, ProjectSection as DbSection } from '@/generated/prisma/browser';
+import { ProjectType, ProjectStatus } from '@/generated/prisma/enums';
+import { createTranslator } from 'next-intl';
+import messages from '@/messages/en.json';
+import { AdminSelect } from '../../_components/AdminSelect';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -15,8 +19,12 @@ import { SectionsEditor, type SectionDraft } from './SectionsEditor';
 import { FeaturesEditor, type FeatureDraft } from './FeaturesEditor';
 import { StackInput } from './StackInput';
 
-/** Every field is held as a string so the inputs stay controlled. */
+const tMetadata = createTranslator({ locale: 'en', messages, namespace: 'ProjectMetadata' });
+
+/** Text and number inputs are held as strings to keep them controlled. */
 type FormState = {
+  type: ProjectType;
+  status: ProjectStatus;
   slug: string;
   shortLabel: string;
   titleUk: string;
@@ -54,6 +62,8 @@ type Props =
 function toFormState(project: ProjectWithSections | undefined): FormState {
   if (!project) {
     return {
+      type: ProjectType.PERSONAL,
+      status: ProjectStatus.IN_DEVELOPMENT,
       slug: '',
       shortLabel: '',
       titleUk: '',
@@ -84,6 +94,8 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
   }
 
   return {
+    type: project.type,
+    status: project.status,
     slug: project.slug,
     shortLabel: project.shortLabel,
     titleUk: project.titleUk,
@@ -190,9 +202,9 @@ export function ProjectForm({ mode, project }: Props) {
       }
     }
     if (!formElement.checkValidity()) {
-      const firstInvalid = formElement.querySelector<HTMLInputElement | HTMLTextAreaElement>(
-        ':invalid'
-      );
+      const firstInvalid = formElement.querySelector<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >(':invalid');
       firstInvalid?.focus();
       const message = firstInvalid?.validationMessage || 'Please correct the highlighted fields.';
       setSaveError(message);
@@ -432,27 +444,49 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{'Status (UA, optional)'}</span>
-          <ProjectField
-            type="text"
-            name="statusUk"
-            error={fieldErrors.statusUk}
-            value={form.statusUk}
-            onChange={(event) => updateField('statusUk', event.target.value)}
-            placeholder="У розробці"
-          />
+          <span className={labelStyles}>{tMetadata('labelType')}</span>
+          <AdminSelect
+            required
+            name="type"
+            value={form.type}
+            aria-invalid={!!fieldErrors.type}
+            aria-describedby={fieldErrors.type ? 'type-error' : undefined}
+            onChange={(event) => updateField('type', event.target.value as ProjectType)}
+          >
+            {Object.values(ProjectType).map((value) => (
+              <option key={value} value={value}>
+                {tMetadata(`types.${value}`)}
+              </option>
+            ))}
+          </AdminSelect>
+          {fieldErrors.type && (
+            <span id="type-error" className="mt-1 block text-xs text-red-600">
+              {fieldErrors.type}
+            </span>
+          )}
         </label>
 
         <label>
-          <span className={labelStyles}>{'Status (EN, optional)'}</span>
-          <ProjectField
-            type="text"
-            name="statusEn"
-            error={fieldErrors.statusEn}
-            value={form.statusEn}
-            onChange={(event) => updateField('statusEn', event.target.value)}
-            placeholder="In development"
-          />
+          <span className={labelStyles}>{tMetadata('labelStatus')}</span>
+          <AdminSelect
+            required
+            name="status"
+            value={form.status}
+            aria-invalid={!!fieldErrors.status}
+            aria-describedby={fieldErrors.status ? 'status-error' : undefined}
+            onChange={(event) => updateField('status', event.target.value as ProjectStatus)}
+          >
+            {Object.values(ProjectStatus).map((value) => (
+              <option key={value} value={value}>
+                {tMetadata(`statuses.${value}`)}
+              </option>
+            ))}
+          </AdminSelect>
+          {fieldErrors.status && (
+            <span id="status-error" className="mt-1 block text-xs text-red-600">
+              {fieldErrors.status}
+            </span>
+          )}
         </label>
 
         <label>

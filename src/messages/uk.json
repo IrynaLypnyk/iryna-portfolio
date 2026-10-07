@@ -127,5 +127,19 @@
   },
   "NavLinks": {
     "home": "На головну"
+  },
+  "ProjectMetadata": {
+    "labelType": "Тип проєкту",
+    "labelStatus": "Статус проєкту",
+    "types": {
+      "PERSONAL": "Особистий проєкт",
+      "TEAM": "Командний проєкт"
+    },
+    "statuses": {
+      "LIVE": "Працює",
+      "IN_DEVELOPMENT": "У розробці",
+      "COMPLETED": "Завершено",
+      "ARCHIVED": "Архівний"
+    }
   }
 }

@@ -66,6 +66,7 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   const t = await getTranslations('Work');
+  const tMetadata = await getTranslations('ProjectMetadata');
   const tProject = await getTranslations('Project');
 
   const meta: MetaItem[] = [{ label: t('labelRole'), value: detail.role }];
@@ -74,9 +75,10 @@ export default async function ProjectPage({ params }: Props) {
     meta.push({ label: t('labelStack'), value: detail.stack });
   }
 
-  if (detail.status) {
-    meta.push({ label: t('labelStatus'), value: detail.status });
-  }
+  meta.push(
+    { label: tMetadata('labelType'), value: tMetadata(`types.${detail.type}`) },
+    { label: tMetadata('labelStatus'), value: tMetadata(`statuses.${detail.status}`) }
+  );
 
   if (detail.yearLabel) {
     meta.push({ label: t('labelYear'), value: detail.yearLabel });

@@ -1,3 +1,5 @@
+import type { ProjectType, ProjectStatus } from '@/generated/prisma/enums';
+
 /**
  * A portfolio project, localized to a single language.
  *
@@ -12,7 +14,8 @@ export type ProjectData = {
   context: string;
   role: string;
   stack: string | null;
-  status: string | null;
+  type: ProjectType;
+  status: ProjectStatus;
   yearLabel: string | null;
   featured: boolean;
   order: number;

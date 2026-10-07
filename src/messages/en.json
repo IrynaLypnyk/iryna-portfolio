@@ -130,5 +130,19 @@
   },
   "NavLinks": {
     "home": "Back to home"
+  },
+  "ProjectMetadata": {
+    "labelType": "Project type",
+    "labelStatus": "Project status",
+    "types": {
+      "PERSONAL": "Personal project",
+      "TEAM": "Team project"
+    },
+    "statuses": {
+      "LIVE": "Live",
+      "IN_DEVELOPMENT": "In development",
+      "COMPLETED": "Completed",
+      "ARCHIVED": "Archived"
+    }
   }
 }

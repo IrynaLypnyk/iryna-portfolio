@@ -1,3 +1,5 @@
+import { ProjectType, ProjectStatus } from '@/generated/prisma/enums';
+
 export type ProjectSectionInput = {
   titleUk: string;
   titleEn: string;
@@ -8,6 +10,8 @@ export type ProjectSectionInput = {
 };
 
 export type ProjectInput = {
+  type: ProjectType;
+  status: ProjectStatus;
   slug: string;
   shortLabel: string;
   titleUk: string;
@@ -126,6 +130,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
   }
 
   const {
+    type,
+    status,
     slug,
     shortLabel,
     titleUk,
@@ -156,6 +162,16 @@ export function validateProjectInput(body: unknown): ValidationResult {
     published,
     sections,
   } = body as Record<string, unknown>;
+
+  if (typeof type !== 'string' || !Object.values(ProjectType).includes(type as ProjectType)) {
+    return { field: 'type', error: 'Оберіть тип проєкту' };
+  }
+  if (
+    typeof status !== 'string' ||
+    !Object.values(ProjectStatus).includes(status as ProjectStatus)
+  ) {
+    return { field: 'status', error: 'Оберіть статус проєкту' };
+  }
 
   if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug)) {
     return { field: 'slug', error: 'Slug має містити лише малі літери, цифри та дефіси' };
@@ -231,6 +247,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
 
   return {
     data: {
+      type: type as ProjectType,
+      status: status as ProjectStatus,
       slug,
       shortLabel: shortLabel.trim(),
       titleUk: titleUk.trim(),
