@@ -3,7 +3,7 @@
   "Common": {
     "name": "Ірина Липник",
     "role": "Frontend Engineer",
-    "stack": "React · TypeScript · Next.js · PostgreSQL",
+    "stack": "React · TypeScript · Next.js · Prisma",
     "switchLanguage": "Перемкнути мову",
     "close": "Закрити",
     "closeMenu": "Закрити меню",
@@ -31,7 +31,7 @@
     "labelExpanding": "Розвиваюсь",
     "labelLocation": "Локація",
     "metaExperience": "7+ років production",
-    "metaExpanding": "Next.js · PostgreSQL · Prisma",
+    "metaExpanding": "full-stack розробка",
     "metaStatus": "Відкрита до нових можливостей"
   },
   "Work": {

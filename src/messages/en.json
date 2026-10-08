@@ -3,7 +3,7 @@
   "Common": {
     "name": "Iryna Lypnyk",
     "role": "Frontend Engineer",
-    "stack": "React · TypeScript · Next.js · PostgreSQL",
+    "stack": "React · TypeScript · Next.js · Prisma",
     "switchLanguage": "Switch language",
     "close": "Close",
     "closeMenu": "Close menu",
@@ -30,8 +30,8 @@
     "labelExperience": "Experience",
     "labelExpanding": "Expanding",
     "labelLocation": "Location",
-    "metaExperience": "7+ years production",
-    "metaExpanding": "Next.js · PostgreSQL · Prisma",
+    "metaExperience": "7+ years in production",
+    "metaExpanding": "full-stack development",
     "metaStatus": "Open to opportunities"
   },
   "Work": {

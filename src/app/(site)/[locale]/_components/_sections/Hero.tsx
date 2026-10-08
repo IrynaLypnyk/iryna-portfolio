@@ -20,15 +20,16 @@ export function Hero() {
           <h1 className="text-app-ink text-[clamp(44px,8vw,96px)] leading-[0.92] font-medium tracking-[-0.04em]">
             {t('name')}
           </h1>
-          <div className="text-app-muted max-w-160 text-[clamp(16px,1.4vw,18px)] leading-normal">
-            <p>{t('body', { role })}</p>
-          </div>
+
           <div className="text-app-ink text-[clamp(24px,3.5vw,46px)] leading-[1.12] font-semibold tracking-[-0.03em]">
             <p>{t('statement.part1')}</p>
             <p>{t('statement.part2')}</p>
             <p>
               <span className="text-app-accent-bright">{t('statement.part3')}</span>
             </p>
+          </div>
+          <div className="text-app-muted max-w-160 text-[clamp(16px,1.4vw,18px)] leading-normal">
+            <p>{t('body', { role })}</p>
           </div>
 
           <AppLink

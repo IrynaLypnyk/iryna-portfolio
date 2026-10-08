@@ -59,11 +59,7 @@ export function MetaList({
   return (
     <dl
       data-component="MetaList"
-      className={cn(
-        'text-app-muted m-0 grid',
-        isRoomy ? 'gap-3.5 text-[15px]' : 'gap-2.5 font-mono text-xs',
-        className
-      )}
+      className={cn('text-app-muted m-0 grid', isRoomy ? 'gap-3.5' : 'gap-2', className)}
     >
       {items.map((item) => (
         <div
@@ -86,7 +82,7 @@ export function MetaList({
               {item.label}
             </Label>
           </dt>
-          <dd className={cn('m-0 ml-2')}>{item.value}</dd>
+          <dd className={cn('m-0 ml-2 font-sans text-[14px]')}>{item.value}</dd>
         </div>
       ))}
     </dl>
