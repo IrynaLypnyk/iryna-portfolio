@@ -33,9 +33,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       // maps to a 404 response via isRecordNotFoundError.
       const current = await tx.photo.findUniqueOrThrow({
         where: { id },
-        select: { projectId: true },
+        select: { projectId: true, asset: { select: { mimeType: true } } },
       });
 
+      if (result.data.isProjectCover && current.asset.mimeType?.startsWith('video/')) {
+        throw new Error('VIDEO_COVER');
+      }
       const { projectId } = current;
 
       // ── Cover uniqueness ──────────────────────────────────────────────────
@@ -61,6 +64,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
     return NextResponse.json({ photo });
   } catch (error) {
+    if (error instanceof Error && error.message === 'VIDEO_COVER') {
+      return NextResponse.json(
+        { message: 'Обкладинкою може бути лише зображення' },
+        { status: 400 }
+      );
+    }
     if (isRecordNotFoundError(error)) {
       return NextResponse.json({ message: 'Фото не знайдено' }, { status: 404 });
     }

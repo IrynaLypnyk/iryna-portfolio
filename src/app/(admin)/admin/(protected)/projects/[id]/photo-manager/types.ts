@@ -1,4 +1,5 @@
 export type PhotoRow = {
+  mimeType?: string | null;
   id: string;
   imageUrl: string;
   width: number;

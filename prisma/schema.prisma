@@ -123,8 +123,9 @@ model ProjectSection {
 }
 
 model MediaAsset {
-  id             String @id @default(cuid())
-  imageKitFileId String @unique
+  mimeType       String?
+  id             String  @id @default(cuid())
+  imageKitFileId String  @unique
   src            String
   width          Int
   height         Int

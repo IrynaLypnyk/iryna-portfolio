@@ -37,6 +37,7 @@ export default async function EditProjectPage({ params }: Props) {
   const photoRows = photos.map((photo) => ({
     id: photo.id,
     imageUrl: getImageUrl(photo.asset.src),
+    mimeType: photo.asset.mimeType,
     width: photo.asset.width,
     height: photo.asset.height,
     orderInProject: photo.orderInProject,
@@ -64,7 +65,7 @@ export default async function EditProjectPage({ params }: Props) {
 
         <ProjectForm mode="edit" project={projectFields} />
 
-        <h2 className="mt-12 mb-4 text-xl font-semibold text-neutral-900">Photo</h2>
+        <h2 className="mt-12 mb-4 text-xl font-semibold text-neutral-900">Photos & videos</h2>
 
         <PhotoManager
           projectId={projectFields.id}

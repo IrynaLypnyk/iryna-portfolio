@@ -13,12 +13,17 @@ type Props = {
 export function DeletePhotoDialog({ photo, onConfirmAction, onCancelAction }: Props) {
   return (
     <AdminDeleteDialog
-      title="Delete photo?"
-      description="Якщо це фото більше ніде не використовується, файл також буде видалений з ImageKit."
+      title="Delete media?"
+      description="Якщо цей медіафайл більше ніде не використовується, файл також буде видалений з ImageKit."
       onConfirmAction={onConfirmAction}
       onCancelAction={onCancelAction}
     >
-      <AdminMediaPreview src={photo.imageUrl} className="h-32 w-full" sizes="384px" />
+      <AdminMediaPreview
+        mimeType={photo.mimeType}
+        src={photo.imageUrl}
+        className="h-32 w-full"
+        sizes="384px"
+      />
     </AdminDeleteDialog>
   );
 }

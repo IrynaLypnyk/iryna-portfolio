@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { GalleryImage, ImageLightbox } from '@/components/ImageLightbox';
 
 type LightboxPhoto = {
+  mimeType?: string | null;
   src: string;
   width: number;
   height: number;
@@ -25,6 +26,7 @@ export function AdminPhotoLightbox({ photos, index, onCloseAction }: Props) {
         photo: {
           id: String(photoIndex),
           src: photo.src,
+          mimeType: photo.mimeType,
           width: photo.width,
           height: photo.height,
           alt: '',

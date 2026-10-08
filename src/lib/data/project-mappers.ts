@@ -27,6 +27,7 @@ export function toPhoto(
   return {
     id: photo.id,
     src: getImageUrl(photo.asset.src),
+    mimeType: photo.asset.mimeType,
     width: photo.asset.width,
     height: photo.asset.height,
     alt: caption ?? pick(locale, project.titleUk, project.titleEn),
@@ -36,7 +37,8 @@ export function toPhoto(
 }
 
 export function toProjectData(project: ProjectWithRelations, locale: LocaleType): ProjectData {
-  const cover = project.photos.find((photo) => photo.isProjectCover) ?? project.photos[0];
+  const images = project.photos.filter((photo) => !photo.asset.mimeType?.startsWith('video/'));
+  const cover = images.find((photo) => photo.isProjectCover) ?? images[0];
 
   return {
     slug: project.slug,

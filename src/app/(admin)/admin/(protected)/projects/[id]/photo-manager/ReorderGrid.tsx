@@ -40,6 +40,7 @@ function SortablePhotoCard({ item, index }: CardProps) {
     >
       <AdminMediaPreview
         src={item.imageUrl}
+        mimeType={item.mimeType}
         className="aspect-[4/3] w-full rounded-none border-0"
       />
       <div className="absolute right-0 bottom-0 left-0 bg-black/50 px-2 py-1">

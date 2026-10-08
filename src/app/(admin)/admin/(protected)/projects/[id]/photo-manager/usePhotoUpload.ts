@@ -3,7 +3,8 @@
 import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { upload } from '@imagekit/javascript';
-import { validateImageFiles } from '@/lib/media/validate-image-files';
+import { getProjectMediaValidationError } from '@/lib/media/project-media-policy';
+import { toast } from 'sonner';
 
 import type { PhotoRow, UploadItem } from './types';
 import { apiRoutes } from '@/constants/routes';
@@ -37,7 +38,11 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
       return;
     }
 
-    const validFiles = validateImageFiles(files);
+    const validFiles = files.filter((file) => {
+      const error = getProjectMediaValidationError(file.type, file.size);
+      if (error) toast.error(`«${file.name}»: ${error}`);
+      return !error;
+    });
 
     if (validFiles.length === 0) {
       return;
@@ -89,7 +94,7 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
         const json = (await response.json()) as UploadApiResponse;
 
         if (!response.ok) {
-          throw new Error(json.message ?? 'Не вдалося зберегти фото');
+          throw new Error(json.message ?? 'Не вдалося зберегти медіафайл');
         }
 
         onPhotoUploadedAction(json.photo);

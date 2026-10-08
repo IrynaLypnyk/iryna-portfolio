@@ -4,7 +4,8 @@ import { Photo } from '@/types/projects';
 import { ReactNode, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import Lightbox from 'yet-another-react-lightbox';
+import Lightbox, { type Slide } from 'yet-another-react-lightbox';
+import Video from 'yet-another-react-lightbox/plugins/video';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
@@ -60,19 +61,31 @@ export const ImageLightbox = ({
   // resets its internal current slide back to `index` whenever this array's
   // reference changes, so recomputing it on every render (including the ones
   // `on.view` itself triggers below) would silently cancel navigation.
-  const slides = useMemo(
+  const slides = useMemo<Slide[]>(
     () =>
-      photos.map(({ photo }, idx) => ({
-        src: photo.src,
-        width: photo.width,
-        height: photo.height,
-        alt: photo.alt,
-        index: idx,
-      })),
+      photos.map(({ photo }) =>
+        photo.mimeType?.startsWith('video/')
+          ? {
+              type: 'video',
+              width: photo.width,
+              height: photo.height,
+              sources: [{ src: photo.src, type: photo.mimeType }],
+              controls: true,
+              playsInline: true,
+              autoPlay: false,
+              preload: 'metadata',
+            }
+          : {
+              src: photo.src,
+              width: photo.width,
+              height: photo.height,
+              alt: photo.alt,
+            }
+      ),
     [photos]
   );
 
-  const plugins = showThumbnails ? [Thumbnails] : [];
+  const plugins = showThumbnails ? [Video, Thumbnails] : [Video];
   const currentCaption = photos[currentIndex]?.caption;
 
   return (

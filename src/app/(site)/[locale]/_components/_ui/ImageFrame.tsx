@@ -32,7 +32,16 @@ export function ImageFrame({
         !photo && 'project-placeholder'
       )}
     >
-      {photo ? (
+      {photo?.mimeType?.startsWith('video/') ? (
+        <video
+          src={photo.src}
+          controls
+          playsInline
+          preload="metadata"
+          aria-label={photo.alt}
+          className="h-full w-full object-contain"
+        />
+      ) : photo ? (
         <Image
           src={photo.src}
           alt={photo.alt}

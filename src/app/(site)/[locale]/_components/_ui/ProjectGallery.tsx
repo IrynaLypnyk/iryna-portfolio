@@ -6,6 +6,7 @@ import { AppLink } from './AppLink';
 import { ImageLightbox, type GalleryImage } from '@/components/ImageLightbox';
 import type { Photo } from '@/types/projects';
 import Image from 'next/image';
+import { Play } from 'lucide-react';
 
 type Props = {
   photos: Photo<string>[];
@@ -57,16 +58,40 @@ export function ProjectGallery({ photos }: Props) {
             <button
               type="button"
               onClick={() => setLightboxIndex(index)}
-              aria-label={t('openPhoto', { index: index + 1, count: photos.length })}
-              className="cursor-zoom-in"
+              aria-label={t(photo.mimeType?.startsWith('video/') ? 'openVideo' : 'openPhoto', {
+                index: index + 1,
+                count: photos.length,
+              })}
+              className="relative cursor-zoom-in"
             >
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                width={photo.width}
-                height={photo.height}
-                className="h-75 w-auto"
-              />
+              {photo.mimeType?.startsWith('video/') ? (
+                <>
+                  <video
+                    src={photo.src}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    width={photo.width}
+                    height={photo.height}
+                    aria-hidden="true"
+                    className="pointer-events-none h-75 w-auto"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/10">
+                    <Play
+                      aria-hidden="true"
+                      className="h-12 w-12 rounded-full bg-black/60 p-3 text-white"
+                    />
+                  </span>
+                </>
+              ) : (
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
+                  className="h-75 w-auto"
+                />
+              )}
             </button>
 
             {(photo.description || photo.linkUrl) && (

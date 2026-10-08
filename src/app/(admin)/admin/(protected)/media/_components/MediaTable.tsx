@@ -8,6 +8,7 @@ export type MediaLibraryItem = {
   id: string;
   imageKitFileId: string;
   src: string;
+  mimeType?: string | null;
   previewUrl: string;
   width: number;
   height: number;
@@ -50,7 +51,12 @@ export function MediaTable({ items }: MediaTableProps) {
           {items.map((item) => (
             <tr key={item.id} className="border-t border-neutral-200 align-middle">
               <td className="px-4 py-3">
-                <AdminMediaPreview src={item.previewUrl} className="h-16 w-20" sizes="80px" />
+                <AdminMediaPreview
+                  src={item.previewUrl}
+                  mimeType={item.mimeType}
+                  className="h-16 w-20"
+                  sizes="80px"
+                />
               </td>
 
               <td className="px-4 py-3">

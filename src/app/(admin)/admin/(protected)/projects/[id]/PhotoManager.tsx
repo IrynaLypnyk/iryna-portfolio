@@ -122,7 +122,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
       const result = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося зберегти фото');
+        throw new Error(result.message || 'Не вдалося зберегти медіафайл');
       }
 
       setItems((current) =>
@@ -131,9 +131,9 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
         )
       );
 
-      toast.success('Photo збережено');
+      toast.success('Медіафайл збережено');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти фото');
+      toast.error(error instanceof Error ? error.message : 'Не вдалося зберегти медіафайл');
     } finally {
       setStatuses((current) => ({ ...current, [item.id]: 'idle' }));
     }
@@ -164,13 +164,13 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
       const result = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(result.message || 'Не вдалося видалити фото');
+        throw new Error(result.message || 'Не вдалося видалити медіафайл');
       }
 
       setItems((current) => current.filter((currentItem) => currentItem.id !== item.id));
-      toast.success('Photo видалено');
+      toast.success('Медіафайл видалено');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Не вдалося видалити фото');
+      toast.error(error instanceof Error ? error.message : 'Не вдалося видалити медіафайл');
       setStatuses((current) => ({ ...current, [item.id]: 'idle' }));
     }
   }
@@ -219,6 +219,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
       <AdminPhotoLightbox
         photos={sortedItems.map((item) => ({
           src: item.imageUrl,
+          mimeType: item.mimeType,
           width: item.width,
           height: item.height,
         }))}

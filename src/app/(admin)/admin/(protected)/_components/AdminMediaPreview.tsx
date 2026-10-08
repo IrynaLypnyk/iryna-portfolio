@@ -6,6 +6,7 @@ type AdminMediaPreviewFit = 'cover' | 'contain';
 
 type AdminMediaPreviewProps = {
   src: string;
+  mimeType?: string | null;
   alt?: string;
   sizes?: string;
   fit?: AdminMediaPreviewFit;
@@ -16,6 +17,7 @@ type AdminMediaPreviewProps = {
 
 export function AdminMediaPreview({
   src,
+  mimeType,
   alt = '',
   sizes = '96px',
   fit = 'cover',
@@ -30,14 +32,34 @@ export function AdminMediaPreview({
         className
       )}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes={sizes}
-        priority={priority}
-        className={cn(fit === 'cover' ? 'object-cover' : 'object-contain', imageClassName)}
-      />
+      {mimeType?.startsWith('video/') ? (
+        <>
+          <video
+            src={src}
+            muted
+            playsInline
+            preload="metadata"
+            aria-label={alt || 'Video preview'}
+            className={cn(
+              'h-full w-full',
+              fit === 'cover' ? 'object-cover' : 'object-contain',
+              imageClassName
+            )}
+          />
+          <span className="absolute right-1 bottom-1 rounded bg-black/70 px-1.5 py-0.5 text-xs text-white">
+            Video
+          </span>
+        </>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className={cn(fit === 'cover' ? 'object-cover' : 'object-contain', imageClassName)}
+        />
+      )}
     </div>
   );
 }

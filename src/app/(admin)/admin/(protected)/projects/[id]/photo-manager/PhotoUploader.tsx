@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IMAGE_FILE_ACCEPT } from '@/lib/media/validate-image-files';
+import { PROJECT_MEDIA_ACCEPT } from '@/lib/media/project-media-policy';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { ConfirmReorderExitDialog } from './ConfirmReorderExitDialog';
 import type { PhotoRow, UploadItem, UploadStatus } from './types';
@@ -70,14 +70,19 @@ export function PhotoUploader({
       <input
         ref={fileInputRef}
         type="file"
-        accept={IMAGE_FILE_ACCEPT}
+        accept={PROJECT_MEDIA_ACCEPT}
         multiple
         className="hidden"
         onChange={handleFileChange}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-white p-4">
-        <p className="text-sm text-neutral-600">{photoCount} фото</p>
+        <div>
+          <p className="text-sm text-neutral-600">{photoCount} медіафайлів</p>
+          <p className="mt-1 text-xs text-neutral-500">
+            Images: up to 25 MB · MP4 / WebM: up to 100 MB
+          </p>
+        </div>
 
         {isReorderMode ? (
           <div className="flex flex-wrap items-center gap-2">
@@ -97,7 +102,7 @@ export function PhotoUploader({
           /* Normal mode toolbar */
           <div className="flex flex-wrap gap-2">
             <AdminButton onClickAction={handleFilePickerClick} disabled={isUploading}>
-              {isUploading ? 'Uploading…' : 'Upload photo'}
+              {isUploading ? 'Uploading…' : 'Upload photos / videos'}
             </AdminButton>
             <AdminButton
               variant="outline"

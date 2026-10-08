@@ -45,7 +45,7 @@ export function RecentProjectArticle({ project, index }: Props) {
       value: <ProjectFeatures features={project.features} />,
     });
   }
-  const expandable = project.features.length > 0 || project.photos.length > 1;
+  const expandable = project.features.length > 0 || project.photos.length > 0;
 
   const showMoreButton = (
     <button
@@ -145,7 +145,7 @@ export function RecentProjectArticle({ project, index }: Props) {
                 />
               )}
 
-              {project.photos.length > 1 && (
+              {project.photos.length > 0 && (
                 <div className="grid gap-3">
                   <Label color="blue">{t('labelGallery')}</Label>
                   <ProjectGallery photos={project.photos} />

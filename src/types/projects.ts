@@ -49,6 +49,8 @@ export type ProjectDetail = ProjectData & {
  * mappers, `string` once a locale has been picked.
  */
 export type Photo<TText> = {
+  /** Missing on legacy image assets. */
+  mimeType?: string | null;
   id: string;
   src: string;
   width: number;

@@ -7,7 +7,7 @@ import { getImageKit } from '@/lib/imagekit/client';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import { getImageKitFolder } from '@/lib/imagekit/getImageKitFolder';
 import { prisma } from '@/lib/prisma';
-import { getImageValidationError } from '@/lib/media/image-policy';
+import { getProjectMediaValidationError, isVideo } from '@/lib/media/project-media-policy';
 import type { PhotoRow } from '@/app/(admin)/admin/(protected)/projects/[id]/photo-manager/types';
 
 type Params = {
@@ -17,7 +17,7 @@ type Params = {
 /**
  * POST /api/admin/projects/[id]/photos/upload
  *
- * Finalizes a photo that has already been uploaded directly
+ * Finalizes project media that has already been uploaded directly
  * from the browser to ImageKit.
  *
  * Accepts JSON: { fileId }.
@@ -26,7 +26,7 @@ type Params = {
  * - verifies the project exists;
  * - fetches authoritative file data from ImageKit;
  * - verifies that the asset belongs to the expected project folder;
- * - validates the image type and size;
+ * - validates the media type and size;
  * - creates MediaAsset + Photo in Postgres.
  *
  * If the DB write fails and the asset is not already referenced in DB,
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({ message: 'Неправильний формат запиту' }, { status: 400 });
   }
 
-  const fileId = body.fileId?.trim();
+  const fileId = typeof body?.fileId === 'string' ? body.fileId.trim() : '';
 
   if (!fileId) {
     return NextResponse.json({ message: 'ImageKit fileId не передано' }, { status: 400 });
@@ -88,6 +88,10 @@ export async function POST(request: NextRequest, { params }: Params) {
     );
   }
 
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0) {
+    return NextResponse.json({ message: 'Некоректні розміри медіафайлу' }, { status: 400 });
+  }
+
   const expectedFolder = getImageKitFolder('projects', project.slug, 'photos').replace(/\/+$/, '');
 
   const expectedPrefix = `${expectedFolder}/`;
@@ -105,10 +109,12 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({ message: 'Небезпечний ImageKit path' }, { status: 400 });
   }
 
-  const imageError =
-    fileType !== 'image' ? 'Непідтримуваний тип зображення' : getImageValidationError(mime, size);
-  if (imageError) {
-    return NextResponse.json({ message: imageError }, { status: 400 });
+  const mediaError =
+    fileType !== 'image' && !isVideo(mime)
+      ? 'Непідтримуваний тип медіафайлу'
+      : getProjectMediaValidationError(mime, size);
+  if (mediaError) {
+    return NextResponse.json({ message: mediaError }, { status: 400 });
   }
 
   // ── 4. Determine next order ───────────────────────────────────────────────
@@ -126,6 +132,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         data: {
           imageKitFileId: fileId,
           src: filePath,
+          mimeType: mime,
           width,
           height,
         },
@@ -152,6 +159,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         photo: {
           id: photo.id,
           imageUrl: getImageUrl(photo.asset.src),
+          mimeType: photo.asset.mimeType,
           width: photo.asset.width,
           height: photo.asset.height,
           orderInProject: photo.orderInProject,
@@ -199,7 +207,7 @@ export async function POST(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           message:
-            'Не вдалося зберегти фото до бази даних. Не вдалося автоматично видалити файл з ImageKit.',
+            'Не вдалося зберегти медіафайл до бази даних. Не вдалося автоматично видалити файл з ImageKit.',
         },
         { status: 500 }
       );
@@ -207,7 +215,7 @@ export async function POST(request: NextRequest, { params }: Params) {
 
     return NextResponse.json(
       {
-        message: 'Не вдалося зберегти фото до бази даних. Файл ImageKit видалено.',
+        message: 'Не вдалося зберегти медіафайл до бази даних. Файл ImageKit видалено.',
       },
       { status: 500 }
     );

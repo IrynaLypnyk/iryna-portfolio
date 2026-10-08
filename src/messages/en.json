@@ -52,6 +52,7 @@
     "githubLabel": "GitHub",
     "storybookLabel": "Storybook",
     "demoLabel": "Live demo",
+    "openVideo": "Open video {index} of {count}",
     "openPhoto": "Open photo {index} of {count}",
     "coverPlaceholder": "{title} — product screenshot",
     "recentWork": {

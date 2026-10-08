@@ -39,9 +39,14 @@ export function PhotoTableRow({
           type="button"
           onClick={onPreviewAction}
           className="group relative block overflow-hidden rounded-md"
-          aria-label="Переглянути фото"
+          aria-label="Переглянути медіа"
         >
-          <AdminMediaPreview src={item.imageUrl} className="h-20 w-28 rounded-md" sizes="112px" />
+          <AdminMediaPreview
+            mimeType={item.mimeType}
+            src={item.imageUrl}
+            className="h-20 w-28 rounded-md"
+            sizes="112px"
+          />
           <span className="absolute inset-0 flex items-center justify-center rounded-md bg-black/0 text-white opacity-0 transition-all group-hover:bg-black/30 group-hover:opacity-100">
             <span className="text-xs font-medium">Переглянути</span>
           </span>
@@ -53,6 +58,7 @@ export function PhotoTableRow({
         <AdminChip
           label="Обкл. проєкту"
           checked={item.draft.isProjectCover}
+          disabled={item.mimeType?.startsWith('video/')}
           onChangeAction={(checked) => onDraftChangeAction(item.id, 'isProjectCover', checked)}
         />
       </td>

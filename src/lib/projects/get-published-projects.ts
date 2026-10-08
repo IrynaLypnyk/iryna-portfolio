@@ -35,6 +35,7 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
           {
             id: photo.id,
             src: getImageUrl(photoAsset.src),
+            mimeType: photoAsset.mimeType,
             width: photoAsset.width,
             height: photoAsset.height,
             alt: (isUkrainian ? photo.captionUk : photo.captionEn) || title,

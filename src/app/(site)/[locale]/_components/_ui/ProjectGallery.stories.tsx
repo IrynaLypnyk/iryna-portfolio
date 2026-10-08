@@ -29,3 +29,22 @@ export const Default: Story = {};
 export const SinglePhoto: Story = {
   args: { photos: [samplePhoto] },
 };
+
+const sampleVideo = {
+  ...samplePhoto,
+  id: 'video-1',
+  src: 'https://ik.imagekit.io/demo/sample-video.mp4',
+  mimeType: 'video/mp4',
+  width: 1280,
+  height: 720,
+  alt: 'Video demo',
+  description: 'Open to play the video',
+};
+
+export const MixedMedia: Story = {
+  args: { photos: [samplePhoto, sampleVideo] },
+};
+
+export const SingleVideo: Story = {
+  args: { photos: [sampleVideo] },
+};
