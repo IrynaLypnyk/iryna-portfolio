@@ -10,7 +10,10 @@ export function Hero() {
   const role = tCommon('role');
 
   return (
-    <Section className="hero-grid relative grid min-h-[88vh] content-center py-[clamp(48px,9vh,112px)]">
+    <Section
+      id={anchors.hero}
+      className="hero-grid relative grid min-h-[88vh] content-center py-[clamp(48px,9vh,112px)]"
+    >
       <div className="grid items-start gap-[clamp(32px,6vw,84px)] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
         <div className="grid gap-[clamp(24px,3.4vh,40px)]">
           <div className="text-app-muted flex items-center gap-3 font-mono text-xs tracking-wide">

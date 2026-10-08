@@ -22,6 +22,7 @@ export const routes = {
 
 export const anchors = {
   top: 'top',
+  hero: 'hero',
   projects: 'projects',
   playground: 'playground',
   about: 'about',

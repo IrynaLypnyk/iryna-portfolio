@@ -148,7 +148,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages} locale={locale}>
           <SiteHeader />
           <GrowingThread />
-          <PageContainer as="main" id={anchors.top.slice(1)} className="flex-1">
+          <PageContainer as="main" id={anchors.top} className="flex-1">
             {children}
           </PageContainer>
           <SiteFooter />
