@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 const BRANCH_1_RANGE = [0.62, 0.74] as const;
 const BRANCH_2_RANGE = [0.7, 0.82] as const;
@@ -16,7 +17,7 @@ function ramp(value: number, [start, end]: readonly [number, number]): number {
   return clamp01((value - start) / (end - start));
 }
 
-export function GrowingThread() {
+export function GrowingThread({ className }: { className?: string }) {
   const stemRef = useRef<SVGPathElement>(null);
   const branch1Ref = useRef<SVGPathElement>(null);
   const branch2Ref = useRef<SVGPathElement>(null);
@@ -122,7 +123,10 @@ export function GrowingThread() {
   return (
     <div
       data-component="GrowingThread"
-      className="pointer-events-none fixed top-0 left-1 z-2 hidden h-screen w-15 overflow-visible md:block lg:left-2 xl:left-3"
+      className={cn(
+        'pointer-events-none fixed top-0 left-1 z-2 h-screen w-15 overflow-visible lg:left-2 xl:left-3',
+        className
+      )}
     >
       <svg
         aria-hidden="true"

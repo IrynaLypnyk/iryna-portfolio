@@ -147,7 +147,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <JsonLd data={[personJsonLd, websiteJsonLd]} />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <SiteHeader />
-          <GrowingThread />
+          <GrowingThread className="hidden md:block" />
           <PageContainer as="main" id={anchors.top} className="flex-1">
             {children}
           </PageContainer>

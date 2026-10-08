@@ -64,7 +64,7 @@ export function RecentProjectArticle({ project, index }: Props) {
 
   return (
     <article
-      data-component="ProjectArticle"
+      data-component="RecentProjectArticle"
       className={cn(
         'border-app-line grid gap-7 overflow-visible border-b pr-(--page-pad-right) pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
       )}
@@ -95,7 +95,7 @@ export function RecentProjectArticle({ project, index }: Props) {
           <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
 
           {links.length > 0 && (
-            <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
+            <div className="relative inline-flex flex-wrap gap-x-4 gap-y-1.5">
               {links.map((link) => (
                 <AppLink
                   key={link.label}
