@@ -12,6 +12,9 @@ type Props = {
   photos: Photo<string>[];
 };
 
+// const navButtonClassnames =
+//   'border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors cursor-pointer';
+
 /**
  * Horizontal swipeable strip of screenshots shown inside an expanded project
  * card. Clicking a thumbnail opens it in the shared `ImageLightbox`; the
@@ -22,6 +25,16 @@ export function ProjectGallery({ photos }: Props) {
   const t = useTranslations('Work');
   const trackRef = useRef<HTMLDivElement>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // function scrollGallery(direction: -1 | 1) {
+  //   const track = trackRef.current;
+  //   if (!track) return;
+  //
+  //   track.scrollBy({
+  //     left: direction * track.clientWidth,
+  //     behavior: 'smooth',
+  //   });
+  // }
 
   // Memoized so this array keeps a stable reference across re-renders that
   // don't touch `photos` — the lightbox resets its own current slide back to
@@ -46,6 +59,27 @@ export function ProjectGallery({ photos }: Props) {
 
   return (
     <div data-component="ProjectGallery" className="grid gap-3">
+      {/*{photos.length > 1 && (*/}
+      {/*  <div className="flex gap-2">*/}
+      {/*    <button*/}
+      {/*      type="button"*/}
+      {/*      aria-label={t('galleryPrev')}*/}
+      {/*      onClick={() => scrollGallery(-1)}*/}
+      {/*      className={navButtonClassnames}*/}
+      {/*    >*/}
+      {/*      <ChevronLeft size={16} strokeWidth={1.75} />*/}
+      {/*    </button>*/}
+      {/*    <button*/}
+      {/*      type="button"*/}
+      {/*      aria-label={t('galleryNext')}*/}
+      {/*      onClick={() => scrollGallery(1)}*/}
+      {/*      className={navButtonClassnames}*/}
+      {/*    >*/}
+      {/*      <ChevronRight size={16} strokeWidth={1.75} />*/}
+      {/*    </button>*/}
+      {/*  </div>*/}
+      {/*)}*/}
+
       <div
         ref={trackRef}
         className="scrollbar-hide flex snap-x snap-mandatory items-start gap-3 overflow-x-auto pb-1"
@@ -117,27 +151,6 @@ export function ProjectGallery({ photos }: Props) {
           </div>
         ))}
       </div>
-
-      {/*{photos.length > 1 && (*/}
-      {/*  <div className="flex gap-2">*/}
-      {/*    <button*/}
-      {/*      type="button"*/}
-      {/*      aria-label={t('galleryPrev')}*/}
-      {/*      onClick={() => scrollBy(-1)}*/}
-      {/*      className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"*/}
-      {/*    >*/}
-      {/*      <ChevronLeft size={16} strokeWidth={1.75} />*/}
-      {/*    </button>*/}
-      {/*    <button*/}
-      {/*      type="button"*/}
-      {/*      aria-label={t('galleryNext')}*/}
-      {/*      onClick={() => scrollBy(1)}*/}
-      {/*      className="border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors"*/}
-      {/*    >*/}
-      {/*      <ChevronRight size={16} strokeWidth={1.75} />*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*)}*/}
 
       <ImageLightbox
         photos={slides}

@@ -108,7 +108,7 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
     leadEn: project.leadEn,
     roleUk: project.roleUk,
     roleEn: project.roleEn,
-    stack: (project.stack ?? '').split(' · ').join(', '),
+    stack: project.stack.join(', '),
     statusUk: project.statusUk ?? '',
     statusEn: project.statusEn ?? '',
     yearLabel: project.yearLabel ?? '',
@@ -219,8 +219,7 @@ export function ProjectForm({ mode, project }: Props) {
       stack: form.stack
         .split(',')
         .map((item) => item.trim())
-        .filter(Boolean)
-        .join(' · '),
+        .filter(Boolean),
       order: Number(form.order || 0),
       // `key` is a client-only React identity; the server rebuilds order from
       // array position.

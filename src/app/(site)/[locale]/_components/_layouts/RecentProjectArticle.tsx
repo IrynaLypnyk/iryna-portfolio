@@ -4,12 +4,10 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useProjectMeta } from '@/hooks/useProjectMeta';
+import { useProjectMeta, selectProjectMeta, type ProjectMetaKey } from '@/hooks/useProjectMeta';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_ui/ProjectFeatures';
-import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
 import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
@@ -17,7 +15,7 @@ import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 
 type Props = {
   project: ProjectData;
-  /** 1-based position, rendered as the "01" kicker. */
+  /** 1-based position; the first cover is loaded with priority. */
   index: number;
 };
 
@@ -26,7 +24,48 @@ export function RecentProjectArticle({ project, index }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
-  const meta = useProjectMeta(project);
+  const allMeta = useProjectMeta(project);
+
+  // Add, remove or reorder fields here; move a key between lists to change its group.
+  const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
+  const expandedFields: ProjectMetaKey[] = ['stack', 'features', 'gallery'];
+
+  const meta = selectProjectMeta(allMeta, metaFields);
+  const expandedMeta = selectProjectMeta(
+    allMeta,
+    expandedFields.filter((key) => !metaFields.includes(key))
+  );
+  const expandable = expandedMeta.length > 0;
+
+  // Keep the gallery full-width in either group; adjacent metadata stays in a list.
+  function renderMeta(items: MetaItem[], expanded = false) {
+    const groups: MetaItem[][] = [];
+    for (const item of items) {
+      const previousGroup = groups.at(-1);
+      if (!previousGroup || item === allMeta.gallery || previousGroup[0] === allMeta.gallery) {
+        groups.push([item]);
+      } else {
+        previousGroup.push(item);
+      }
+    }
+    return groups.map((group) =>
+      group[0] === allMeta.gallery ? (
+        <div key="gallery" className="grid gap-3">
+          <Label color={expanded ? 'blue' : 'gray'}>{group[0].label}</Label>
+          {group[0].value}
+        </div>
+      ) : (
+        <MetaList
+          key={group[0].label}
+          items={group}
+          variant="compact"
+          labelColor={expanded ? 'blue' : 'gray'}
+          labelWidth={110}
+          className={expanded ? 'gap-6' : ''}
+        />
+      )
+    );
+  }
 
   const links = [
     project.externalUrl && {
@@ -36,16 +75,6 @@ export function RecentProjectArticle({ project, index }: Props) {
     project.githubUrl && { href: project.githubUrl, label: t('githubLabel') },
     project.storybookUrl && { href: project.storybookUrl, label: t('storybookLabel') },
   ].filter((link): link is { href: string; label: string } => Boolean(link));
-
-  const expandedMeta: MetaItem[] = [];
-
-  if (project.features.length > 0) {
-    expandedMeta.push({
-      label: t('labelFeatures'),
-      value: <ProjectFeatures features={project.features} />,
-    });
-  }
-  const expandable = project.features.length > 0 || project.photos.length > 0;
 
   const showMoreButton = (
     <button
@@ -92,7 +121,7 @@ export function RecentProjectArticle({ project, index }: Props) {
 
           <p className="text-app-muted text-[17px] leading-[1.6] text-pretty">{project.context}</p>
 
-          <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
+          {renderMeta(meta)}
 
           {links.length > 0 && (
             <div className="relative inline-flex flex-wrap gap-x-4 gap-y-1.5">
@@ -134,51 +163,10 @@ export function RecentProjectArticle({ project, index }: Props) {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7"
           >
-            <div className="grid gap-6 pb-4">
-              {expandedMeta.length > 0 && (
-                <MetaList
-                  items={expandedMeta}
-                  labelColor="blue"
-                  variant="compact"
-                  labelWidth={130}
-                  className="pb-4"
-                />
-              )}
-
-              {project.photos.length > 0 && (
-                <div className="grid gap-3">
-                  <Label color="blue">{t('labelGallery')}</Label>
-                  <ProjectGallery photos={project.photos} />
-                </div>
-              )}
-
-              {/*<div className="border-app-line mt-2 border-t pt-5">*/}
-              {/*  <AppLink*/}
-              {/*    href={routes.project(project.slug)}*/}
-              {/*    internal*/}
-              {/*    variant="plain"*/}
-              {/*    arrow="right"*/}
-              {/*    color="blueBright"*/}
-              {/*  >*/}
-              {/*    {t('caseCta')}*/}
-              {/*  </AppLink>*/}
-              {/*</div>*/}
-            </div>
+            <div className="grid gap-6 pb-4">{renderMeta(expandedMeta, true)}</div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/*{!expandable && (*/}
-      {/*  <AppLink*/}
-      {/*    href={routes.project(project.slug)}*/}
-      {/*    internal*/}
-      {/*    variant="plain"*/}
-      {/*    arrow="right"*/}
-      {/*    color="blueBright"*/}
-      {/*  >*/}
-      {/*    {t('caseCta')}*/}
-      {/*  </AppLink>*/}
-      {/*)}*/}
     </article>
   );
 }

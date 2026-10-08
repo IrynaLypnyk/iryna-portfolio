@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useProjectMeta } from '@/hooks/useProjectMeta';
+import { useProjectMeta, selectProjectMeta, PROJECT_META_ORDER } from '@/hooks/useProjectMeta';
 import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
@@ -24,7 +24,8 @@ export function EarlierProjectArticle({ project }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
-  const expandedMeta = useProjectMeta(project);
+  const allMeta = useProjectMeta(project);
+  const expandedMeta = selectProjectMeta(allMeta, PROJECT_META_ORDER);
 
   const links = [
     project.externalUrl && {

@@ -1,3 +1,4 @@
+import { ProjectStack } from '@/components/ProjectStack';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
@@ -71,8 +72,8 @@ export default async function ProjectPage({ params }: Props) {
 
   const meta: MetaItem[] = [{ label: t('labelRole'), value: detail.role }];
 
-  if (detail.stack) {
-    meta.push({ label: t('labelStack'), value: detail.stack });
+  if (detail.stack.length) {
+    meta.push({ label: t('labelStack'), value: <ProjectStack items={detail.stack} /> });
   }
 
   // Older cached payloads may predate the enum fields.

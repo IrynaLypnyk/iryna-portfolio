@@ -13,7 +13,7 @@ export type ProjectData = {
   subtitle: string;
   context: string;
   role: string;
-  stack: string | null;
+  stack: string[];
   type: ProjectType;
   status: ProjectStatus;
   yearLabel: string | null;

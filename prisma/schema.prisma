@@ -64,7 +64,7 @@ model Project {
   roleUk String
   roleEn String
 
-  stack String?
+  stack String[] @default([])
 
   statusUk String?
   statusEn String?

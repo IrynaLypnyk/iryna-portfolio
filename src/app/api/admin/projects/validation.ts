@@ -24,7 +24,7 @@ export type ProjectInput = {
   leadEn: string;
   roleUk: string;
   roleEn: string;
-  stack: string | null;
+  stack: string[];
   statusUk: string | null;
   statusEn: string | null;
   yearLabel: string | null;
@@ -200,6 +200,11 @@ export function validateProjectInput(body: unknown): ValidationResult {
     return { field: 'order', error: 'Порядок має бути цілим числом' };
   }
 
+  if (!Array.isArray(stack) || stack.some((item) => typeof item !== 'string')) {
+    return { field: 'stack', error: 'Стек має бути масивом рядків' };
+  }
+  const normalizedStack = stack.map((item: string) => item.trim()).filter(Boolean);
+
   const normalizedUrl = optionalText(externalUrl);
 
   if (normalizedUrl !== null && !isWebUrl(normalizedUrl)) {
@@ -261,7 +266,7 @@ export function validateProjectInput(body: unknown): ValidationResult {
       leadEn: leadEn.trim(),
       roleUk: roleUk.trim(),
       roleEn: roleEn.trim(),
-      stack: optionalText(stack),
+      stack: normalizedStack,
       statusUk: optionalText(statusUk),
       statusEn: optionalText(statusEn),
       yearLabel: optionalText(yearLabel),

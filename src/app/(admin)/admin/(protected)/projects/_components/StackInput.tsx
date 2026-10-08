@@ -1,5 +1,6 @@
 'use client';
 
+import { ProjectStack } from '@/components/ProjectStack';
 import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
 import { ChangeEvent } from 'react';
 
@@ -14,8 +15,6 @@ export function StackInput({ value, onChangeAction }: Props) {
     .map((item) => item.trim())
     .filter(Boolean);
 
-  const previewText = items.join(' · ');
-
   return (
     <div className="space-y-3">
       <AdminInput
@@ -24,9 +23,12 @@ export function StackInput({ value, onChangeAction }: Props) {
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeAction(event.target.value)}
         placeholder="React, TypeScript, Redux"
       />
-      {previewText && (
+      {items.length > 0 && (
         <div className="text-sm text-neutral-600">
-          Preview: <span className="font-medium">{previewText}</span>
+          Preview:{' '}
+          <span className="font-medium">
+            <ProjectStack items={items} />
+          </span>
         </div>
       )}
     </div>

@@ -24,7 +24,7 @@ export async function getPublishedProjects(): Promise<ProjectWithRelations[]> {
         orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
         include: projectInclude,
       }),
-    ['published-projects', 'media-mime-v2'],
+    ['published-projects', 'media-mime-v2', 'stack-array-v1'],
     {
       revalidate: 60,
       tags: ['projects'],

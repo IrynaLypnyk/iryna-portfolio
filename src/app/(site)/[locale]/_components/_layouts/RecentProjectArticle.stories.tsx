@@ -17,23 +17,22 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Compact row layout. `index` is zero-padded into the "01" kicker. */
+/** Default summary metadata with features and gallery behind the toggle. */
 export const Default: Story = {};
 
 /**
  * Has features and multiple photos, so the `+` toggle renders. Click the
- * title or the toggle to reveal the "Key features" grid, gallery, and CTA.
+ * toggle to reveal the "Key features" grid and gallery.
  */
 export const Expandable: Story = {
   args: { project: featuredProject },
 };
 
 /**
- * No features and at most one photo: nothing extra to expand into, so the
- * toggle is hidden and the CTA falls back to always-visible.
+ * No features or photos: no toggle or empty expanded panel.
  */
 export const NotExpandable: Story = {
-  args: { project: projectWithoutCover, index: 2 },
+  args: { project: { ...projectWithoutCover, features: [] }, index: 2 },
 };
 
 /** The meta list only renders the rows that exist, so no empty `<dt>` appears. */
@@ -41,12 +40,20 @@ export const WithoutCover: Story = {
   args: { project: projectWithoutCover, index: 2 },
 };
 
-/** Role only: `stack` and `status` are both null. */
+/** Missing optional metadata is omitted automatically. */
 export const MinimalMeta: Story = {
   args: { project: sparseProject, index: 3 },
 };
 
-/** The last article uses tighter bottom padding than the ones above it. */
+/** Only features are available in the expanded group. */
+export const FeaturesOnly: Story = {
+  args: { project: { ...featuredProject, photos: [] } },
+};
+
+/** Only the gallery is available in the expanded group. */
+export const GalleryOnly: Story = {
+  args: { project: { ...featuredProject, features: [] } },
+};
 
 /** Two in sequence, the way `Projects` renders them. */
 export const Sequence: Story = {

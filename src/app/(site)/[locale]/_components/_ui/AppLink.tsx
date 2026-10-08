@@ -49,7 +49,7 @@ export function AppLink({
   const classNames = cn(
     'inline-flex w-fit items-center gap-2 transition-colors',
     variant === 'underline' &&
-      'border-b border-app-accent-light/80 pb-1.2 hover:border-app-accent-bright',
+      'border-b border-app-accent-light/50 pb-1.2 hover:border-app-accent-bright/80',
     fontMono ? 'font-mono uppercase text-[13px] tracking-widest' : 'font-sans text-base',
     COLOR_CLASSNAME[color],
     className

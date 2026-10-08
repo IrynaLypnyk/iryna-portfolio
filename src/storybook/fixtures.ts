@@ -23,7 +23,7 @@ export const featuredProject: ProjectData = {
   context:
     'Tokens, primitives and docs for a product team of twelve. Shipping a rebrand went from a six-week slog to a one-day token swap.',
   role: 'Lead frontend engineer',
-  stack: 'Next.js · TypeScript · Tailwind',
+  stack: ['Next.js', 'TypeScript', 'Tailwind'],
   type: 'TEAM',
   status: 'LIVE',
   yearLabel: '2024',
@@ -59,7 +59,7 @@ export const projectWithoutCover: ProjectData = {
   shortLabel: 'North Star',
   title: 'Analytics that answer one question well',
   context: 'A reporting surface built around a single funnel view instead of a wall of charts.',
-  stack: 'React · D3',
+  stack: ['React', 'D3'],
   status: 'IN_DEVELOPMENT',
   yearLabel: '2025',
   coverPhoto: null,
@@ -74,7 +74,7 @@ export const sparseProject: ProjectData = {
   subtitle: '',
   context: 'A small writing tool.',
   role: 'Solo',
-  stack: null,
+  stack: [],
   type: 'PERSONAL',
   status: 'COMPLETED',
   yearLabel: null,
@@ -95,7 +95,7 @@ export const moreWorkProject: ProjectData = {
   shortLabel: 'Ledger',
   title: 'Ledger',
   context: 'A double-entry bookkeeping engine with a deliberately boring API.',
-  stack: 'Node · Postgres',
+  stack: ['Node', 'Postgres'],
   yearLabel: '2023',
 };
 

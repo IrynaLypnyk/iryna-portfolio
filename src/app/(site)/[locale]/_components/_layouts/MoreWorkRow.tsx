@@ -1,3 +1,4 @@
+import { ProjectStack } from '@/components/ProjectStack';
 import { Link } from '@/i18n/navigation';
 import { routes } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';
@@ -7,7 +8,7 @@ type Props = {
 };
 
 export function MoreWorkRow({ project }: Props) {
-  const stamp = [project.stack, project.yearLabel].filter(Boolean).join(' · ');
+  const hasStack = project.stack.length > 0;
 
   return (
     <div
@@ -23,7 +24,13 @@ export function MoreWorkRow({ project }: Props) {
 
       <span className="text-app-muted text-[15px] text-pretty">{project.context}</span>
 
-      {stamp && <span className="text-app-accent-light font-mono text-xs">{stamp}</span>}
+      {(hasStack || project.yearLabel) && (
+        <span className="text-app-accent-light font-mono text-xs">
+          <ProjectStack items={project.stack} />
+          {hasStack && project.yearLabel && ' · '}
+          {project.yearLabel}
+        </span>
+      )}
     </div>
   );
 }
