@@ -110,6 +110,9 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          <div className="border-app-line border-t pt-8">
+            <LocaleSwitcher onLocaleChangeAction={() => setIsMobileMenuOpen(false)} />
+          </div>
         </div>
       </MobileMenuContainer>
     </>

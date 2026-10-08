@@ -8,9 +8,10 @@ const LABELS: Record<LocaleType, string> = { en: 'EN', uk: 'УК' };
 
 type Props = {
   variant?: 'boxed' | 'underlined';
+  onLocaleChangeAction?: () => void;
 };
 
-export function LocaleSwitcher({ variant = 'boxed' }: Props) {
+export function LocaleSwitcher({ variant = 'boxed', onLocaleChangeAction }: Props) {
   const locale = useLocale() as LocaleType;
   const pathname = usePathname();
   const router = useRouter();
@@ -25,6 +26,7 @@ export function LocaleSwitcher({ variant = 'boxed' }: Props) {
     router.replace(`${pathname}${hash}`, {
       locale: next,
     });
+    onLocaleChangeAction?.();
   }
 
   const isFooter = variant === 'underlined';
@@ -63,8 +65,8 @@ export function LocaleSwitcher({ variant = 'boxed' }: Props) {
                   : cn(
                       'px-2.5 py-1.5 font-mono text-xs tracking-wide',
                       isActive
-                        ? 'bg-app-ink text-app-on-dark hover:bg-app-accent-bright'
-                        : 'text-app-muted hover:text-app-ink'
+                        ? 'bg-app-ink text-app-on-dark'
+                        : 'text-app-muted hover:text-app-on-dark hover:bg-app-accent-bright'
                     )
               )}
             >
