@@ -101,7 +101,7 @@ export function SiteHeader() {
             <div className="md:hidden">
               <BurgerMenuButton
                 isMenuOpen={isMobileMenuOpen}
-                toggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+                toggleMobileMenuAction={() => setIsMobileMenuOpen((prev) => !prev)}
               />
             </div>
             <div className="hidden md:block">

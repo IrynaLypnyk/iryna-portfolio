@@ -1,13 +1,14 @@
 'use client';
 
 import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
+import { ChangeEvent } from 'react';
 
 type Props = {
   value: string;
-  onChange: (value: string) => void;
+  onChangeAction: (value: string) => void;
 };
 
-export function StackInput({ value, onChange }: Props) {
+export function StackInput({ value, onChangeAction }: Props) {
   const items = value
     .split(',')
     .map((item) => item.trim())
@@ -20,7 +21,7 @@ export function StackInput({ value, onChange }: Props) {
       <AdminInput
         type="text"
         value={value}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeAction(event.target.value)}
         placeholder="React, TypeScript, Redux"
       />
       {previewText && (

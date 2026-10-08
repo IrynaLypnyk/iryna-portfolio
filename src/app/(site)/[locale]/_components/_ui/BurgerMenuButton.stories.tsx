@@ -5,7 +5,7 @@ import { BurgerMenuButton } from './BurgerMenuButton';
 const meta = {
   title: 'UI/BurgerMenuButton',
   component: BurgerMenuButton,
-  args: { isMenuOpen: false, toggleMobileMenu: () => {} },
+  args: { isMenuOpen: false, toggleMobileMenuAction: () => {} },
 } satisfies Meta<typeof BurgerMenuButton>;
 
 export default meta;
@@ -24,7 +24,7 @@ export const Default: Story = {
     return (
       <BurgerMenuButton
         isMenuOpen={isMenuOpen}
-        toggleMobileMenu={() => setIsMenuOpen((previous) => !previous)}
+        toggleMobileMenuAction={() => setIsMenuOpen((previous) => !previous)}
       />
     );
   },

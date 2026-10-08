@@ -62,7 +62,7 @@ export function AdminNav() {
             <div className="md:hidden">
               <BurgerMenuButton
                 isMenuOpen={isMobileMenuOpen}
-                toggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+                toggleMobileMenuAction={() => setIsMobileMenuOpen((prev) => !prev)}
               />
             </div>
           </>

@@ -439,7 +439,7 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>{'Stack (optional)'}</span>
           <StackInput
             value={form.stack}
-            onChange={(value: string) => updateField('stack', value)}
+            onChangeAction={(value: string) => updateField('stack', value)}
           />
         </label>
 

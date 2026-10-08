@@ -5,20 +5,20 @@ import { cn } from '@/lib/utils';
 
 type Props = {
   isMenuOpen: boolean;
-  toggleMobileMenu: () => void;
+  toggleMobileMenuAction: () => void;
 };
 
 const lineClassName =
   'bg-app-accent-bright group-hover:bg-app-accent-lightest absolute h-0.5 transition-colors duration-500';
 
-export function BurgerMenuButton({ isMenuOpen, toggleMobileMenu }: Props) {
+export function BurgerMenuButton({ isMenuOpen, toggleMobileMenuAction }: Props) {
   return (
     <AnimatePresence initial={false}>
       {/* Burger / close menu button */}
       <ActionBox className={isMenuOpen ? 'bg-app-accent-bright' : ''}>
         <motion.button
           data-component={isMenuOpen ? 'MobileNavigationCloseButton' : 'MobileNavigationOpenButton'}
-          onClick={toggleMobileMenu}
+          onClick={toggleMobileMenuAction}
           type="button"
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMenuOpen}
