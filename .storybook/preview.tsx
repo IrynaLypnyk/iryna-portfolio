@@ -51,6 +51,11 @@ const preview: Preview = {
     },
   },
   parameters: {
+    options: {
+      storySort: {
+        order: ['*', 'Admin'],
+      },
+    },
     nextjs: {
       appDirectory: true, //That makes @storybook/nextjs create the next/navigation router mocks before stories render, so ProjectDeleteButton and BlogPostDeleteButton can call useRouter() safely.
     },
