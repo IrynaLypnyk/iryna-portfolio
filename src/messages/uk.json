@@ -11,6 +11,7 @@
     "backToTop": "Нагору"
   },
   "Navigation": {
+    "home": "Головна",
     "projects": "Проєкти",
     "playground": "Експерименти",
     "about": "Про мене",

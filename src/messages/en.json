@@ -11,6 +11,7 @@
     "backToTop": "Back to top"
   },
   "Navigation": {
+    "home": "Home",
     "projects": "Projects",
     "playground": "Playground",
     "about": "About",
