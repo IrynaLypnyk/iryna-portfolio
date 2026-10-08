@@ -63,7 +63,7 @@ export function Contact() {
                 <button
                   type="button"
                   onClick={copyEmail}
-                  className="text-app-muted/70 hover:text-app-accent-bright cursor-pointer font-mono text-[10px] tracking-[0.14em] uppercase"
+                  className="text-app-muted hover:text-app-accent-bright cursor-pointer font-mono text-[9px] tracking-normal uppercase"
                 >
                   {copied ? 'Copied' : 'Copy email'}
                 </button>

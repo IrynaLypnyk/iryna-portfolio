@@ -11,6 +11,7 @@
 
 :root {
   --azure: #3d63ff;
+  --azure-dark: #365bf5;
   --blue: #376dcd;
   --blue-dark: oklch(0.42 0.15 263);
   --blue-light: #84aaff;
@@ -74,6 +75,7 @@
   --color-app-accent-lightest: var(--blue-sky);
   --color-app-accent-light: var(--blue-light);
   --color-app-accent-bright: var(--azure);
+  --color-app-accent-bright-text: var(--azure-dark);
   --color-app-accent-dark: var(--blue-dark);
 
   --color-app-danger: var(--color-red-600);

@@ -16,7 +16,7 @@ export function Label({
       data-component="Label"
       className={cn(
         'font-mono text-[11.5px] whitespace-nowrap uppercase',
-        color === 'gray' ? 'text-app-text' : 'text-app-accent-bright',
+        color === 'gray' ? 'text-app-text' : 'text-app-accent-bright-text',
         isRoomy ? 'tracking-widest' : 'tracking-normal'
       )}
     >
