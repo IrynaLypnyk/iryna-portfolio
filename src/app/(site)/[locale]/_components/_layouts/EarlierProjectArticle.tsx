@@ -111,7 +111,9 @@ export function EarlierProjectArticle({ project }: Props) {
           >
             {project.title}
           </h3>
-          <p className="text-app-muted text-sm leading-normal tracking-wide">{project.context}</p>
+          <p className="text-app-muted text-sm leading-normal tracking-wide whitespace-pre-line">
+            {project.context}
+          </p>
           <AnimatePresence initial={false}>
             {expandable && open && (
               <motion.div

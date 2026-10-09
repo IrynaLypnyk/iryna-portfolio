@@ -118,7 +118,9 @@ export function RecentProjectArticle({ project, index }: Props) {
             {project.title}
           </h3>
 
-          <p className="text-app-muted text-base leading-normal tracking-wide">{project.context}</p>
+          <p className="text-app-muted text-base leading-normal tracking-wide whitespace-pre-line">
+            {project.context}
+          </p>
 
           <div className="flex flex-col gap-2">
             {renderMeta(meta)}
