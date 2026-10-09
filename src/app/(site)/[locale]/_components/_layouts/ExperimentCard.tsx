@@ -25,7 +25,7 @@ export function ExperimentCard({ experiment }: Props) {
       </div>
 
       <div className="grid content-start gap-2">
-        <span className="text-app-ink text-xl leading-tight font-medium tracking-tight">
+        <span className="text-app-ink text-xl leading-none font-medium tracking-tight">
           {experiment.title}
         </span>
         <span className="text-app-muted text-[15px] leading-[1.55] text-pretty">

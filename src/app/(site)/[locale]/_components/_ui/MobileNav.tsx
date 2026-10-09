@@ -34,7 +34,8 @@ export function MobileNav({ isMenuOpen, activeId, closeMobileMenu }: Props) {
                   aria-current={isActive ? 'true' : undefined}
                   onClick={closeMobileMenu}
                   className={cn(
-                    'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-tight font-semibold tracking-tight transition-colors',
+                    'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none' +
+                      ' font-semibold tracking-tight transition-colors',
                     isActive ? 'text-app-accent' : 'text-app-muted'
                   )}
                 >

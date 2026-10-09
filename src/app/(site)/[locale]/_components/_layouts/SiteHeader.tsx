@@ -84,11 +84,9 @@ export function SiteHeader() {
             <Link href={routes.home} onClick={handleHomeClick} className="flex items-center gap-2">
               <LogoIcon className="h-10 w-10" />
               <span className="flex flex-wrap items-baseline gap-2">
-                <span className="text-app-text text-[16px] leading-5 font-semibold tracking-[-0.01em]">
-                  {tCommon('name')}
-                </span>
-                <span className="text-app-muted caption text-[12px] leading-5">/</span>
-                <span className="text-app-muted caption text-[12px] leading-5 tracking-wide">
+                <span className="text-app-text font-semibold">{tCommon('name')}</span>
+                <span className="text-app-muted tracking-wide">/</span>
+                <span className="text-app-muted font-mono text-sm tracking-wide">
                   {tCommon('role')}
                 </span>
               </span>
@@ -117,7 +115,7 @@ export function SiteHeader() {
             onClick={handleHomeClick}
             aria-current={isHeroActive ? 'page' : undefined}
             className={cn(
-              'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-tight font-semibold tracking-tight transition-colors',
+              'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
               isHeroActive ? 'text-app-accent' : 'text-app-muted'
             )}
           >
@@ -133,7 +131,7 @@ export function SiteHeader() {
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
-                  'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-tight font-semibold tracking-tight transition-colors',
+                  'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
                   isActive ? 'text-app-accent' : 'text-app-muted'
                 )}
               >

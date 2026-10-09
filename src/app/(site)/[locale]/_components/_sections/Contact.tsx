@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 const contactAppLinkProps = {
   arrow: 'right',
-  color: 'gray',
+  color: 'black',
   variant: 'underline',
   arrowPosition: 'after',
 } satisfies Pick<AppLinkProps, 'arrow' | 'color' | 'variant' | 'arrowPosition'>;
@@ -37,9 +37,9 @@ export function Contact() {
       <div className="grid items-start gap-[clamp(36px,7vw,96px)] md:grid-cols-2">
         <div className="grid gap-7">
           <div className="grid gap-4.5">
-            <Kicker className="text-app-ink font-medium tracking-wide">{t('lead')}</Kicker>
+            <Kicker withRule>{t('lead')}</Kicker>
 
-            <div className="text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-tight font-medium tracking-normal">
+            <div className="text-app-accent-bright text-[clamp(1.75rem,calc(0.9167rem+2.6667vw),3.25rem)] leading-[1.08] font-medium tracking-normal">
               {t('pitch1')}
               <br />
               {t('pitch2')}

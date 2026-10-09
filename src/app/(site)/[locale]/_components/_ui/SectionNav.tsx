@@ -38,7 +38,9 @@ export function SectionNav({ activeId }: { activeId: string }) {
             aria-current={isActive ? 'page' : undefined}
             className={cn(
               'text-app-muted border-b border-transparent transition-colors',
-              isActive ? 'border-app-accent text-app-ink font-semibold' : 'hover:text-app-ink'
+              isActive
+                ? 'border-app-accent-bright text-app-ink font-semibold'
+                : 'hover:text-app-ink'
             )}
           >
             {t(item.labelKey)}

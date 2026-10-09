@@ -4,18 +4,17 @@ import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useProjectMeta, selectProjectMeta, PROJECT_META_ORDER } from '@/hooks/useProjectMeta';
-import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
+import { useProjectMeta, selectProjectMeta, type ProjectMetaKey } from '@/hooks/useProjectMeta';
+import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
-import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
+import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
 
 type Props = {
   project: ProjectData;
-  /** 1-based position, rendered as the "01" kicker. */
+  /** 1-based position; the first cover is loaded with priority. */
   index: number;
 };
 
@@ -23,9 +22,38 @@ export function EarlierProjectArticle({ project }: Props) {
   const t = useTranslations('Work');
   const [open, setOpen] = useState(false);
   const panelId = useId();
+  const detailsId = `${panelId}-details`;
+  const galleryId = `${panelId}-gallery`;
 
   const allMeta = useProjectMeta(project);
-  const expandedMeta = selectProjectMeta(allMeta, PROJECT_META_ORDER);
+
+  // Add, remove or reorder fields here; move a key between lists to change its group.
+  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack', 'features'];
+
+  const expandedMeta = selectProjectMeta(allMeta, expandedFields);
+  const expandable = expandedMeta.length > 0;
+
+  // Keep the gallery full-width in either group; adjacent metadata stays in a list.
+  function renderMeta(items: MetaItem[]) {
+    const groups: MetaItem[][] = [];
+    for (const item of items) {
+      const previousGroup = groups.at(-1);
+      if (!previousGroup) {
+        groups.push([item]);
+      } else {
+        previousGroup.push(item);
+      }
+    }
+    return groups.map((group) => (
+      <MetaList
+        key={group[0].label}
+        items={group}
+        variant="compact"
+        labelColor="gray"
+        labelWidth={120}
+      />
+    ));
+  }
 
   const links = [
     project.externalUrl && {
@@ -36,18 +64,16 @@ export function EarlierProjectArticle({ project }: Props) {
     project.storybookUrl && { href: project.storybookUrl, label: t('storybookLabel') },
   ].filter((link): link is { href: string; label: string } => Boolean(link));
 
-  const expandable = project.features.length > 0 || project.photos.length > 1;
-
   const showMoreButton = (
     <button
       type="button"
       aria-expanded={open}
-      aria-controls={panelId}
+      aria-controls={`${detailsId} ${galleryId}`}
       aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
       onClick={() => setOpen((current) => !current)}
-      className="text-app-accent-bright cursor-pointer"
+      className="cursor-pointer [grid-area:btn]"
     >
-      <ActionBox colorMode="onLight">
+      <ActionBox>
         {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
       </ActionBox>
     </button>
@@ -55,88 +81,90 @@ export function EarlierProjectArticle({ project }: Props) {
 
   return (
     <article
-      data-component="EarlierProjectArticle"
-      className={cn('border-app-line overflow-visible border-b first:border-t last:border-b-0')}
+      data-component="RecentProjectArticle"
+      className={cn(
+        'border-app-disabled grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
+      )}
     >
-      <div className="grid items-baseline gap-1 py-5 md:grid-cols-[auto_auto_minmax(0,1fr)_auto_auto_auto] md:gap-6">
-        {expandable && <div className="hidden md:inline-block">{showMoreButton}</div>}
-        <h5 className="text-app-ink text-[17px] transition-colors">{project.title}</h5>
-        <span className="text-app-muted text-[15px] text-pretty">{project.context}</span>
-        <p className="text-app-muted text-[15px] text-pretty">{project.yearLabel}</p>
+      <div
+        className={cn(
+          'group relative grid items-start gap-[clamp(20px,3.5vw,48px)] pt-4 md:pt-6',
+          expandable
+            ? "[grid-template-areas:'textContent'_'links'_'btn'] md:grid-cols-[auto_minmax(0,1fr)_auto] md:[grid-template-areas:'btn_textContent_links']"
+            : 'md:grid-cols-[minmax(0,1fr)_auto'
+        )}
+      >
+        {/*<ImageFrame*/}
+        {/*  photo={project.coverPhoto}*/}
+        {/*  placeholder={t('coverPlaceholder', { title: project.shortLabel })}*/}
+        {/*  priority={index === 1}*/}
+        {/*  sizes="(min-width: 768px) 20vw, 40vw"*/}
+        {/*  className="aspect-4/3 [grid-area:image]"*/}
+        {/*/>*/}
+
+        <div className="flex flex-col gap-2 [grid-area:textContent]">
+          <h3
+            className={cn(
+              'text-[clamp(1.375rem,calc(0.9583rem+1.3333vw),2.125rem)] leading-none font-medium tracking-tight text-pretty transition-colors',
+              expandable && 'group-hover:text-app-ink'
+            )}
+          >
+            {project.title}
+          </h3>
+          <p className="text-app-muted text-sm leading-normal tracking-wide">{project.context}</p>
+          <AnimatePresence initial={false}>
+            {expandable && open && (
+              <motion.div
+                id={detailsId}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="-pr-(--page-pad-right) grid gap-6 overflow-visible py-4"
+              >
+                {renderMeta(expandedMeta)}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         {links.length > 0 && (
-          <div className="relative z-10 inline-flex flex-wrap gap-x-4 gap-y-1.5">
+          <div className="relative inline-flex flex-wrap gap-x-8 gap-y-1.5 [grid-area:links]">
             {links.map((link) => (
               <AppLink
                 key={link.label}
                 href={link.href}
                 external
                 arrow="upRight"
-                color="black"
-                variant="underline"
+                color="blueBright"
               >
                 {link.label}
               </AppLink>
             ))}
           </div>
         )}
-        {expandable && <div className="pt-2 md:hidden">{showMoreButton}</div>}
+        {expandable && showMoreButton}
       </div>
 
       <AnimatePresence initial={false}>
         {expandable && open && (
           <motion.div
-            id={panelId}
+            id={galleryId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7"
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="border-app-line -pr-(--page-pad-right) flex flex-col gap-6 overflow-visible border-t pt-7"
           >
-            <div className="grid">
-              {expandedMeta.length > 0 && (
-                <MetaList
-                  items={expandedMeta}
-                  labelColor="blue"
-                  variant="compact"
-                  labelWidth={130}
-                  className="pb-4"
-                />
-              )}
-
-              {project.photos.length > 1 && (
-                <div className="grid gap-3">
-                  <Label color="blue">{t('labelGallery')}</Label>
-                  <ProjectGallery photos={project.photos} />
-                </div>
-              )}
-
-              {/*<div className="border-app-line mt-2 border-t pt-5">*/}
-              {/*  <AppLink*/}
-              {/*    href={routes.project(project.slug)}*/}
-              {/*    internal*/}
-              {/*    variant="plain"*/}
-              {/*    arrow="right"*/}
-              {/*    color="blueBright"*/}
-              {/*  >*/}
-              {/*    {t('caseCta')}*/}
-              {/*  </AppLink>*/}
-              {/*</div>*/}
+            <div className="grid gap-6 pb-4">
+              <div key="gallery" className="grid gap-2">
+                {allMeta.gallery && (
+                  <ProjectGallery photos={allMeta.gallery.value} imageHeightClass="h-40" />
+                )}
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/*{!expandable && (*/}
-      {/*  <AppLink*/}
-      {/*    href={routes.project(project.slug)}*/}
-      {/*    internal*/}
-      {/*    variant="plain"*/}
-      {/*    arrow="right"*/}
-      {/*    color="blueBright"*/}
-      {/*  >*/}
-      {/*    {t('caseCta')}*/}
-      {/*  </AppLink>*/}
-      {/*)}*/}
     </article>
   );
 }

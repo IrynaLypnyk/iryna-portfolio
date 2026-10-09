@@ -3,6 +3,7 @@ import { anchors } from '@/constants/routes';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { HeroMetaList } from '@/app/(site)/[locale]/_components/_layouts/HeroMetaList';
+import { Kicker } from '@/app/(site)/[locale]/_components/_ui/Kicker';
 
 export function Hero() {
   const t = useTranslations('Hero');
@@ -16,22 +17,19 @@ export function Hero() {
     >
       <div className="grid items-start gap-[clamp(32px,6vw,84px)] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
         <div className="grid gap-[clamp(24px,3.4vh,40px)]">
-          <div className="text-app-muted flex items-center gap-3 font-mono text-xs tracking-wide">
-            <span className="bg-app-muted/50 inline-block h-px w-6 align-middle"></span>
-            <span className="text-app-muted">{t('kicker')}</span>
-          </div>
-          <h1 className="text-app-ink text-[clamp(44px,8vw,96px)] leading-[0.92] font-medium tracking-[-0.04em]">
+          <Kicker withRule>{t('kicker')}</Kicker>
+          <h1 className="text-app-ink text-[clamp(2.875rem,calc(1.1389rem+6vw),6rem)] leading-none font-medium tracking-tight">
             {t('name')}
           </h1>
 
-          <div className="text-app-ink text-[clamp(24px,3.5vw,46px)] leading-[1.12] font-semibold tracking-[-0.03em]">
+          <div className="text-app-ink text-[clamp(1.5rem,calc(0.7361rem+2.4444vw),2.875rem)] leading-tight font-semibold tracking-tight">
             <p>{t('statement.part1')}</p>
             <p>{t('statement.part2')}</p>
             <p>
               <span className="text-app-accent-bright">{t('statement.part3')}</span>
             </p>
           </div>
-          <div className="text-app-muted max-w-160 text-[clamp(16px,1.4vw,18px)] leading-normal">
+          <div className="text-app-muted max-w-160 text-base leading-normal lg:text-lg">
             <p>{t('body', { role })}</p>
           </div>
 

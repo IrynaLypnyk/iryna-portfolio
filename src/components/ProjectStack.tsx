@@ -9,14 +9,14 @@ export function ProjectStack({ items }: Props) {
   return (
     <span
       data-component="ProjectStack"
-      className="inline-flex flex-wrap items-center gap-x-3 gap-y-1"
+      className="inline-flex flex-wrap items-center gap-x-2 gap-y-1"
     >
       {items.map((item, index) => (
-        <span key={`${item}-${index}`} className="inline-flex items-center gap-3">
-          {index > 0 && (
+        <span key={`${item}-${index}`} className="inline-flex items-center gap-2">
+          <span>{item}</span>
+          {index < items.length - 1 && (
             <span aria-hidden="true" className="bg-app-muted h-0.5 w-0.5 shrink-0 rounded-full" />
           )}
-          <span>{item}</span>
         </span>
       ))}
     </span>

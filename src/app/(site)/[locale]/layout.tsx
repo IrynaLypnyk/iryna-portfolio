@@ -141,7 +141,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       data-scroll-behavior="smooth"
     >
       <body
-        className="bg-app-page text-app-text flex min-h-dvh flex-col font-sans font-normal antialiased"
+        className="bg-app-page text-app-text flex min-h-dvh flex-col font-sans text-base leading-normal font-normal antialiased"
         suppressHydrationWarning
       >
         <JsonLd data={[personJsonLd, websiteJsonLd]} />

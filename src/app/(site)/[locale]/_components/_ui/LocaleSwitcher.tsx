@@ -35,10 +35,8 @@ export function LocaleSwitcher({ variant = 'boxed', onLocaleChangeAction }: Prop
     <div
       data-component="LocaleSwitcher"
       className={cn(
-        'inline-flex items-center',
-        isFooter
-          ? 'gap-2.5 font-mono text-[11.5px]'
-          : 'border-app-line min-h-8.5 gap-0.5 border p-0.5'
+        'inline-flex items-center font-mono text-xs tracking-widest',
+        isFooter ? 'gap-2.5' : 'border-app-line min-h-8.5 gap-0.5 border p-0.5'
       )}
     >
       {locales.map((candidate, index) => {
@@ -57,13 +55,13 @@ export function LocaleSwitcher({ variant = 'boxed', onLocaleChangeAction }: Prop
                 isActive ? 'cursor-default' : 'cursor-pointer',
                 isFooter
                   ? cn(
-                      'border-b pb-0.5 tracking-wide',
+                      'border-b pb-0.5',
                       isActive
                         ? 'border-app-accent text-app-ink font-medium'
                         : 'text-app-muted hover:text-app-ink border-transparent'
                     )
                   : cn(
-                      'px-2.5 py-1.5 font-mono text-xs tracking-wide',
+                      'px-2.5 py-1.5',
                       isActive
                         ? 'bg-app-ink text-app-on-dark'
                         : 'text-app-muted hover:text-app-on-dark hover:bg-app-accent-bright'

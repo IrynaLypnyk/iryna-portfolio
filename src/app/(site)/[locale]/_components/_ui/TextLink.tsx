@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { MoveUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 const linkStyles =
   'hover:text-app-accent-bright active:text-app-ink transition-colors inline-flex items-center transition-colors text-app-accent';
@@ -13,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-const arrow = <MoveUpRight strokeWidth={1} className="h-4 w-4" />;
+const arrow = <ArrowUpRight strokeWidth={1.5} className="w-4" />;
 
 export function TextLink({ href, isExternal, className, children }: Props) {
   if (isExternal) {

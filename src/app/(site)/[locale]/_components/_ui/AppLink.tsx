@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { MoveDown, MoveLeft, MoveRight, MoveUpRight } from 'lucide-react';
+import { MoveDown, MoveLeft, ArrowUpRight, ArrowRight } from 'lucide-react';
 
 export type AppLinkProps = {
   href: string;
@@ -20,10 +20,10 @@ export type AppLinkProps = {
 };
 
 const ARROWS = {
-  right: <MoveRight strokeWidth={1} className="h-4 w-4" />,
-  left: <MoveLeft strokeWidth={1} className="h-4 w-4" />,
-  down: <MoveDown strokeWidth={1} className="h-4 w-4" />,
-  upRight: <MoveUpRight strokeWidth={1} className="h-4 w-4" />,
+  right: <ArrowRight strokeWidth={1.5} className="h-4 w-4" />,
+  left: <MoveLeft strokeWidth={1.5} className="h-4 w-4" />,
+  down: <MoveDown strokeWidth={1.5} className="h-4 w-4" />,
+  upRight: <ArrowUpRight strokeWidth={1.5} className="h-4 w-4" />,
   none: null,
 } as const;
 
@@ -47,10 +47,10 @@ export function AppLink({
   children,
 }: AppLinkProps) {
   const classNames = cn(
-    'inline-flex w-fit items-center gap-2 transition-colors',
+    'inline-flex w-fit items-center gap-1 transition-colors',
     variant === 'underline' &&
-      'border-b border-app-accent-light/50 pb-1.2 hover:border-app-accent-bright/80',
-    fontMono ? 'font-mono uppercase text-[13px] tracking-widest' : 'font-sans text-base',
+      'border-b border-app-accent-bright/20 pb-1.5 hover:border-app-accent-bright/80',
+    fontMono ? 'font-mono uppercase text-sm tracking-widest' : 'font-sans text-base',
     COLOR_CLASSNAME[color],
     className
   );

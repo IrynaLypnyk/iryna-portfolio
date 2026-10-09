@@ -4,14 +4,16 @@ import { ProjectStack } from '@/components/ProjectStack';
 import { useTranslations } from 'next-intl';
 import type { MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_ui/ProjectFeatures';
-import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
 import type { ProjectData } from '@/types/projects';
 
 // Default summary order; each article chooses its own groups.
 export const PROJECT_META_ORDER = ['type', 'role', 'stack', 'status', 'year'] as const;
 
-export type ProjectMetaKey = (typeof PROJECT_META_ORDER)[number] | 'features' | 'gallery';
-export type ProjectMeta = Record<ProjectMetaKey, MetaItem | null>;
+// Gallery photos are data, so they are rendered separately from MetaList rows.
+export type ProjectMetaKey = (typeof PROJECT_META_ORDER)[number] | 'features';
+export type ProjectMeta = Record<ProjectMetaKey, MetaItem | null> & {
+  gallery: { label: string; value: ProjectData['photos'] } | null;
+};
 
 /** Select, order and deduplicate available fields without rendering empty rows. */
 export function selectProjectMeta(items: ProjectMeta, keys: readonly ProjectMetaKey[]): MetaItem[] {
@@ -40,8 +42,6 @@ export function useProjectMeta(project: ProjectData): ProjectMeta {
     features: project.features.length
       ? { label: t('labelFeatures'), value: <ProjectFeatures features={project.features} /> }
       : null,
-    gallery: project.photos.length
-      ? { label: t('labelGallery'), value: <ProjectGallery photos={project.photos} /> }
-      : null,
+    gallery: project.photos.length ? { label: t('labelGallery'), value: project.photos } : null,
   };
 }

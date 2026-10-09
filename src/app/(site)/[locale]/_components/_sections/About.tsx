@@ -37,23 +37,23 @@ export function About() {
           </div>
         </figure>
 
-        <div className="grid max-w-155 gap-5">
-          <p className="text-[clamp(19px,1.9vw,24px)] leading-[1.5] tracking-normal text-pretty">
+        <div className="text-app-text grid max-w-155 gap-5 text-base tracking-normal text-pretty md:text-lg">
+          <p className="text-xl leading-normal text-pretty md:text-2xl">
             {t('p1', { role: tCommon('role') })}
           </p>
-          <p className="text-app-text text-[17px] leading-[1.68] text-pretty">
+          <p className="leading-relaxed text-pretty">
             {t('p2.p2-1')}{' '}
             <TextLink href="https://helsi.me" isExternal={true}>
               {t('p2.p2-2')}
             </TextLink>
             {t('p2.p2-3')}
           </p>
-          <p className="text-app-text text-[17px] leading-[1.68] text-pretty">{t('p3')}</p>
+          <p className="leading-relaxed text-pretty">{t('p3')}</p>
 
           <MetaList
-            variant="roomy"
+            variant="compact"
             labelColor="blue"
-            labelWidth={100}
+            labelWidth={110}
             className="border-app-line border-t pt-6.5"
             items={[
               { label: t('labelCurrently'), value: t('currently') },

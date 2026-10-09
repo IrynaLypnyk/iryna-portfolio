@@ -18,7 +18,7 @@ export function Kicker({ as: Tag = 'span', withRule = false, className, children
     <Tag
       data-component="Kicker"
       className={cn(
-        'text-app-muted font-mono text-xs tracking-wide uppercase',
+        'text-app-muted font-mono text-xs tracking-widest uppercase',
         !withRule && className
       )}
     >
@@ -32,7 +32,7 @@ export function Kicker({ as: Tag = 'span', withRule = false, className, children
 
   return (
     <span className={cn('flex items-center gap-3.5', className)}>
-      <span aria-hidden="true" className="bg-app-accent block h-px w-11" />
+      <span aria-hidden="true" className="bg-app-muted/50 inline-block h-px w-6 align-middle" />
       {label}
     </span>
   );

@@ -10,8 +10,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Gray: Story = {};
+export const Default: Story = {};
 
 export const Blue: Story = {
   args: { color: 'blue' },
+};
+
+export const Compact: Story = {
+  args: { variant: 'compact' },
+};
+
+export const SizeSm: Story = {
+  args: { size: 'sm' },
 };

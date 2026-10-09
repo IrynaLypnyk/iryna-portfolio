@@ -2,26 +2,28 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { AppLink } from './AppLink';
 import { ImageLightbox, type GalleryImage } from '@/components/ImageLightbox';
 import type { Photo } from '@/types/projects';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
+import { TextLink } from '@/app/(site)/[locale]/_components/_ui/TextLink';
+import { cn } from '@/lib/utils';
 
 type Props = {
   photos: Photo<string>[];
+  imageHeightClass?: string;
 };
 
 // const navButtonClassnames =
 //   'border-app-line text-app-muted hover:border-app-accent hover:text-app-accent flex h-8 w-8 items-center justify-center border transition-colors cursor-pointer';
-
+const IMAGE_HEIGHT_CLASS = 'h-85';
 /**
  * Horizontal swipeable strip of screenshots shown inside an expanded project
  * card. Clicking a thumbnail opens it in the shared `ImageLightbox`; the
  * caption/link for a photo sits underneath it rather than on hover, since
  * hover has no equivalent on touch devices.
  */
-export function ProjectGallery({ photos }: Props) {
+export function ProjectGallery({ photos, imageHeightClass = IMAGE_HEIGHT_CLASS }: Props) {
   const t = useTranslations('Work');
   const trackRef = useRef<HTMLDivElement>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -85,10 +87,7 @@ export function ProjectGallery({ photos }: Props) {
         className="scrollbar-hide flex snap-x snap-mandatory items-start gap-3 overflow-x-auto pb-1"
       >
         {photos.map((photo, index) => (
-          <div
-            key={photo.id}
-            className="flex max-w-107.5 min-w-0 shrink-0 snap-start flex-col gap-1.5"
-          >
+          <div key={photo.id} className="flex min-w-0 shrink-0 snap-start flex-col gap-1.5">
             <button
               type="button"
               onClick={() => setLightboxIndex(index)}
@@ -108,7 +107,7 @@ export function ProjectGallery({ photos }: Props) {
                     width={photo.width}
                     height={photo.height}
                     aria-hidden="true"
-                    className="pointer-events-none h-75 w-auto"
+                    className={cn('pointer-events-none w-auto', imageHeightClass)}
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/10">
                     <Play
@@ -123,30 +122,20 @@ export function ProjectGallery({ photos }: Props) {
                   alt={photo.alt}
                   width={photo.width}
                   height={photo.height}
-                  className="h-75 w-auto"
+                  className={cn('w-auto', imageHeightClass)}
                 />
               )}
             </button>
 
             {(photo.description || photo.linkUrl) && (
-              <p>
-                {photo.description && (
-                  <span className="text-app-muted max-w-full leading-snug">
-                    {photo.description}
-                  </span>
-                )}{' '}
+              <div className="flex max-w-full flex-col gap-1 text-sm tracking-wide">
+                {photo.description && <span className="text-app-muted">{photo.description}</span>}
                 {photo.linkUrl && (
-                  <AppLink
-                    href={photo.linkUrl}
-                    external
-                    arrow="right"
-                    color="blueBright"
-                    className="inline-flex"
-                  >
+                  <TextLink href={photo.linkUrl} isExternal>
                     {t('demoLabel')}
-                  </AppLink>
+                  </TextLink>
                 )}
-              </p>
+              </div>
             )}
           </div>
         ))}

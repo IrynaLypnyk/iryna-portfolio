@@ -45,7 +45,9 @@ export function MetaList({
         {items.map((item) => (
           <div key={item.label} className="grid gap-1.5">
             <dt>
-              <Label color={labelColor}>{item.label}</Label>
+              <Label color={labelColor} size="xs">
+                {item.label}
+              </Label>
             </dt>
             <dd className="text-app-text m-0 text-base">{item.value}</dd>
           </div>
@@ -57,10 +59,7 @@ export function MetaList({
   const isRoomy = variant === 'roomy';
 
   return (
-    <dl
-      data-component="MetaList"
-      className={cn('text-app-muted m-0 grid', isRoomy ? 'gap-3.5' : 'gap-2', className)}
-    >
+    <dl data-component="MetaList" className={cn('m-0 grid gap-2', className)}>
       {items.map((item) => (
         <div
           key={item.label}
@@ -72,17 +71,16 @@ export function MetaList({
                 : undefined,
           }}
         >
-          <dt
-            className={cn(
-              'text-app-muted',
-              isRoomy ? 'pt-0.5 font-mono text-[14px] tracking-tight uppercase' : 'tracking-label'
-            )}
-          >
-            <Label color={labelColor} variant={isRoomy ? 'roomy' : 'compact'}>
+          <dt>
+            <Label
+              color={labelColor}
+              variant={isRoomy ? 'roomy' : 'compact'}
+              size={isRoomy ? 'sm' : 'xs'}
+            >
               {item.label}
             </Label>
           </dt>
-          <dd className={cn('m-0 ml-2 font-sans text-[14px]')}>{item.value}</dd>
+          <dd className={cn('text-app-muted m-0 ml-2 text-sm tracking-wide')}>{item.value}</dd>
         </div>
       ))}
     </dl>
