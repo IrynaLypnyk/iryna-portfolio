@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -26,12 +26,22 @@ export function EarlierProjectArticle({ project }: Props) {
   const galleryId = `${panelId}-gallery`;
 
   const allMeta = useProjectMeta(project);
+  const galleryPhotos = useMemo(() => {
+    const coverPhoto = project.coverPhoto;
+    const photos = project.photos;
+    if (!coverPhoto) return photos;
+
+    return [
+      coverPhoto,
+      ...photos.filter((photo) => photo.id !== coverPhoto.id && photo.src !== coverPhoto.src),
+    ];
+  }, [project.coverPhoto, project.photos]);
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
   const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack', 'features'];
 
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
-  const expandable = expandedMeta.length > 0;
+  const expandable = expandedMeta.length > 0 || galleryPhotos.length > 0;
 
   // Keep the gallery full-width in either group; adjacent metadata stays in a list.
   function renderMeta(items: MetaItem[]) {
@@ -81,7 +91,7 @@ export function EarlierProjectArticle({ project }: Props) {
 
   return (
     <article
-      data-component="RecentProjectArticle"
+      data-component="EarlierProjectArticle"
       className={cn(
         'border-app-disabled grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
       )}
@@ -159,8 +169,8 @@ export function EarlierProjectArticle({ project }: Props) {
           >
             <div className="grid gap-6 pb-4">
               <div key="gallery" className="grid gap-2">
-                {allMeta.gallery && (
-                  <ProjectGallery photos={allMeta.gallery.value} imageHeightClass="h-40" />
+                {galleryPhotos.length > 0 && (
+                  <ProjectGallery photos={galleryPhotos} imageHeightClass="h-40" />
                 )}
               </div>
             </div>
