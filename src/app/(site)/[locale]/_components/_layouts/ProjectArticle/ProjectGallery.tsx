@@ -3,9 +3,9 @@ import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { ProjectGalleryMeta } from '@/hooks/useProjectMeta';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 
-type Props = ProjectGalleryMeta & { galleryId: string; height?: number };
+type Props = ProjectGalleryMeta & { galleryId: string; imageHeightClass?: string };
 
-export function ProjectGallery({ gallery, galleryId, height }: Props) {
+export function ProjectGallery({ gallery, galleryId, imageHeightClass }: Props) {
   return (
     <motion.div
       id={galleryId}
@@ -20,12 +20,7 @@ export function ProjectGallery({ gallery, galleryId, height }: Props) {
           {gallery?.label}
         </Label>
         <div key="gallery" className="grid gap-3">
-          {gallery && (
-            <ImagesGallery
-              photos={gallery.value}
-              imageHeightClass={height ? `h-${height}` : undefined}
-            />
-          )}
+          {gallery && <ImagesGallery photos={gallery.value} imageHeightClass={imageHeightClass} />}
         </div>
       </div>
     </motion.div>

@@ -96,7 +96,11 @@ export function EarlierProjectArticle({ project }: Props) {
         {links.length > 0 && <ProjectLinks open={open} links={links} />}
         <AnimatePresence initial={false}>
           {expandable && open && (
-            <ProjectGallery gallery={allMeta.gallery} galleryId={galleryId} height={40} />
+            <ProjectGallery
+              gallery={allMeta.gallery}
+              galleryId={galleryId}
+              imageHeightClass="h-40"
+            />
           )}
         </AnimatePresence>
         {expandable && (

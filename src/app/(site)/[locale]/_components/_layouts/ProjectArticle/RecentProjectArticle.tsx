@@ -128,7 +128,11 @@ export function RecentProjectArticle({ project, index }: Props) {
 
         <AnimatePresence initial={false}>
           {expandable && open && (
-            <ProjectGallery gallery={allMeta.gallery} galleryId={galleryId} height={40} />
+            <ProjectGallery
+              gallery={allMeta.gallery}
+              galleryId={galleryId}
+              imageHeightClass="h-40"
+            />
           )}
         </AnimatePresence>
 
