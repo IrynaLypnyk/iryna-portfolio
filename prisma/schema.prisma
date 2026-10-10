@@ -24,8 +24,9 @@ model Admin {
 }
 
 enum ProjectType {
-  PERSONAL
+  SOLO_DEVELOPED
   TEAM
+  PERSONAL
 }
 
 enum ProjectStatus {

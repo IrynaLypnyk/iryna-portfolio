@@ -137,8 +137,9 @@
     "labelType": "Project type",
     "labelStatus": "Project status",
     "types": {
-      "PERSONAL": "Personal project",
-      "TEAM": "Team project"
+      "SOLO_DEVELOPED": "Solo-developed project",
+      "TEAM": "Team project",
+      "PERSONAL": "Personal project"
     },
     "statuses": {
       "LIVE": "Live",
