@@ -30,7 +30,7 @@ export function SectionHeader({
           {title}
         </TitleTag>
         {subtitle && (
-          <SubtitleTag className="text-app-accent-bright-text font-mono text-base leading-normal tracking-wide">
+          <SubtitleTag className="text-app-accent-bright-text font-mono text-sm leading-normal tracking-wide md:text-base">
             {subtitle}
           </SubtitleTag>
         )}

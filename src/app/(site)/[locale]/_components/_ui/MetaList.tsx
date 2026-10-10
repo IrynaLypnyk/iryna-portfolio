@@ -20,6 +20,7 @@ type Props = {
   variant?: 'compact' | 'roomy' | 'panel';
   className?: string;
   labelColor?: 'blue' | 'gray';
+  textColor?: 'gray' | 'black';
 };
 
 export function MetaList({
@@ -28,6 +29,7 @@ export function MetaList({
   columnGap,
   variant = 'compact',
   labelColor = 'gray',
+  textColor = 'gray',
   className,
 }: Props) {
   if (variant === 'panel') {
@@ -36,7 +38,7 @@ export function MetaList({
         data-component="MetaList"
         className={cn(
           'm-0 grid gap-3 gap-x-[clamp(20px,3vw,40px)] md:gap-6.5',
-          'border-app-line border-t pt-6.5',
+          'border-app-line',
           'md:grid-cols-1 md:border-t-0 md:border-l md:pt-0 md:pl-[clamp(20px,2.6vw,36px)]',
           'max-md:grid-cols-2 max-sm:grid-cols-1',
           className
@@ -49,7 +51,14 @@ export function MetaList({
                 {item.label}
               </Label>
             </dt>
-            <dd className="text-app-text m-0 text-base">{item.value}</dd>
+            <dd
+              className={cn(
+                'm-0 text-base',
+                textColor === 'gray' ? 'text-app-muted' : 'text-app-text'
+              )}
+            >
+              {item.value}
+            </dd>
           </div>
         ))}
       </dl>
@@ -80,7 +89,7 @@ export function MetaList({
               {item.label}
             </Label>
           </dt>
-          <dd className={cn('text-app-muted m-0 ml-2 text-sm tracking-wide')}>{item.value}</dd>
+          <dd className={cn('text-app-muted m-0 ml-2 text-base tracking-wide')}>{item.value}</dd>
         </div>
       ))}
     </dl>

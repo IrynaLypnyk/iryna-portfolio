@@ -83,7 +83,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-3">
             <Link href={routes.home} onClick={handleHomeClick} className="flex items-center gap-2">
               <LogoIcon className="h-10 w-10" />
-              <span className="flex flex-wrap items-baseline gap-2">
+              <span className="flex flex-wrap items-baseline gap-x-2">
                 <span className="text-app-text font-semibold">{tCommon('name')}</span>
                 <span className="text-app-muted tracking-wide">/</span>
                 <span className="text-app-muted font-mono text-sm tracking-wide">

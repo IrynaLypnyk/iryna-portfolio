@@ -25,6 +25,7 @@ export function HeroMetaList() {
     <MetaList
       variant={isMobile ? 'compact' : 'panel'}
       labelColor="blue"
+      textColor="black"
       labelWidth={110}
       items={HERO_META_ORDER.map((key) => items[key])}
     />

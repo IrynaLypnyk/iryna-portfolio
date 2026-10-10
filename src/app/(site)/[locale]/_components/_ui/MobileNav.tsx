@@ -36,7 +36,7 @@ export function MobileNav({ isMenuOpen, activeId, closeMobileMenu }: Props) {
                   className={cn(
                     'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none' +
                       ' font-semibold tracking-tight transition-colors',
-                    isActive ? 'text-app-accent' : 'text-app-muted'
+                    isActive ? 'text-app-accent-bright' : 'text-app-muted'
                   )}
                 >
                   {t(item.labelKey)}

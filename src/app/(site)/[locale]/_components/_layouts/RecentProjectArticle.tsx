@@ -2,16 +2,16 @@
 
 import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useProjectMeta, selectProjectMeta, type ProjectMetaKey } from '@/hooks/useProjectMeta';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
-import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
+import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
-import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
 
 type Props = {
   project: ProjectData;
@@ -27,6 +27,7 @@ export function RecentProjectArticle({ project, index }: Props) {
   const galleryId = `${panelId}-gallery`;
 
   const allMeta = useProjectMeta(project);
+  const { isMobile } = useBreakpoint();
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
   const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
@@ -39,28 +40,6 @@ export function RecentProjectArticle({ project, index }: Props) {
   );
   const expandable = expandedMeta.length > 0;
 
-  // Keep the gallery full-width in either group; adjacent metadata stays in a list.
-  function renderMeta(items: MetaItem[]) {
-    const groups: MetaItem[][] = [];
-    for (const item of items) {
-      const previousGroup = groups.at(-1);
-      if (!previousGroup) {
-        groups.push([item]);
-      } else {
-        previousGroup.push(item);
-      }
-    }
-    return groups.map((group) => (
-      <MetaList
-        key={group[0].label}
-        items={group}
-        variant="compact"
-        labelColor="gray"
-        labelWidth={120}
-      />
-    ));
-  }
-
   const links = [
     project.externalUrl && {
       href: project.externalUrl,
@@ -69,21 +48,6 @@ export function RecentProjectArticle({ project, index }: Props) {
     project.githubUrl && { href: project.githubUrl, label: t('githubLabel') },
     project.storybookUrl && { href: project.storybookUrl, label: t('storybookLabel') },
   ].filter((link): link is { href: string; label: string } => Boolean(link));
-
-  const showMoreButton = (
-    <button
-      type="button"
-      aria-expanded={open}
-      aria-controls={`${detailsId} ${galleryId}`}
-      aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${project.title}`}
-      onClick={() => setOpen((current) => !current)}
-      className="cursor-pointer [grid-area:btn]"
-    >
-      <ActionBox>
-        {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
-      </ActionBox>
-    </button>
-  );
 
   return (
     <article
@@ -111,7 +75,7 @@ export function RecentProjectArticle({ project, index }: Props) {
         <div className="flex flex-col gap-4 [grid-area:textContent]">
           <h3
             className={cn(
-              'text-[clamp(1.375rem,calc(0.9583rem+1.3333vw),2.125rem)] leading-none font-medium tracking-tight text-pretty transition-colors',
+              'mt-6 text-[clamp(1.375rem,calc(0.9583rem+1.3333vw),2.125rem)] leading-tight font-medium tracking-tight text-pretty transition-colors md:mt-0',
               expandable && 'group-hover:text-app-ink'
             )}
           >
@@ -123,20 +87,47 @@ export function RecentProjectArticle({ project, index }: Props) {
           </p>
 
           <div className="flex flex-col gap-2">
-            {renderMeta(meta)}
+            {meta.length > 0 && (
+              <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
+            )}
             <AnimatePresence initial={false}>
-              {expandable && open && (
-                <motion.div
-                  id={detailsId}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="-pr-(--page-pad-right) grid gap-6 overflow-visible pb-4"
-                >
-                  {renderMeta(expandedMeta)}
-                </motion.div>
-              )}
+              <>
+                {expandable && open && (
+                  <motion.div
+                    id={detailsId}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="-pr-(--page-pad-right) grid gap-6 overflow-visible pb-4"
+                  >
+                    {expandedMeta.length > 0 && (
+                      <MetaList
+                        items={expandedMeta}
+                        variant="compact"
+                        labelColor="gray"
+                        labelWidth={120}
+                      />
+                    )}
+                  </motion.div>
+                )}
+                {expandable && open && (
+                  <motion.div
+                    id={galleryId}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7"
+                  >
+                    <div className="grid gap-6 pb-4">
+                      <div key="gallery" className="grid gap-3">
+                        {allMeta.gallery && <ProjectGallery photos={allMeta.gallery.value} />}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </>
             </AnimatePresence>
           </div>
           {links.length > 0 && (
@@ -155,27 +146,17 @@ export function RecentProjectArticle({ project, index }: Props) {
             </div>
           )}
         </div>
-        {expandable && showMoreButton}
-      </div>
-
-      <AnimatePresence initial={false}>
-        {expandable && open && (
-          <motion.div
-            id={galleryId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7"
-          >
-            <div className="grid gap-6 pb-4">
-              <div key="gallery" className="grid gap-3">
-                {allMeta.gallery && <ProjectGallery photos={allMeta.gallery.value} />}
-              </div>
-            </div>
-          </motion.div>
+        {expandable && (
+          <ShowMoreButton
+            open={open}
+            setOpenAction={() => setOpen((current) => !current)}
+            detailsId={detailsId}
+            galleryId={galleryId}
+            projectTitle={project.title}
+            className="[grid-area:btn]"
+          />
         )}
-      </AnimatePresence>
+      </div>
     </article>
   );
 }

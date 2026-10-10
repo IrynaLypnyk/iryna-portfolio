@@ -15,7 +15,7 @@ export function Hero() {
       id={anchors.hero}
       className="hero-grid relative grid min-h-[88vh] content-center py-[clamp(48px,9vh,112px)]"
     >
-      <div className="grid items-start gap-[clamp(32px,6vw,84px)] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
+      <div className="grid items-start gap-x-[clamp(32px,6vw,84px)] gap-y-[6vh] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
         <div className="grid gap-[clamp(24px,3.4vh,40px)]">
           <Kicker withRule>{t('kicker')}</Kicker>
           <h1 className="text-app-ink text-[clamp(2.875rem,calc(1.1389rem+6vw),6rem)] leading-none font-medium tracking-tight">
@@ -29,7 +29,7 @@ export function Hero() {
               <span className="text-app-accent-bright">{t('statement.part3')}</span>
             </p>
           </div>
-          <div className="text-app-muted max-w-160 text-base leading-normal lg:text-lg">
+          <div className="text-app-muted max-w-160 text-base leading-relaxed lg:text-lg">
             <p>{t('body', { role })}</p>
           </div>
 
