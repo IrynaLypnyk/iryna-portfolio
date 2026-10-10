@@ -10,7 +10,6 @@ import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_ui/ProjectGallery';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
 
 type Props = {
@@ -27,7 +26,6 @@ export function RecentProjectArticle({ project, index }: Props) {
   const galleryId = `${panelId}-gallery`;
 
   const allMeta = useProjectMeta(project);
-  const { isMobile } = useBreakpoint();
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
   const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
