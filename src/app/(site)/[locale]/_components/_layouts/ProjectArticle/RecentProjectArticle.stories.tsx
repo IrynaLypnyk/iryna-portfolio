@@ -5,8 +5,6 @@ import { featuredProject, projectWithoutCover, sparseProject } from '@/storybook
 const meta = {
   title: 'Layouts/RecentProjectArticle',
   component: RecentProjectArticle,
-  parameters: { layout: 'padded' },
-  tags: ['autodocs'],
   args: { project: featuredProject, index: 1 },
   argTypes: {
     project: { control: false },
@@ -19,21 +17,6 @@ type Story = StoryObj<typeof meta>;
 
 /** Default summary metadata with features and gallery behind the toggle. */
 export const Default: Story = {};
-
-/**
- * Has features and multiple photos, so the `+` toggle renders. Click the
- * toggle to reveal the "Key features" grid and gallery.
- */
-export const Expandable: Story = {
-  args: { project: featuredProject },
-};
-
-/**
- * No features or photos: no toggle or empty expanded panel.
- */
-export const NotExpandable: Story = {
-  args: { project: { ...projectWithoutCover, features: [] }, index: 2 },
-};
 
 /** The meta list only renders the rows that exist, so no empty `<dt>` appears. */
 export const WithoutCover: Story = {
