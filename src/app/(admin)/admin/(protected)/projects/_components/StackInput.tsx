@@ -1,6 +1,6 @@
 'use client';
 
-import { ProjectStack } from '@/components/ProjectStack';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_ui/ProjectStack';
 import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInput';
 import { ChangeEvent } from 'react';
 

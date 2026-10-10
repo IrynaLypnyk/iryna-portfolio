@@ -1,6 +1,6 @@
 'use client';
 
-import { ProjectStack } from '@/components/ProjectStack';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_ui/ProjectStack';
 import { useTranslations } from 'next-intl';
 import type { MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_ui/ProjectFeatures';
