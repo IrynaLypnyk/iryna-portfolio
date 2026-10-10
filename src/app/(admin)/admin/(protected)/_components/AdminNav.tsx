@@ -56,7 +56,7 @@ export function AdminNav() {
               ))}
             </nav>
             <span className="text-app-text border-app-accent-bright/50 flex min-w-0 grow items-center justify-center gap-1 truncate border-b text-sm font-semibold uppercase md:hidden">
-              {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1} /> : null}
+              {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1.5} /> : null}
               {activeLink?.label ?? 'Admin'}
             </span>
             <div className="md:hidden">

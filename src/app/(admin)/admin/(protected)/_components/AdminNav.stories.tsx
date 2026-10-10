@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { routes } from '@/constants/routes';
@@ -34,11 +34,7 @@ export const MobileClosed: Story = {
       },
     },
   },
-  render: () => (
-    <MobileAdminNavFrame>
-      <AdminNav />
-    </MobileAdminNavFrame>
-  ),
+  render: () => <AdminNav />,
 };
 
 export const MobileMenuOpen: Story = {
@@ -53,11 +49,7 @@ export const MobileMenuOpen: Story = {
       },
     },
   },
-  render: () => (
-    <MobileAdminNavFrame>
-      <AdminNavWithOpenMobileMenu />
-    </MobileAdminNavFrame>
-  ),
+  render: () => <AdminNavWithOpenMobileMenu />,
 };
 
 function AdminNavWithOpenMobileMenu() {
@@ -76,31 +68,6 @@ function AdminNavWithOpenMobileMenu() {
   return (
     <div ref={wrapperRef}>
       <AdminNav />
-    </div>
-  );
-}
-
-function MobileAdminNavFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="p-4">
-      <style>{`
-        .admin-nav-mobile-story [data-component="AdminNav"] > div:first-of-type {
-          display: none !important;
-        }
-
-        .admin-nav-mobile-story [data-component="AdminNav"] > div:nth-of-type(2) {
-          display: flex !important;
-        }
-
-        .admin-nav-mobile-story [data-component="AdminNav"] > div:nth-of-type(3) {
-          display: block !important;
-        }
-      `}</style>
-
-      <div className="admin-nav-mobile-story mx-auto min-h-130 w-full max-w-97.5 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm">
-        {children}
-        <main className="p-4 text-sm text-neutral-500">Mobile admin content starts here.</main>
-      </div>
     </div>
   );
 }
