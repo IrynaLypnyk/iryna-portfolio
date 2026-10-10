@@ -43,7 +43,7 @@ type Props = {
 export default function AdminLayout({ children }: Props) {
   return (
     <html lang="uk" suppressHydrationWarning className={sans.variable}>
-      <body className="text-app-text bg-app-page/30 flex min-h-screen flex-col font-sans antialiased">
+      <body className="text-app-text bg-app-page flex min-h-screen flex-col font-sans antialiased">
         {children}
         <Toaster />
       </body>

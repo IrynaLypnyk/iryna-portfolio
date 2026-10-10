@@ -54,7 +54,7 @@ export default async function EditProjectPage({ params }: Props) {
       <div className="mx-auto max-w-5xl">
         <Link
           href={routes.admin.projects}
-          className="text-sm text-neutral-500 hover:text-neutral-900"
+          className="text-app-accent-bright hover:text-app-text text-base"
         >
           ← All projects
         </Link>

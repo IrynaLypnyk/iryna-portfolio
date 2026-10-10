@@ -3,10 +3,10 @@ import { ReactNode } from 'react';
 
 type TagColor = 'info' | 'success' | 'danger' | 'warning';
 
-const tagBaseStyles = 'rounded-full px-2 py-1 text-[12px]';
+const tagBaseStyles = 'rounded-2xl px-2 py-1 text-xs';
 const tagStyles = {
-  info: 'bg-app-accent-lightest text-app-accent',
-  success: 'bg-app-success-light text-app-success-dark',
+  info: 'text-app-accent',
+  success: 'text-app-success-dark',
   danger: 'bg-app-danger-light text-app-danger',
   warning: 'bg-app-warning-light text-app-warning-dark',
 };

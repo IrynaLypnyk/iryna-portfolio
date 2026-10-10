@@ -32,31 +32,31 @@ export function AdminNav() {
       <Header
         title={
           <span className="flex flex-wrap items-baseline gap-1 md:gap-2.5">
-            <span className="text-app-text text-[18px] leading-5 font-medium">Admin</span>
+            <span className="text-app-text text-[18px] leading-5 font-medium uppercase">Admin</span>
           </span>
         }
         nav={
           <>
-            <nav className="hidden items-center gap-5 md:flex">
+            <nav className="hidden items-center gap-10 md:flex">
               {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
                   className={cn(
-                    'flex items-center gap-1.5 py-1 text-sm font-medium transition-colors',
+                    'flex items-center gap-1.5 py-1 text-base font-medium tracking-wide transition-colors',
                     isActive(pathname, href)
-                      ? 'text-app-accent font-semibold'
-                      : 'hover:text-app-accent'
+                      ? 'text-app-text border-app-accent-bright/50 border-b font-semibold'
+                      : 'hover:text-app-accent-bright text-app-muted'
                   )}
                   aria-current={isActive(pathname, href) ? 'page' : undefined}
                 >
-                  <Icon size={16} strokeWidth={1.75} />
                   {label}
+                  <Icon size={16} strokeWidth={1.5} />
                 </Link>
               ))}
             </nav>
-            <span className="text-app-accent flex min-w-0 grow items-center justify-center gap-1 truncate text-sm font-semibold md:hidden">
-              {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1.5} /> : null}
+            <span className="text-app-text border-app-accent-bright/50 flex min-w-0 grow items-center justify-center gap-1 truncate border-b text-sm font-semibold uppercase md:hidden">
+              {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1} /> : null}
               {activeLink?.label ?? 'Admin'}
             </span>
             <div className="md:hidden">
@@ -88,13 +88,13 @@ export function AdminNav() {
                   key={href}
                   href={href}
                   className={cn(
-                    'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    active ? 'bg-app-accent-lightest' : 'hover:bg-app-accent-lightest'
+                    'flex items-center gap-2 rounded-lg px-3 py-2 text-base font-semibold tracking-wide uppercase transition-colors',
+                    active ? 'text-app-accent-bright' : 'hover:bg-app-accent-lightest'
                   )}
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Icon size={16} strokeWidth={1.5} />
+                  <Icon size={20} strokeWidth={1.5} />
                   {label}
                 </Link>
               );

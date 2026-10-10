@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
+import { EditButton } from '@/app/(admin)/admin/_components/EditButton';
 import { ProjectDeleteButton } from './_components/ProjectDeleteButton';
 import { AdminTag } from '@/app/(admin)/admin/(protected)/_components/AdminTag';
 
@@ -29,10 +30,10 @@ export default async function AdminProjectsListPage() {
               <thead>
                 <tr>
                   <th className={headCellStyles}>Name</th>
-                  <th className={`${headCellStyles} w-32`}>Label</th>
+                  <th className={`${headCellStyles} w-70`}>Label</th>
                   <th className={`${headCellStyles} w-24`}>Order</th>
                   <th className={`${headCellStyles} w-28`}>Photo</th>
-                  <th className={`${headCellStyles} w-40`}>Status</th>
+                  <th className={`${headCellStyles} w-70`}>Status</th>
                   <th className={`${headCellStyles} w-44`}>Actions</th>
                 </tr>
               </thead>
@@ -64,13 +65,7 @@ export default async function AdminProjectsListPage() {
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex gap-2">
-                        <AdminButton
-                          variant="outline"
-                          size="sm"
-                          href={routes.admin.project(project.id)}
-                        >
-                          Edit
-                        </AdminButton>
+                        <EditButton href={routes.admin.project(project.id)} />
                         <ProjectDeleteButton id={project.id} title={project.titleEn} />
                       </div>
                     </td>

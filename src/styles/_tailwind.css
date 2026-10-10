@@ -66,9 +66,9 @@
   --color-app-accent-bright-text: var(--azure-dark);
   --color-app-accent-dark: var(--blue-dark);
 
-  --color-app-danger: var(--color-red-600);
+  --color-app-danger: var(--color-red-400);
   --color-app-danger-light: var(--color-red-50);
-  --color-app-danger-dark: var(--color-red-700);
+  --color-app-danger-dark: var(--color-red-500);
   --color-app-success: var(--color-green-300);
   --color-app-success-dark: var(--color-green-800);
   --color-app-success-light: var(--color-green-50);

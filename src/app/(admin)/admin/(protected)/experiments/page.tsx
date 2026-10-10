@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
+import { EditButton } from '@/app/(admin)/admin/_components/EditButton';
 import { ExperimentDeleteButton } from './_components/ExperimentDeleteButton';
 import { AdminTag } from '@/app/(admin)/admin/(protected)/_components/AdminTag';
 
@@ -54,13 +55,7 @@ export default async function AdminExperimentsListPage() {
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex gap-2">
-                        <AdminButton
-                          variant="outline"
-                          size="sm"
-                          href={routes.admin.experiment(experiment.id)}
-                        >
-                          Edit
-                        </AdminButton>
+                        <EditButton href={routes.admin.experiment(experiment.id)} />
                         <ExperimentDeleteButton id={experiment.id} title={experiment.titleEn} />
                       </div>
                     </td>
