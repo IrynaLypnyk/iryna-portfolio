@@ -131,8 +131,8 @@ export function SiteHeader() {
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
-                  'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
-                  isActive ? 'text-app-accent' : 'text-app-muted'
+                  'hover:text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
+                  isActive ? 'text-app-accent-bright' : 'text-app-muted'
                 )}
               >
                 {tNav(item.labelKey)}
