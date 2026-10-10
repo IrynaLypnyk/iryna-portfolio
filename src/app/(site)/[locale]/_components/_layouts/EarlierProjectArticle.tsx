@@ -137,7 +137,8 @@ export function EarlierProjectArticle({ project }: Props) {
                 href={link.href}
                 external
                 arrow="upRight"
-                color="blueBright"
+                color="black"
+                variant="underline"
               >
                 {link.label}
               </AppLink>

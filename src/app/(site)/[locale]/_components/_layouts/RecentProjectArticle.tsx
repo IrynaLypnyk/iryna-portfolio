@@ -80,7 +80,7 @@ export function RecentProjectArticle({ project, index }: Props) {
             {project.title}
           </h3>
 
-          <p className="text-app-muted text-base leading-normal tracking-wide whitespace-pre-line">
+          <p className="text-app-text text-base leading-normal tracking-wide whitespace-pre-line">
             {project.context}
           </p>
 
@@ -136,7 +136,8 @@ export function RecentProjectArticle({ project, index }: Props) {
                   href={link.href}
                   external
                   arrow="upRight"
-                  color="blueBright"
+                  color="black"
+                  variant="underline"
                 >
                   {link.label}
                 </AppLink>
