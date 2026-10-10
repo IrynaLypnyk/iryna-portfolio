@@ -23,7 +23,7 @@ const IMAGE_HEIGHT_CLASS = 'h-85';
  * caption/link for a photo sits underneath it rather than on hover, since
  * hover has no equivalent on touch devices.
  */
-export function ProjectGallery({ photos, imageHeightClass = IMAGE_HEIGHT_CLASS }: Props) {
+export function ImagesGallery({ photos, imageHeightClass = IMAGE_HEIGHT_CLASS }: Props) {
   const t = useTranslations('Work');
   const trackRef = useRef<HTMLDivElement>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);

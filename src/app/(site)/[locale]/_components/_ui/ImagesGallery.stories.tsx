@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { ProjectGallery } from './ProjectGallery';
+import { ImagesGallery } from './ImagesGallery';
 import { samplePhoto } from '@/storybook/fixtures';
 
 const meta = {
   title: 'UI/ProjectGallery',
-  component: ProjectGallery,
+  component: ImagesGallery,
   args: {
     photos: [
       { ...samplePhoto, id: 'photo-1' },
@@ -17,7 +17,7 @@ const meta = {
       },
     ],
   },
-} satisfies Meta<typeof ProjectGallery>;
+} satisfies Meta<typeof ImagesGallery>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

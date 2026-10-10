@@ -1,4 +1,4 @@
-import { ProjectStack } from '@/app/(site)/[locale]/_components/_ui/ProjectStack';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';

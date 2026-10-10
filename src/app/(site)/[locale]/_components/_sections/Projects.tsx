@@ -2,9 +2,9 @@ import { useTranslations } from 'next-intl';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
 import { anchors } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';
-import { RecentProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/RecentProjectArticle';
+import { RecentProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/RecentProjectArticle';
 import { Section } from '@/app/(site)/[locale]/_components/_ui/Section';
-import { EarlierProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/EarlierProjectArticle';
+import { EarlierProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/EarlierProjectArticle';
 
 type Props = {
   projects: ProjectData[];

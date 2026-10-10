@@ -1,9 +1,9 @@
 'use client';
 
-import { ProjectStack } from '@/app/(site)/[locale]/_components/_ui/ProjectStack';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
 import { useTranslations } from 'next-intl';
 import type { MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
-import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_ui/ProjectFeatures';
+import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectFeatures';
 import type { ProjectData } from '@/types/projects';
 
 // Default summary order; each article chooses its own groups.
@@ -11,9 +11,10 @@ export const PROJECT_META_ORDER = ['type', 'role', 'stack', 'status', 'year'] as
 
 // Gallery photos are data, so they are rendered separately from MetaList rows.
 export type ProjectMetaKey = (typeof PROJECT_META_ORDER)[number] | 'features';
-export type ProjectMeta = Record<ProjectMetaKey, MetaItem | null> & {
+export type ProjectGalleryMeta = {
   gallery: { label: string; value: ProjectData['photos'] } | null;
 };
+export type ProjectMeta = Record<ProjectMetaKey, MetaItem | null> & ProjectGalleryMeta;
 
 /** Select, order and deduplicate available fields without rendering empty rows. */
 export function selectProjectMeta(items: ProjectMeta, keys: readonly ProjectMetaKey[]): MetaItem[] {

@@ -1,4 +1,4 @@
-import { ProjectStack } from '@/app/(site)/[locale]/_components/_ui/ProjectStack';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
 import { Link } from '@/i18n/navigation';
 import { routes } from '@/constants/routes';
 import type { ProjectData } from '@/types/projects';

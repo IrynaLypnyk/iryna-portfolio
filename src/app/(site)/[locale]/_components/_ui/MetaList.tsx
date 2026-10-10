@@ -68,7 +68,7 @@ export function MetaList({
   const isRoomy = variant === 'roomy';
 
   return (
-    <dl data-component="MetaList" className={cn('m-0 grid gap-2', className)}>
+    <dl data-component="MetaList" className={cn('m-0 grid gap-1', className)}>
       {items.map((item) => (
         <div
           key={item.label}
