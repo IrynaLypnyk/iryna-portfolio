@@ -137,6 +137,7 @@ export function RecentProjectArticle({ project, index }: Props) {
         </AnimatePresence>
 
         {links.length > 0 && <ProjectLinks open={open} links={links} />}
+
         {expandable && (
           <ShowMoreButton
             open={open}

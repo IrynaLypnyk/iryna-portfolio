@@ -7,8 +7,8 @@ export function ProjectLinks({ open, links }: Props) {
   return (
     <div
       className={cn(
-        'relative mt-6 mb-6 inline-flex grow-0 flex-wrap gap-x-8 gap-y-1.5 [grid-area:links] md:mb-0',
-        open ? 'my-10 md:my-10' : ''
+        'relative inline-flex grow-0 flex-wrap gap-x-8 gap-y-1.5 [grid-area:links]',
+        open ? 'my-10' : 'mt-10 mb-6 md:mb-0'
       )}
     >
       {links.map((link) => (
