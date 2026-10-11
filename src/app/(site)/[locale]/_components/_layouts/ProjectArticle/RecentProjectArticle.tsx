@@ -11,7 +11,12 @@ import type { ProjectData } from '@/types/projects';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
-import { ProjectGallery } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery';
+import dynamic from 'next/dynamic';
+const ProjectGallery = dynamic(() =>
+  import('@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery').then(
+    (module) => module.ProjectGallery
+  )
+);
 
 type Props = {
   project: ProjectData;
