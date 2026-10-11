@@ -34,7 +34,7 @@ export function ShowMoreButton({
       <ActionBox>
         {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
       </ActionBox>
-      <span className="text-app-accent-bright font-mono text-sm md:hidden">
+      <span className="text-app-accent-bright-text font-mono text-sm md:hidden">
         {open ? t('hideDetails') : t('showDetails')}
       </span>
     </button>

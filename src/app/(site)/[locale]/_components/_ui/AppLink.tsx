@@ -29,7 +29,7 @@ const ARROWS = {
 
 const COLOR_CLASSNAME = {
   blue: 'text-app-accent hover:text-app-text',
-  blueBright: 'text-app-accent-bright hover:text-app-text',
+  blueBright: 'text-app-accent-bright-text hover:text-app-text',
   gray: 'text-app-muted hover:text-app-accent-bright',
   black: 'text-app-text hover:text-app-accent-bright',
 };
