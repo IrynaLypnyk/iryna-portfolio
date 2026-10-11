@@ -51,7 +51,7 @@ export function RecentProjectArticle({ project, index }: Props) {
         className={cn(
           'group relative grid items-start gap-x-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)]',
           // Keep areas defined while AnimatePresence runs exit animations to avoid implicit columns.
-          "[grid-template-areas:'image'_'textContent'_'features'_'links'_'gallery'_'btn'] md:[grid-template-areas:'btn_textContent_image'_'._features_.'_'._links_.'_'gallery_gallery_gallery']"
+          "[grid-template-areas:'image'_'textContent'_'expandedMeta'_'links'_'gallery'_'btn'] md:[grid-template-areas:'btn_textContent_image'_'._expandedMeta_expandedMeta'_'._links_links'_'gallery_gallery_gallery']"
         )}
       >
         <ImageFrame
@@ -80,27 +80,6 @@ export function RecentProjectArticle({ project, index }: Props) {
             {meta.length > 0 && (
               <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
             )}
-            <AnimatePresence initial={false}>
-              {expandable && open && (
-                <motion.div
-                  id={detailsId}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="-pr-(--page-pad-right) grid gap-6 overflow-visible"
-                >
-                  {stackMeta.length > 0 && (
-                    <MetaList
-                      items={stackMeta}
-                      variant="compact"
-                      labelColor="gray"
-                      labelWidth={120}
-                    />
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
 
@@ -112,8 +91,11 @@ export function RecentProjectArticle({ project, index }: Props) {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="-pr-(--page-pad-right) grid gap-6 overflow-visible [grid-area:features]"
+              className="-pr-(--page-pad-right) grid gap-1 overflow-visible pt-1 [grid-area:expandedMeta]"
             >
+              {stackMeta.length > 0 && (
+                <MetaList items={stackMeta} variant="compact" labelColor="gray" labelWidth={120} />
+              )}
               {featuresMeta.length > 0 && (
                 <MetaList
                   items={featuresMeta}

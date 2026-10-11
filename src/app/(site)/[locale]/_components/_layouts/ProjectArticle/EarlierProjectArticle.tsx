@@ -12,6 +12,7 @@ import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreBu
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 type Props = {
   project: ProjectData;
@@ -22,6 +23,7 @@ type Props = {
 export function EarlierProjectArticle({ project }: Props) {
   const t = useTranslations('Work');
   const [open, setOpen] = useState(false);
+  const { isMobile } = useBreakpoint();
   const panelId = useId();
   const detailsId = `${panelId}-details`;
   const galleryId = `${panelId}-gallery`;
@@ -80,7 +82,7 @@ export function EarlierProjectArticle({ project }: Props) {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="-pr-(--page-pad-right) grid gap-6 overflow-visible py-4"
+                className="-pr-(--page-pad-right) grid gap-1 overflow-visible py-4"
               >
                 {(expandedMeta.length > 0 || expandedFeaturesMeta.length > 0) && (
                   <>
@@ -92,7 +94,7 @@ export function EarlierProjectArticle({ project }: Props) {
                     />
                     <MetaList
                       items={expandedFeaturesMeta}
-                      variant="panel"
+                      variant={isMobile ? 'panel' : 'compact'}
                       labelColor="gray"
                       labelWidth={120}
                     />
@@ -102,7 +104,7 @@ export function EarlierProjectArticle({ project }: Props) {
             )}
           </AnimatePresence>
         </div>
-        {links.length > 0 && <ProjectLinks open={open} links={links} />}
+        {links.length > 0 && <ProjectLinks open={open} links={links} className="mt-6" />}
         <AnimatePresence initial={false}>
           {expandable && open && (
             <ProjectGallery

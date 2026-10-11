@@ -40,7 +40,7 @@ export function MetaList({
           'm-0 grid gap-3 gap-x-[clamp(20px,3vw,40px)] md:gap-6.5',
           'border-app-line',
           'md:grid-cols-1 md:border-t-0 md:border-l md:pt-0 md:pl-[clamp(20px,2.6vw,36px)]',
-          'max-md:grid-cols-2 max-sm:grid-cols-1',
+          // 'max-md:grid-cols-2 max-sm:grid-cols-1',
           className
         )}
       >
