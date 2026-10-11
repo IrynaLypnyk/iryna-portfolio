@@ -17,6 +17,7 @@ import { SiteFooter } from '@/app/(site)/[locale]/_components/_layouts/SiteFoote
 import { PageContainer } from '@/app/(site)/[locale]/_components/_ui/PageContainer';
 import { anchors } from '@/constants/routes';
 import { BackToTopButton } from '@/app/(site)/[locale]/_components/_ui/BackToTopButton';
+import { Analytics } from '@vercel/analytics/next';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -154,6 +155,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <SiteFooter />
           <BackToTopButton />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
