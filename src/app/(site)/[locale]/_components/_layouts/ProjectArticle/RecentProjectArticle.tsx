@@ -9,7 +9,6 @@ import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery';
@@ -26,7 +25,6 @@ export function RecentProjectArticle({ project, index }: Props) {
   const panelId = useId();
   const detailsId = `${panelId}-details`;
   const galleryId = `${panelId}-gallery`;
-  const { isMobile } = useBreakpoint();
 
   const allMeta = useProjectMeta(project);
 
@@ -99,7 +97,7 @@ export function RecentProjectArticle({ project, index }: Props) {
               {featuresMeta.length > 0 && (
                 <MetaList
                   items={featuresMeta}
-                  variant={isMobile ? 'panel' : 'compact'}
+                  variant="compact"
                   labelColor="gray"
                   labelWidth={120}
                 />

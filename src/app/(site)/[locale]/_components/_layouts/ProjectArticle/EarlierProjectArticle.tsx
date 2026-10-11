@@ -12,7 +12,6 @@ import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreBu
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectGallery } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 type Props = {
   project: ProjectData;
@@ -23,7 +22,6 @@ type Props = {
 export function EarlierProjectArticle({ project }: Props) {
   const t = useTranslations('Work');
   const [open, setOpen] = useState(false);
-  const { isMobile } = useBreakpoint();
   const panelId = useId();
   const detailsId = `${panelId}-details`;
   const galleryId = `${panelId}-gallery`;
@@ -94,7 +92,7 @@ export function EarlierProjectArticle({ project }: Props) {
                     />
                     <MetaList
                       items={expandedFeaturesMeta}
-                      variant={isMobile ? 'panel' : 'compact'}
+                      variant="compact"
                       labelColor="gray"
                       labelWidth={120}
                     />
