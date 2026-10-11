@@ -1,4 +1,4 @@
-import { ProjectType, ProjectStatus } from '@/generated/prisma/enums';
+import { ProjectStatus } from '@/generated/prisma/enums';
 
 export type ProjectSectionInput = {
   titleUk: string;
@@ -10,7 +10,8 @@ export type ProjectSectionInput = {
 };
 
 export type ProjectInput = {
-  type: ProjectType;
+  projectTypeEn: string | null;
+  projectTypeUk: string | null;
   status: ProjectStatus;
   slug: string;
   shortLabel: string;
@@ -130,7 +131,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
   }
 
   const {
-    type,
+    projectTypeEn,
+    projectTypeUk,
     status,
     slug,
     shortLabel,
@@ -163,8 +165,10 @@ export function validateProjectInput(body: unknown): ValidationResult {
     sections,
   } = body as Record<string, unknown>;
 
-  if (typeof type !== 'string' || !Object.values(ProjectType).includes(type as ProjectType)) {
-    return { field: 'type', error: 'Оберіть тип проєкту' };
+  for (const [field, value] of Object.entries({ projectTypeEn, projectTypeUk })) {
+    if (value !== undefined && value !== null && typeof value !== 'string') {
+      return { field, error: 'Тип проєкту має бути текстом' };
+    }
   }
   if (
     typeof status !== 'string' ||
@@ -252,7 +256,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
 
   return {
     data: {
-      type: type as ProjectType,
+      projectTypeEn: optionalText(projectTypeEn),
+      projectTypeUk: optionalText(projectTypeUk),
       status: status as ProjectStatus,
       slug,
       shortLabel: shortLabel.trim(),

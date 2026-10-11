@@ -23,12 +23,6 @@ model Admin {
   updatedAt DateTime @updatedAt
 }
 
-enum ProjectType {
-  SOLO_DEVELOPED
-  TEAM
-  PERSONAL
-}
-
 enum ProjectStatus {
   LIVE
   IN_DEVELOPMENT
@@ -45,8 +39,9 @@ model Project {
   id   String @id @default(cuid())
   slug String @unique
 
-  type   ProjectType   @default(PERSONAL)
-  status ProjectStatus @default(COMPLETED)
+  projectTypeEn String?
+  projectTypeUk String?
+  status        ProjectStatus @default(COMPLETED)
 
   shortLabel String
 

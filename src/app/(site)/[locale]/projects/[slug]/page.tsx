@@ -76,9 +76,8 @@ export default async function ProjectPage({ params }: Props) {
     meta.push({ label: t('labelStack'), value: <ProjectStack items={detail.stack} /> });
   }
 
-  // Older cached payloads may predate the enum fields.
-  if (detail.type && tMetadata.has(`types.${detail.type}`)) {
-    meta.push({ label: tMetadata('labelType'), value: tMetadata(`types.${detail.type}`) });
+  if (detail.projectType) {
+    meta.push({ label: tMetadata('labelType'), value: detail.projectType });
   }
   if (detail.status && tMetadata.has(`statuses.${detail.status}`)) {
     meta.push({ label: tMetadata('labelStatus'), value: tMetadata(`statuses.${detail.status}`) });

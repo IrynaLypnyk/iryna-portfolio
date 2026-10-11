@@ -53,7 +53,7 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
       context: isUkrainian ? project.contextUk : project.contextEn,
       role: isUkrainian ? project.roleUk : project.roleEn,
       stack: project.stack,
-      type: project.type,
+      projectType: locale === 'uk' ? project.projectTypeUk : project.projectTypeEn,
       status: project.status,
       yearLabel: project.yearLabel,
       featured: project.featured,

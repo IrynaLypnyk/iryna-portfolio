@@ -48,7 +48,7 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
     context: pick(locale, project.contextUk, project.contextEn),
     role: pick(locale, project.roleUk, project.roleEn),
     stack: project.stack,
-    type: project.type,
+    projectType: locale === 'uk' ? project.projectTypeUk : project.projectTypeEn,
     status: project.status,
     yearLabel: project.yearLabel,
     featured: project.featured,

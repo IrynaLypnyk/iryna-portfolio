@@ -133,11 +133,6 @@
   "ProjectMetadata": {
     "labelType": "Тип проєкту",
     "labelStatus": "Статус проєкту",
-    "types": {
-      "SOLO_DEVELOPED": "Самостійно розроблений проєкт",
-      "TEAM": "Командний проєкт",
-      "PERSONAL": "Особистий проєкт"
-    },
     "statuses": {
       "LIVE": "Працює",
       "IN_DEVELOPMENT": "У розробці",

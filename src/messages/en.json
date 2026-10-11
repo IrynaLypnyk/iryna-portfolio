@@ -136,11 +136,6 @@
   "ProjectMetadata": {
     "labelType": "Project type",
     "labelStatus": "Project status",
-    "types": {
-      "SOLO_DEVELOPED": "Solo-developed project",
-      "TEAM": "Team project",
-      "PERSONAL": "Personal project"
-    },
     "statuses": {
       "LIVE": "Live",
       "IN_DEVELOPMENT": "In development",

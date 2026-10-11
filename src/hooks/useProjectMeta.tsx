@@ -26,11 +26,9 @@ export function useProjectMeta(project: ProjectData): ProjectMeta {
   const tMetadata = useTranslations('ProjectMetadata');
 
   return {
-    // Older cached payloads may predate the enum fields.
-    type:
-      project.type && tMetadata.has(`types.${project.type}`)
-        ? { label: tMetadata('labelType'), value: tMetadata(`types.${project.type}`) }
-        : null,
+    type: project.projectType
+      ? { label: tMetadata('labelType'), value: project.projectType }
+      : null,
     role: project.role ? { label: t('labelRole'), value: project.role } : null,
     stack: project.stack.length
       ? { label: t('labelStack'), value: <ProjectStack items={project.stack} /> }

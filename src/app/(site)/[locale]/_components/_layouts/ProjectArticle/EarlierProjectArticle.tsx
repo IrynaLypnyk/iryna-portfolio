@@ -39,9 +39,10 @@ export function EarlierProjectArticle({ project }: Props) {
   }, [project.coverPhoto, project.photos]);
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
-  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack', 'features'];
+  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack'];
 
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
+  const expandedFeaturesMeta = selectProjectMeta(allMeta, ['features']);
   const expandable = expandedMeta.length > 0 || galleryPhotos.length > 0;
 
   const links = getProjectLinks(project, t);
@@ -81,13 +82,21 @@ export function EarlierProjectArticle({ project }: Props) {
                 transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="-pr-(--page-pad-right) grid gap-6 overflow-visible py-4"
               >
-                {expandedMeta.length > 0 && (
-                  <MetaList
-                    items={expandedMeta}
-                    variant="compact"
-                    labelColor="gray"
-                    labelWidth={120}
-                  />
+                {(expandedMeta.length > 0 || expandedFeaturesMeta.length > 0) && (
+                  <>
+                    <MetaList
+                      items={expandedMeta}
+                      variant="compact"
+                      labelColor="gray"
+                      labelWidth={120}
+                    />
+                    <MetaList
+                      items={expandedFeaturesMeta}
+                      variant="panel"
+                      labelColor="gray"
+                      labelWidth={120}
+                    />
+                  </>
                 )}
               </motion.div>
             )}

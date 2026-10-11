@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
-import { ProjectStatus, ProjectType } from '@/generated/prisma/enums';
+import { ProjectStatus } from '@/generated/prisma/enums';
 import messages from '@/messages/en.json';
 import { ADMIN_NAV_LINKS } from '@/app/(admin)/admin/constants';
 
@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function AdminDashboard() {
   const [projectGroups, experimentGroups, mediaCount, unusedMediaCount] = await Promise.all([
     prisma.project.groupBy({
-      by: ['status', 'type', 'published', 'featured'],
+      by: ['status', 'projectTypeEn', 'published', 'featured'],
       _count: { _all: true },
     }),
     prisma.experiment.groupBy({ by: ['published'], _count: { _all: true } }),
@@ -77,10 +77,10 @@ export default async function AdminDashboard() {
     },
     {
       title: 'Projects by type',
-      items: Object.values(ProjectType).map((type) => ({
-        label: messages.ProjectMetadata.types[type],
+      items: Array.from(new Set(projectGroups.map((group) => group.projectTypeEn))).map((type) => ({
+        label: type ?? 'Not specified',
         count: projectGroups.reduce(
-          (sum, group) => sum + (group.type === type ? group._count._all : 0),
+          (sum, group) => sum + (group.projectTypeEn === type ? group._count._all : 0),
           0
         ),
       })),

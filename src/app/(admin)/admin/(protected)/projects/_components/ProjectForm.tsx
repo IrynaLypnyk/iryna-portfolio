@@ -1,7 +1,7 @@
 'use client';
 
 import type { Project as DbProject, ProjectSection as DbSection } from '@/generated/prisma/browser';
-import { ProjectType, ProjectStatus } from '@/generated/prisma/enums';
+import { ProjectStatus } from '@/generated/prisma/enums';
 import { createTranslator } from 'next-intl';
 import messages from '@/messages/en.json';
 import { AdminSelect } from '../../_components/AdminSelect';
@@ -23,7 +23,8 @@ const tMetadata = createTranslator({ locale: 'en', messages, namespace: 'Project
 
 /** Text and number inputs are held as strings to keep them controlled. */
 type FormState = {
-  type: ProjectType;
+  projectTypeEn: string;
+  projectTypeUk: string;
   status: ProjectStatus;
   slug: string;
   shortLabel: string;
@@ -62,7 +63,8 @@ type Props =
 function toFormState(project: ProjectWithSections | undefined): FormState {
   if (!project) {
     return {
-      type: ProjectType.PERSONAL,
+      projectTypeEn: '',
+      projectTypeUk: '',
       status: ProjectStatus.IN_DEVELOPMENT,
       slug: '',
       shortLabel: '',
@@ -94,7 +96,8 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
   }
 
   return {
-    type: project.type,
+    projectTypeEn: project.projectTypeEn ?? '',
+    projectTypeUk: project.projectTypeUk ?? '',
     status: project.status,
     slug: project.slug,
     shortLabel: project.shortLabel,
@@ -443,26 +446,25 @@ export function ProjectForm({ mode, project }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>{tMetadata('labelType')}</span>
-          <AdminSelect
-            required
-            name="type"
-            value={form.type}
-            aria-invalid={!!fieldErrors.type}
-            aria-describedby={fieldErrors.type ? 'type-error' : undefined}
-            onChange={(event) => updateField('type', event.target.value as ProjectType)}
-          >
-            {Object.values(ProjectType).map((value) => (
-              <option key={value} value={value}>
-                {tMetadata(`types.${value}`)}
-              </option>
-            ))}
-          </AdminSelect>
-          {fieldErrors.type && (
-            <span id="type-error" className="mt-1 block text-xs text-red-600">
-              {fieldErrors.type}
-            </span>
-          )}
+          <span className={labelStyles}>{tMetadata('labelType')} (UA, optional)</span>
+          <ProjectField
+            type="text"
+            name="projectTypeUk"
+            error={fieldErrors.projectTypeUk}
+            value={form.projectTypeUk}
+            onChange={(event) => updateField('projectTypeUk', event.target.value)}
+          />
+        </label>
+
+        <label>
+          <span className={labelStyles}>{tMetadata('labelType')} (EN, optional)</span>
+          <ProjectField
+            type="text"
+            name="projectTypeEn"
+            error={fieldErrors.projectTypeEn}
+            value={form.projectTypeEn}
+            onChange={(event) => updateField('projectTypeEn', event.target.value)}
+          />
         </label>
 
         <label>
