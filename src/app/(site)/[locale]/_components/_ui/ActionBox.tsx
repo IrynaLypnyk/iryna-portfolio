@@ -12,7 +12,6 @@ export function ActionBox({
 }) {
   return (
     <div
-      aria-hidden="true"
       data-component="ActionBox"
       className={cn(
         'flex h-11 w-11 shrink-0 items-center justify-center border transition-colors duration-500 md:justify-self-end',
