@@ -134,7 +134,7 @@
     "labelType": "Тип проєкту",
     "labelStatus": "Статус проєкту",
     "statuses": {
-      "LIVE": "Працює",
+      "LIVE": "Активний",
       "IN_DEVELOPMENT": "У розробці",
       "COMPLETED": "Завершено",
       "ARCHIVED": "Архівний"
