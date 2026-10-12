@@ -1,0 +1,33 @@
+/* Keep hero text visible from first paint; its entrance never waits for hydration. */
+@keyframes hero-enter {
+  from {
+    transform: translateY(18px);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-reveal .hero-grid [data-reveal-stagger] > *,
+  .home-reveal .hero-grid [data-reveal] {
+    animation: hero-enter 780ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(2) {
+    animation-delay: 85ms;
+  }
+
+  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(3) {
+    animation-delay: 170ms;
+  }
+
+  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(4) {
+    animation-delay: 255ms;
+  }
+
+  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(n + 5) {
+    animation-delay: 340ms;
+  }
+}

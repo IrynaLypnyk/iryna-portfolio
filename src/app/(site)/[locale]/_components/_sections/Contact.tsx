@@ -34,7 +34,10 @@ export function Contact() {
     >
       <SectionHeader index="04" title={t('title')} className="mb-[clamp(40px,7vh,84px)]" />
 
-      <div className="grid items-start gap-[clamp(36px,7vw,96px)] md:grid-cols-2">
+      <div
+        data-reveal-stagger
+        className="grid items-start gap-[clamp(36px,7vw,96px)] md:grid-cols-2"
+      >
         <div className="grid gap-7">
           <div className="grid gap-4.5">
             <Kicker withRule>{t('lead')}</Kicker>

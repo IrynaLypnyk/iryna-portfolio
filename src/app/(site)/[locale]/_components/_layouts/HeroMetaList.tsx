@@ -1,5 +1,3 @@
-'use client';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { useTranslations } from 'next-intl';
 
@@ -10,7 +8,6 @@ export function HeroMetaList() {
   const t = useTranslations('Hero');
   const tCommon = useTranslations('Common');
   const tWork = useTranslations('Work');
-  const { isMobile } = useBreakpoint();
 
   const items: Record<(typeof HERO_META_ORDER)[number], MetaItem> = {
     role: { label: tWork('labelRole'), value: tCommon('role') },
@@ -23,7 +20,7 @@ export function HeroMetaList() {
 
   return (
     <MetaList
-      variant={isMobile ? 'compact' : 'panel'}
+      variant="responsive-panel"
       labelColor="blue"
       textColor="black"
       labelWidth={110}

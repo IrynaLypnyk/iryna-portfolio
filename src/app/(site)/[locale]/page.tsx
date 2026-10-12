@@ -12,6 +12,7 @@ import { Playground } from '@/app/(site)/[locale]/_components/_sections/Playgrou
 import { getPublishedProjects } from '@/lib/projects/get-published-projects';
 import { getPublishedExperiments } from '@/lib/data/experiments';
 import { HashScroll } from '@/app/(site)/[locale]/_components/_ui/HashScroll';
+import { HomeReveal } from '@/app/(site)/[locale]/_components/_ui/HomeReveal';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +44,7 @@ export default async function IndexPage({ params }: Props) {
   ]);
 
   return (
-    <div>
+    <HomeReveal key={locale}>
       <HashScroll />
 
       <Hero />
@@ -51,6 +52,6 @@ export default async function IndexPage({ params }: Props) {
       <Playground experiments={experiments} />
       <About />
       <Contact />
-    </div>
+    </HomeReveal>
   );
 }

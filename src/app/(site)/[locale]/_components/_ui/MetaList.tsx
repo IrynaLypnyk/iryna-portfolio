@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
-import { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 export type MetaItem = {
   label: string;
@@ -16,8 +16,9 @@ type Props = {
    * `compact` — mono rows inside a project block.
    * `roomy`   — body-size rows in About.
    * `panel`   — stacked label-over-value column with a left rule (hero, case study).
+   * `responsive-panel` — compact rows on mobile, panel from md upward, using CSS only.
    */
-  variant?: 'compact' | 'roomy' | 'panel';
+  variant?: 'compact' | 'roomy' | 'panel' | 'responsive-panel';
   className?: string;
   labelClassName?: string;
   labelColor?: 'blue' | 'gray';
@@ -34,29 +35,51 @@ export function MetaList({
   className,
   labelClassName,
 }: Props) {
-  if (variant === 'panel') {
+  const isResponsivePanel = variant === 'responsive-panel';
+
+  if (variant === 'panel' || isResponsivePanel) {
     return (
       <dl
         data-component="MetaList"
+        style={
+          isResponsivePanel
+            ? ({
+                '--meta-label-width':
+                  typeof labelWidth === 'number' ? `${labelWidth}px` : labelWidth,
+              } as CSSProperties)
+            : undefined
+        }
         className={cn(
           'm-0 grid gap-3 gap-x-[clamp(20px,3vw,40px)] md:gap-6.5',
           'border-app-line',
           'md:grid-cols-1 md:border-t-0 md:border-l md:pt-0 md:pl-[clamp(20px,2.6vw,36px)]',
-          // 'max-md:grid-cols-2 max-sm:grid-cols-1',
+          isResponsivePanel && 'max-md:gap-1',
           className
         )}
       >
         {items.map((item) => (
-          <div key={item.label} className="grid gap-1.5">
+          <div
+            key={item.label}
+            className={cn(
+              'grid gap-1.5',
+              isResponsivePanel &&
+                'max-md:grid-cols-[var(--meta-label-width)_minmax(0,1fr)] max-md:gap-1'
+            )}
+          >
             <dt>
-              <Label color={labelColor} size="xs" className={labelClassName}>
+              <Label
+                color={labelColor}
+                size="xs"
+                className={cn(isResponsivePanel && 'max-md:tracking-wide', labelClassName)}
+              >
                 {item.label}
               </Label>
             </dt>
             <dd
               className={cn(
                 'm-0 text-base',
-                textColor === 'gray' ? 'text-app-muted' : 'text-app-text'
+                textColor === 'gray' ? 'text-app-muted' : 'text-app-text',
+                isResponsivePanel && 'max-md:text-app-muted max-md:ml-2 max-md:tracking-wide'
               )}
             >
               {item.value}
