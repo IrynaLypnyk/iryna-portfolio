@@ -23,6 +23,8 @@ const tMetadata = createTranslator({ locale: 'en', messages, namespace: 'Project
 
 /** Text and number inputs are held as strings to keep them controlled. */
 type FormState = {
+  featuresTitleEn: string;
+  featuresTitleUk: string;
   projectTypeEn: string;
   projectTypeUk: string;
   status: ProjectStatus;
@@ -63,6 +65,8 @@ type Props =
 function toFormState(project: ProjectWithSections | undefined): FormState {
   if (!project) {
     return {
+      featuresTitleEn: '',
+      featuresTitleUk: '',
       projectTypeEn: '',
       projectTypeUk: '',
       status: ProjectStatus.IN_DEVELOPMENT,
@@ -96,6 +100,8 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
   }
 
   return {
+    featuresTitleEn: project.featuresTitleEn ?? '',
+    featuresTitleUk: project.featuresTitleUk ?? '',
     projectTypeEn: project.projectTypeEn ?? '',
     projectTypeUk: project.projectTypeUk ?? '',
     status: project.status,
@@ -623,6 +629,30 @@ export function ProjectForm({ mode, project }: Props) {
 
       <SectionsEditor sections={sections} onChangeAction={setSections} />
 
+      <div className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5 sm:grid-cols-2">
+        <label>
+          <span className={labelStyles}>Features title (UK, optional)</span>
+          <ProjectField
+            type="text"
+            name="featuresTitleUk"
+            error={fieldErrors.featuresTitleUk}
+            value={form.featuresTitleUk}
+            onChange={(event) => updateField('featuresTitleUk', event.target.value)}
+            placeholder="Ключові можливості"
+          />
+        </label>
+        <label>
+          <span className={labelStyles}>Features title (EN, optional)</span>
+          <ProjectField
+            type="text"
+            name="featuresTitleEn"
+            error={fieldErrors.featuresTitleEn}
+            value={form.featuresTitleEn}
+            onChange={(event) => updateField('featuresTitleEn', event.target.value)}
+            placeholder="Key Features"
+          />
+        </label>
+      </div>
       <FeaturesEditor features={features} onChangeAction={setFeatures} />
 
       {saveError && (

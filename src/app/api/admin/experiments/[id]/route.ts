@@ -55,12 +55,16 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
-    // `coverAsset` uses onDelete: SetNull, so deleting the Experiment doesn't
-    // touch the MediaAsset row — clean it up explicitly if nothing else uses it.
-    const experiment = await prisma.experiment.delete({ where: { id } });
-
-    if (experiment.coverAssetId) {
-      await deleteMediaAssetIfUnused(experiment.coverAssetId);
+    const experiment = await prisma.experiment.delete({
+      where: { id },
+      include: { photos: { select: { assetId: true, assetUkId: true } } },
+    });
+    const assetIds = new Set(
+      experiment.photos.flatMap((photo) => [photo.assetId, photo.assetUkId])
+    );
+    revalidateTag('experiments', 'max');
+    for (const assetId of assetIds) {
+      if (assetId) await deleteMediaAssetIfUnused(assetId);
     }
 
     revalidateTag('experiments', 'max');

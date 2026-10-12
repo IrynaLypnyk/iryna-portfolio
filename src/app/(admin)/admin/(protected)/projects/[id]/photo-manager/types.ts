@@ -14,6 +14,7 @@ export type PhotoRow = {
 };
 
 export type PhotoManagerProps = {
+  ownerType?: 'projects' | 'experiments';
   projectId: string;
   projectSlug: string;
   photos: PhotoRow[];

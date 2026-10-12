@@ -16,10 +16,15 @@ type UploadApiResponse = {
 
 type Props = {
   projectId: string;
+  ownerType?: 'projects' | 'experiments';
   onPhotoUploadedAction: (photo: PhotoRow) => void;
 };
 
-export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
+export function usePhotoUpload({
+  projectId,
+  ownerType = 'projects',
+  onPhotoUploadedAction,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -58,7 +63,11 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
       updateUploadItem(item.uid, { status: 'uploading' });
 
       try {
-        const authResponse = await fetch(apiRoutes.admin.projectPhotoUploadAuth(projectId));
+        const authResponse = await fetch(
+          ownerType === 'projects'
+            ? apiRoutes.admin.projectPhotoUploadAuth(projectId)
+            : apiRoutes.admin.experimentPhotoUploadAuth(projectId)
+        );
         const authJson = await authResponse.json();
 
         if (!authResponse.ok) {
@@ -73,7 +82,7 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
           expire: authJson.expire,
           publicKey: authJson.publicKey,
           folder: authJson.folder,
-          useUniqueFileName: false,
+          useUniqueFileName: true,
           overwriteFile: false,
         });
 
@@ -81,15 +90,20 @@ export function usePhotoUpload({ projectId, onPhotoUploadedAction }: Props) {
           throw new Error('ImageKit did not return fileId');
         }
 
-        const response = await fetch(apiRoutes.admin.projectPhotoUpload(projectId), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fileId: imageKitResult.fileId,
-          }),
-        });
+        const response = await fetch(
+          ownerType === 'projects'
+            ? apiRoutes.admin.projectPhotoUpload(projectId)
+            : apiRoutes.admin.experimentPhotoUpload(projectId),
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fileId: imageKitResult.fileId,
+            }),
+          }
+        );
 
         const json = (await response.json()) as UploadApiResponse;
 

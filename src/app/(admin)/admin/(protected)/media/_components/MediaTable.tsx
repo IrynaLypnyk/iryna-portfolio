@@ -20,6 +20,7 @@ export type MediaLibraryItem = {
     id: string;
     slug: string;
     title: string;
+    href?: string;
   }[];
 };
 
@@ -41,7 +42,7 @@ export function MediaTable({ items }: MediaTableProps) {
           <tr>
             <th className="w-28 px-4 py-3">Preview</th>
             <th className="px-4 py-3">File</th>
-            <th className="w-94 px-4 py-3">Projects</th>
+            <th className="w-94 px-4 py-3">Projects & experiments</th>
             <th className="w-36 px-4 py-3">Uploaded</th>
             <th className="w-44 px-4 py-3">Статус</th>
           </tr>
@@ -78,7 +79,7 @@ export function MediaTable({ items }: MediaTableProps) {
                     {item.projects.map((project) => (
                       <Link
                         key={project.id}
-                        href={routes.admin.project(project.id)}
+                        href={project.href ?? routes.admin.project(project.id)}
                         className="block max-w-56 truncate text-neutral-900 underline decoration-neutral-300 underline-offset-2 hover:decoration-neutral-900"
                       >
                         {project.title}

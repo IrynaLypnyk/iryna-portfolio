@@ -56,7 +56,7 @@ export function PhotoTableRow({
       {/* Project cover */}
       <td className="px-3 py-3">
         <AdminChip
-          label="Обкл. проєкту"
+          label="Обкладинка"
           checked={item.draft.isProjectCover}
           disabled={item.mimeType?.startsWith('video/')}
           onChangeAction={(checked) => onDraftChangeAction(item.id, 'isProjectCover', checked)}

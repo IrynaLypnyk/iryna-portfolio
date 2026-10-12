@@ -26,11 +26,18 @@ function validateReorderInput(
       return { error: 'id має бути непорожнім рядком' };
     }
 
-    if (typeof orderInProject !== 'number' || !Number.isInteger(orderInProject)) {
+    if (
+      typeof orderInProject !== 'number' ||
+      !Number.isInteger(orderInProject) ||
+      orderInProject < 0
+    ) {
       return { error: 'orderInProject має бути цілим числом' };
     }
   }
 
+  if (new Set(body.map((item) => item.id)).size !== body.length) {
+    return { error: 'Медіафайли не мають повторюватися' };
+  }
   return { data: body as ReorderItem[] };
 }
 
@@ -49,28 +56,43 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Fetch one photo to get the project slug for cache invalidation.
-    const firstPhoto = await prisma.photo.findUnique({
-      where: { id: result.data[0].id },
-      select: { project: { select: { slug: true } } },
+    const ownerPhoto = await prisma.$transaction(async (tx) => {
+      const photos = await tx.photo.findMany({
+        where: { id: { in: result.data.map((item) => item.id) } },
+        select: { projectId: true, experimentId: true, project: { select: { slug: true } } },
+      });
+      const first = photos[0];
+      if (
+        !first ||
+        photos.length !== result.data.length ||
+        photos.some(
+          (photo) =>
+            photo.projectId !== first.projectId || photo.experimentId !== first.experimentId
+        )
+      ) {
+        throw new Error('INVALID_MEDIA_ORDER');
+      }
+      for (const { id, orderInProject } of result.data) {
+        await tx.photo.update({ where: { id }, data: { orderInProject } });
+      }
+      return first;
     });
 
-    await prisma.$transaction(
-      result.data.map(({ id, orderInProject }) =>
-        prisma.photo.update({
-          where: { id },
-          data: { orderInProject },
-        })
-      )
-    );
-
-    revalidateTag('projects', 'max');
-    if (firstPhoto?.project.slug) {
-      revalidateTag(`project-${firstPhoto.project.slug}`, 'max');
+    if (ownerPhoto.project) {
+      revalidateTag('projects', 'max');
+      revalidateTag(`project-${ownerPhoto.project.slug}`, 'max');
+    } else {
+      revalidateTag('experiments', 'max');
     }
 
     return NextResponse.json({ message: 'Порядок збережено' });
   } catch (error) {
+    if (error instanceof Error && error.message === 'INVALID_MEDIA_ORDER') {
+      return NextResponse.json(
+        { message: 'Медіафайли мають належати одному проєкту або експерименту' },
+        { status: 400 }
+      );
+    }
     console.error('Failed to reorder photos:', error);
     return NextResponse.json({ message: 'Не вдалося зберегти порядок' }, { status: 500 });
   }

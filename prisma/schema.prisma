@@ -73,6 +73,9 @@ model Project {
   linkNoteUk  String?
   linkNoteEn  String?
 
+  featuresTitleEn String?
+  featuresTitleUk String?
+
   featuresUk String[] @default([])
   featuresEn String[] @default([])
 
@@ -126,9 +129,8 @@ model MediaAsset {
   width          Int
   height         Int
 
-  defaultForPhotos   Photo[]      @relation("DefaultPhotoAsset")
-  ukrainianForPhotos Photo[]      @relation("UkrainianPhotoAsset")
-  experimentCovers   Experiment[]
+  defaultForPhotos   Photo[] @relation("DefaultPhotoAsset")
+  ukrainianForPhotos Photo[] @relation("UkrainianPhotoAsset")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -136,7 +138,7 @@ model MediaAsset {
 
 /// A small Playground experiment (AI/animation/UI prototype), shown as a
 /// compact card on the home page and a full article on `/playground`.
-/// Single cover image — unlike `Project`, experiments don't need a gallery.
+/// Photos and videos share the same media manager as projects.
 model Experiment {
   id   String @id @default(cuid())
   slug String @unique
@@ -147,13 +149,15 @@ model Experiment {
   descriptionUk String
   descriptionEn String
 
+  shortDescriptionUk String @default("")
+  shortDescriptionEn String @default("")
+
   stack String?
 
   demoUrl   String?
   githubUrl String?
 
-  coverAssetId String?
-  coverAsset   MediaAsset? @relation(fields: [coverAssetId], references: [id], onDelete: SetNull)
+  photos Photo[]
 
   order     Int     @default(0)
   published Boolean @default(true)
@@ -173,8 +177,11 @@ model Photo {
   assetUkId String?
   assetUk   MediaAsset? @relation("UkrainianPhotoAsset", fields: [assetUkId], references: [id], onDelete: Restrict)
 
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  experimentId String?
+  experiment   Experiment? @relation(fields: [experimentId], references: [id], onDelete: Cascade)
 
   orderInProject Int     @default(0)
   isProjectCover Boolean @default(false)
@@ -192,4 +199,5 @@ model Photo {
   @@index([assetId])
   @@index([assetUkId])
   @@index([projectId, orderInProject])
+  @@index([experimentId, orderInProject])
 }

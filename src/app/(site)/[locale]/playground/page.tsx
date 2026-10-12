@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
+import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { anchors, routes } from '@/constants/routes';
@@ -65,12 +66,15 @@ export default async function PlaygroundPage({ params }: Props) {
               id={`exp-${experiment.slug}`}
               className="border-app-line grid scroll-mt-(--header-height) items-start gap-[clamp(24px,4vw,56px)] border-t pt-6 md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]"
             >
-              <ImageFrame
-                photo={experiment.cover}
-                placeholder={t('coverPlaceholder', { title: experiment.title })}
-                sizes="(min-width: 768px) 55vw, 100vw"
-                className="aspect-16/10"
-              />
+              <div className="grid min-w-0 gap-4">
+                <ImageFrame
+                  photo={experiment.cover}
+                  placeholder={t('coverPlaceholder', { title: experiment.title })}
+                  sizes="(min-width: 768px) 55vw, 100vw"
+                  className="aspect-16/10"
+                />
+                <ImagesGallery photos={experiment.photos} imageHeightClass="h-48" />
+              </div>
 
               <div className="grid gap-4">
                 <span className="text-app-muted font-mono text-xs tracking-wide">

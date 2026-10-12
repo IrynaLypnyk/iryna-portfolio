@@ -21,7 +21,7 @@ import { useUnsavedChanges } from '../../_components/UnsavedChangesProvider';
 
 export type { PhotoRow } from './photo-manager/types';
 
-export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
+export function PhotoManager({ projectId, photos, ownerType = 'projects' }: PhotoManagerProps) {
   const [items, setItems] = useState<EditablePhoto[]>(() => photos.map(toEditablePhoto));
   const [statuses, setStatuses] = useState<Record<string, RowStatus>>({});
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -190,6 +190,7 @@ export function PhotoManager({ projectId, photos }: PhotoManagerProps) {
     <div className="min-w-0 space-y-4">
       <PhotoUploader
         projectId={projectId}
+        ownerType={ownerType}
         photoCount={items.length}
         onPhotoUploadedAction={addPhoto}
         onEnterReorderAction={enterReorderMode}

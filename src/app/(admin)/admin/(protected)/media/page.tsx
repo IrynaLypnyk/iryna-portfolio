@@ -27,23 +27,18 @@ function getUsageFilter(value: string | string[] | undefined): UsageFilter {
 
 function getUniqueProjects(
   projectPhotos: {
-    project: {
-      id: string;
-      slug: string;
-      titleUk: string;
-    };
+    project: { id: string; slug: string; titleUk: string } | null;
+    experiment: { id: string; slug: string; titleUk: string } | null;
   }[]
 ) {
   return Array.from(
     new Map(
-      projectPhotos.map(({ project }) => [
-        project.id,
-        {
-          id: project.id,
-          slug: project.slug,
-          title: project.titleUk,
-        },
-      ])
+      projectPhotos.flatMap(({ project, experiment }) => {
+        const owner = project ?? experiment;
+        if (!owner) return [];
+        const href = project ? routes.admin.project(owner.id) : routes.admin.experiment(owner.id);
+        return [[href, { id: owner.id, slug: owner.slug, title: owner.titleUk, href }] as const];
+      })
     ).values()
   );
 }
@@ -64,25 +59,15 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
 
       defaultForPhotos: {
         select: {
-          project: {
-            select: {
-              id: true,
-              slug: true,
-              titleUk: true,
-            },
-          },
+          project: { select: { id: true, slug: true, titleUk: true } },
+          experiment: { select: { id: true, slug: true, titleUk: true } },
         },
       },
 
       ukrainianForPhotos: {
         select: {
-          project: {
-            select: {
-              id: true,
-              slug: true,
-              titleUk: true,
-            },
-          },
+          project: { select: { id: true, slug: true, titleUk: true } },
+          experiment: { select: { id: true, slug: true, titleUk: true } },
         },
       },
     },

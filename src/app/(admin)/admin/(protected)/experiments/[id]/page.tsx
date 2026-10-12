@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import { ExperimentForm } from '../_components/ExperimentForm';
-import { ExperimentCoverSection } from '../_components/ExperimentCoverSection';
+import { PhotoManager } from '../../projects/[id]/PhotoManager';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,18 +17,37 @@ export default async function EditExperimentPage({ params }: Props) {
 
   const experiment = await prisma.experiment.findUnique({
     where: { id },
-    include: { coverAsset: true },
+    include: {
+      photos: {
+        orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
+        include: { asset: true },
+      },
+    },
   });
 
   if (!experiment) {
     notFound();
   }
 
-  const { coverAsset, ...experimentFields } = experiment;
+  const { photos, ...experimentFields } = experiment;
+  const photoRows = photos.map((photo) => ({
+    id: photo.id,
+    imageUrl: getImageUrl(photo.asset.src),
+    mimeType: photo.asset.mimeType,
+    width: photo.asset.width,
+    height: photo.asset.height,
+    orderInProject: photo.orderInProject,
+    isProjectCover: photo.isProjectCover,
+    captionUk: photo.captionUk,
+    captionEn: photo.captionEn,
+    linkUrl: photo.linkUrl,
+    descriptionUk: photo.descriptionUk,
+    descriptionEn: photo.descriptionEn,
+  }));
 
   return (
     <main className="px-6 py-10">
-      <div className="mx-auto max-w-4xl space-y-8">
+      <div className="mx-auto max-w-5xl space-y-8">
         <div>
           <Link
             href={routes.admin.experiments}
@@ -44,18 +63,12 @@ export default async function EditExperimentPage({ params }: Props) {
 
         <ExperimentForm mode="edit" experiment={experimentFields} />
 
-        <ExperimentCoverSection
-          experimentId={experimentFields.id}
-          initialCover={
-            coverAsset
-              ? {
-                  id: coverAsset.id,
-                  imageUrl: getImageUrl(coverAsset.src),
-                  width: coverAsset.width,
-                  height: coverAsset.height,
-                }
-              : null
-          }
+        <h2 className="text-xl font-semibold text-neutral-900">Photos & videos</h2>
+        <PhotoManager
+          ownerType="experiments"
+          projectId={experimentFields.id}
+          projectSlug={experimentFields.slug}
+          photos={photoRows}
         />
       </div>
     </main>

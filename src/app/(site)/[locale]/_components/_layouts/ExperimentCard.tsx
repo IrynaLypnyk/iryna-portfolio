@@ -29,7 +29,7 @@ export function ExperimentCard({ experiment }: Props) {
           {experiment.title}
         </span>
         <span className="text-app-muted text-[15px] leading-[1.55] text-pretty">
-          {experiment.description}
+          {experiment.shortDescription}
         </span>
       </div>
 

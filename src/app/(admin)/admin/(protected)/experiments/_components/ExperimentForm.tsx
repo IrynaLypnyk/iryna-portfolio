@@ -20,6 +20,8 @@ type FormState = {
   titleEn: string;
   descriptionUk: string;
   descriptionEn: string;
+  shortDescriptionUk: string;
+  shortDescriptionEn: string;
   stack: string;
   demoUrl: string;
   githubUrl: string;
@@ -39,6 +41,8 @@ function toFormState(experiment: DbExperiment | undefined): FormState {
       titleEn: '',
       descriptionUk: '',
       descriptionEn: '',
+      shortDescriptionUk: '',
+      shortDescriptionEn: '',
       stack: '',
       demoUrl: '',
       githubUrl: '',
@@ -53,6 +57,8 @@ function toFormState(experiment: DbExperiment | undefined): FormState {
     titleEn: experiment.titleEn,
     descriptionUk: experiment.descriptionUk,
     descriptionEn: experiment.descriptionEn,
+    shortDescriptionUk: experiment.shortDescriptionUk,
+    shortDescriptionEn: experiment.shortDescriptionEn,
     stack: experiment.stack ?? '',
     demoUrl: experiment.demoUrl ?? '',
     githubUrl: experiment.githubUrl ?? '',
@@ -165,6 +171,28 @@ export function ExperimentForm({ mode, experiment }: Props) {
             required
             value={form.titleEn}
             onChange={(event) => updateField('titleEn', event.target.value)}
+          />
+        </label>
+
+        <label>
+          <span className={labelStyles}>Short description (UK)</span>
+          <AdminTextarea
+            required
+            rows={2}
+            value={form.shortDescriptionUk}
+            onChange={(event) => updateField('shortDescriptionUk', event.target.value)}
+            placeholder="Короткий опис для картки"
+          />
+        </label>
+
+        <label>
+          <span className={labelStyles}>Short description (EN)</span>
+          <AdminTextarea
+            required
+            rows={2}
+            value={form.shortDescriptionEn}
+            onChange={(event) => updateField('shortDescriptionEn', event.target.value)}
+            placeholder="Short summary for the card"
           />
         </label>
 

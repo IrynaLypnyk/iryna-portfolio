@@ -34,6 +34,8 @@ export type ProjectInput = {
   linkLabelEn: string | null;
   linkNoteUk: string | null;
   linkNoteEn: string | null;
+  featuresTitleEn: string | null;
+  featuresTitleUk: string | null;
   featuresUk: string[];
   featuresEn: string[];
   githubUrl: string | null;
@@ -155,6 +157,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
     linkLabelEn,
     linkNoteUk,
     linkNoteEn,
+    featuresTitleEn,
+    featuresTitleUk,
     featuresUk,
     featuresEn,
     githubUrl,
@@ -168,6 +172,11 @@ export function validateProjectInput(body: unknown): ValidationResult {
   for (const [field, value] of Object.entries({ projectTypeEn, projectTypeUk })) {
     if (value !== undefined && value !== null && typeof value !== 'string') {
       return { field, error: 'Тип проєкту має бути текстом' };
+    }
+  }
+  for (const [field, value] of Object.entries({ featuresTitleEn, featuresTitleUk })) {
+    if (value !== undefined && value !== null && typeof value !== 'string') {
+      return { field, error: 'Заголовок можливостей має бути текстом' };
     }
   }
   if (
@@ -280,6 +289,8 @@ export function validateProjectInput(body: unknown): ValidationResult {
       linkLabelEn: optionalText(linkLabelEn),
       linkNoteUk: optionalText(linkNoteUk),
       linkNoteEn: optionalText(linkNoteEn),
+      featuresTitleEn: optionalText(featuresTitleEn),
+      featuresTitleUk: optionalText(featuresTitleUk),
       featuresUk: normalizedFeaturesUk,
       featuresEn: normalizedFeaturesEn,
       githubUrl: normalizedGithubUrl,

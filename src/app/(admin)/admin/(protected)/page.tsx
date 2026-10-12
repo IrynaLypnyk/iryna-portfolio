@@ -19,7 +19,6 @@ export default async function AdminDashboard() {
       where: {
         defaultForPhotos: { none: {} },
         ukrainianForPhotos: { none: {} },
-        experimentCovers: { none: {} },
       },
     }),
   ]);

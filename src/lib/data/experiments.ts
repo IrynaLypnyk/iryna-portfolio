@@ -12,34 +12,48 @@ export async function getPublishedExperiments(locale: LocaleType): Promise<Exper
   const experiments = await prisma.experiment.findMany({
     where: { published: true },
     orderBy: [{ order: 'asc' }, { id: 'asc' }],
-    include: { coverAsset: true },
+    include: {
+      photos: {
+        orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
+        include: { asset: true, assetUk: true },
+      },
+    },
   });
 
   const isUkrainian = locale === 'uk';
 
   return experiments.map((experiment, position) => {
     const title = isUkrainian ? experiment.titleUk : experiment.titleEn;
-    const { coverAsset } = experiment;
+    const photos = experiment.photos.map((photo) => {
+      const asset = isUkrainian ? (photo.assetUk ?? photo.asset) : photo.asset;
+      return {
+        id: photo.id,
+        src: getImageUrl(asset.src),
+        mimeType: asset.mimeType,
+        width: asset.width,
+        height: asset.height,
+        alt: (isUkrainian ? photo.captionUk : photo.captionEn) || title,
+        linkUrl: photo.linkUrl,
+        description: isUkrainian ? photo.descriptionUk : photo.descriptionEn,
+      };
+    });
+    const coverPhoto = experiment.photos.find((photo) => photo.isProjectCover);
+    const cover =
+      photos.find((photo) => photo.id === coverPhoto?.id) ??
+      photos.find((photo) => !photo.mimeType?.startsWith('video/')) ??
+      null;
 
     return {
       slug: experiment.slug,
       index: pad(position + 1),
       title,
       description: isUkrainian ? experiment.descriptionUk : experiment.descriptionEn,
+      shortDescription: isUkrainian ? experiment.shortDescriptionUk : experiment.shortDescriptionEn,
       stack: experiment.stack,
       demoUrl: experiment.demoUrl,
       githubUrl: experiment.githubUrl,
-      cover: coverAsset
-        ? {
-            id: coverAsset.id,
-            src: getImageUrl(coverAsset.src),
-            width: coverAsset.width,
-            height: coverAsset.height,
-            alt: title,
-            linkUrl: null,
-            description: null,
-          }
-        : null,
+      cover,
+      photos: photos.filter((photo) => photo.id !== cover?.id),
     };
   });
 }

@@ -20,6 +20,7 @@ export type ProjectData = {
   featured: boolean;
   order: number;
   coverPhoto: Photo<string> | null;
+  featuresTitle?: string | null;
   features: string[];
   externalUrl: string | null;
   linkLabel: string | null;

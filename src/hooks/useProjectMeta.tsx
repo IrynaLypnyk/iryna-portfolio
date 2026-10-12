@@ -39,7 +39,10 @@ export function useProjectMeta(project: ProjectData): ProjectMeta {
         : null,
     year: project.yearLabel ? { label: t('labelYear'), value: project.yearLabel } : null,
     features: project.features.length
-      ? { label: t('labelFeatures'), value: <ProjectFeatures features={project.features} /> }
+      ? {
+          label: project.featuresTitle?.trim() || t('labelFeatures'),
+          value: <ProjectFeatures features={project.features} />,
+        }
       : null,
     gallery: project.photos.length ? { label: t('labelGallery'), value: project.photos } : null,
   };

@@ -45,8 +45,8 @@ export const apiRoutes = {
 
     experiments: '/api/admin/experiments',
     experiment: (id: string) => `/api/admin/experiments/${id}`,
-    experimentCoverUpload: (id: string) => `/api/admin/experiments/${id}/cover/upload`,
-    experimentCoverUploadAuth: (id: string) => `/api/admin/experiments/${id}/cover/upload-auth`,
+    experimentPhotoUpload: (id: string) => `/api/admin/experiments/${id}/photos/upload`,
+    experimentPhotoUploadAuth: (id: string) => `/api/admin/experiments/${id}/photos/upload-auth`,
 
     auth: {
       login: '/api/admin/auth/login',

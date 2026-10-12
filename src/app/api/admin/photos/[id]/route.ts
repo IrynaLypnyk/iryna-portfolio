@@ -33,13 +33,15 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       // maps to a 404 response via isRecordNotFoundError.
       const current = await tx.photo.findUniqueOrThrow({
         where: { id },
-        select: { projectId: true, asset: { select: { mimeType: true } } },
+        select: { projectId: true, experimentId: true, asset: { select: { mimeType: true } } },
       });
 
       if (result.data.isProjectCover && current.asset.mimeType?.startsWith('video/')) {
         throw new Error('VIDEO_COVER');
       }
-      const { projectId } = current;
+      const owner = current.projectId
+        ? { projectId: current.projectId }
+        : { experimentId: current.experimentId! };
 
       // ── Cover uniqueness ──────────────────────────────────────────────────
       // When the cover flag is being set on this photo, demote every sibling
@@ -47,7 +49,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       // two round-trips from the client.
       if (result.data.isProjectCover) {
         await tx.photo.updateMany({
-          where: { projectId, id: { not: id } },
+          where: { ...owner, id: { not: id } },
           data: { isProjectCover: false },
         });
       }
@@ -55,12 +57,16 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return tx.photo.update({
         where: { id },
         data: result.data,
-        include: { project: { select: { slug: true } } },
+        include: { project: { select: { slug: true } }, experiment: { select: { slug: true } } },
       });
     });
 
-    revalidateTag('projects', 'max');
-    revalidateTag(`project-${photo.project.slug}`, 'max');
+    if (photo.project) {
+      revalidateTag('projects', 'max');
+      revalidateTag(`project-${photo.project.slug}`, 'max');
+    } else {
+      revalidateTag('experiments', 'max');
+    }
 
     return NextResponse.json({ photo });
   } catch (error) {
@@ -95,6 +101,7 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
       where: { id },
       select: {
         assetId: true,
+        assetUkId: true,
         project: {
           select: {
             slug: true,
@@ -104,9 +111,16 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
     });
 
     const assetResult = await deleteMediaAssetIfUnused(photo.assetId);
+    if (photo.assetUkId && photo.assetUkId !== photo.assetId) {
+      await deleteMediaAssetIfUnused(photo.assetUkId);
+    }
 
-    revalidateTag('projects', 'max');
-    revalidateTag(`project-${photo.project.slug}`, 'max');
+    if (photo.project) {
+      revalidateTag('projects', 'max');
+      revalidateTag(`project-${photo.project.slug}`, 'max');
+    } else {
+      revalidateTag('experiments', 'max');
+    }
 
     return NextResponse.json({
       message: 'Видалено',

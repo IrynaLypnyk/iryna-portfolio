@@ -54,6 +54,7 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
     featured: project.featured,
     order: project.order,
     coverPhoto: cover ? toPhoto(project, cover, locale) : null,
+    featuresTitle: pick(locale, project.featuresTitleUk, project.featuresTitleEn),
     features: locale === 'uk' ? project.featuresUk : project.featuresEn,
     externalUrl: project.externalUrl,
     linkLabel: pick(locale, project.linkLabelUk, project.linkLabelEn),

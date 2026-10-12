@@ -9,6 +9,7 @@ import { usePhotoUpload } from './usePhotoUpload';
 
 type Props = {
   projectId: string;
+  ownerType?: 'projects' | 'experiments';
   photoCount: number;
   onPhotoUploadedAction: (photo: PhotoRow) => void;
   // Normal mode
@@ -23,6 +24,7 @@ type Props = {
 
 export function PhotoUploader({
   projectId,
+  ownerType = 'projects',
   photoCount,
   onPhotoUploadedAction,
   onEnterReorderAction,
@@ -41,7 +43,7 @@ export function PhotoUploader({
     handleFilePickerClick,
     handleFileChange,
     dismissUploadStatus,
-  } = usePhotoUpload({ projectId, onPhotoUploadedAction });
+  } = usePhotoUpload({ projectId, ownerType, onPhotoUploadedAction });
 
   function handleExitClick() {
     if (hasUnsavedOrder) {

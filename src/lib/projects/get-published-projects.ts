@@ -70,6 +70,7 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
               description: isUkrainian ? cover.descriptionUk : cover.descriptionEn,
             }
           : null,
+      featuresTitle: isUkrainian ? project.featuresTitleUk : project.featuresTitleEn,
       features: isUkrainian ? project.featuresUk : project.featuresEn,
       externalUrl: project.externalUrl,
       linkLabel: isUkrainian ? project.linkLabelUk : project.linkLabelEn,
