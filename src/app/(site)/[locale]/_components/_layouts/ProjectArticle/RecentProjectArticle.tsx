@@ -47,7 +47,7 @@ export function RecentProjectArticle({ project, index }: Props) {
     <article
       data-component="RecentProjectArticle"
       className={cn(
-        'border-app-disabled grid gap-7 overflow-visible border-b pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
+        'border-app-text grid gap-7 overflow-visible border-b pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
       )}
     >
       <div
