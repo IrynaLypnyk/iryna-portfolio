@@ -1,9 +1,19 @@
 # Iryna Lypnyk Portfolio Website
 
-My personal portfolio website showcasing my professional experience, selected projects, experiments and current work as a software developer.
+My personal portfolio website showcasing my professional experience, selected projects, experiments and current work as a frontend engineer.
 
 **Live site:** [irynalypnyk.com](https://irynalypnyk.com)  
 **Storybook:** [https://irynalypnyk-storybook.vercel.app/](https://irynalypnyk-storybook.vercel.app/)
+
+## What I built
+
+- **Bilingual portfolio** — English and Ukrainian content across project pages, navigation and metadata.
+- **Custom content management** — an admin panel to create, edit, organise and publish projects and experiments.
+- **Media management** — ImageKit uploads, gallery ordering, cover selection and localised media.
+- **Google sign-in** — authentication for the admin panel.
+- **Reusable UI components** — a shared component library documented in Storybook.
+- **Dynamic case studies** — database-driven project pages with flexible content sections.
+- **SEO foundations** — page metadata, structured data and an automatically generated sitemap.
 
 ## Stack
 
