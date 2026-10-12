@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { routes } from '@/constants/routes';
 import type { ExperimentData } from '@/types/experiments';
+import { ProjectStack } from './ProjectArticle/ProjectStack';
 
 type Props = {
   experiment: ExperimentData;
@@ -36,7 +37,14 @@ export function ExperimentCard({ experiment }: Props) {
       </div>
 
       {experiment.stack && (
-        <span className="text-app-accent font-mono text-xs">{experiment.stack}</span>
+        <ProjectStack
+          items={experiment.stack
+            .split(/[·,]/)
+            .map((item) => item.trim())
+            .filter(Boolean)}
+          size="sm"
+          color="blue"
+        />
       )}
     </Link>
   );

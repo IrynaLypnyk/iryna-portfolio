@@ -31,7 +31,7 @@ export function useProjectMeta(project: ProjectData): ProjectMeta {
       : null,
     role: project.role ? { label: t('labelRole'), value: project.role } : null,
     stack: project.stack.length
-      ? { label: t('labelStack'), value: <ProjectStack items={project.stack} /> }
+      ? { label: t('labelStack'), value: <ProjectStack items={project.stack} color="blue" /> }
       : null,
     status:
       project.status && tMetadata.has(`statuses.${project.status}`)

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
+import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
 import { anchors, routes } from '@/constants/routes';
 import type { LocaleType } from '@/i18n/routing';
 import { getPublishedExperiments } from '@/lib/data/experiments';
@@ -90,7 +91,14 @@ export default async function PlaygroundPage({ params }: Props) {
                 </p>
 
                 {experiment.stack && (
-                  <span className="text-app-accent font-mono text-xs">{experiment.stack}</span>
+                  <ProjectStack
+                    items={experiment.stack
+                      .split(/[·,]/)
+                      .map((item) => item.trim())
+                      .filter(Boolean)}
+                    size="sm"
+                    color="blue"
+                  />
                 )}
 
                 {(experiment.demoUrl || experiment.githubUrl) && (
@@ -101,8 +109,7 @@ export default async function PlaygroundPage({ params }: Props) {
                         external
                         arrow="upRight"
                         variant="underline"
-                        color="blue"
-                        fontMono
+                        color="blueBright"
                       >
                         {t('demoLabel')}
                       </AppLink>
@@ -114,8 +121,7 @@ export default async function PlaygroundPage({ params }: Props) {
                         external
                         arrow="upRight"
                         variant="underline"
-                        color="blue"
-                        fontMono
+                        color="blueBright"
                       >
                         {t('githubLabel')}
                       </AppLink>
