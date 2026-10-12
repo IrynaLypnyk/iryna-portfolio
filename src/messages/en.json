@@ -73,6 +73,10 @@
     "githubLabel": "GitHub",
     "coverPlaceholder": "{title} — demo",
     "backToWork": "Back to selected work",
+    "backToExperiments": "Back to experiments",
+    "nextExperiment": "Next experiment",
+    "overview": "About the experiment",
+    "gallery": "Images and videos",
     "empty": "Experiments are being added. Check back shortly."
   },
   "About": {

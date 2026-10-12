@@ -2,6 +2,9 @@ import { routing, type LocaleType } from '@/i18n/routing';
 import { routes } from '@/constants/routes';
 import { buildLocaleUrl } from '@/lib/seo/config';
 import type { MetadataRoute } from 'next';
+import { getPublishedExperiments } from '@/lib/data/experiments';
+
+export const revalidate = 60;
 
 function buildLanguageAlternates(pathname: string): Record<LocaleType, string> {
   return Object.fromEntries(
@@ -23,10 +26,15 @@ function buildEntriesForPathname(
 }
 
 /**
- * The public site is a one-pager plus a case-study page per published project,
- * so the sitemap is the home page, the Playground page, and whatever project
- * is currently published.
+ * Experiments have their own localized case studies; the Playground overview
+ * redirects to the home section and should not be indexed separately.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  return [...buildEntriesForPathname(''), ...buildEntriesForPathname(routes.playground)];
+  const experiments = await getPublishedExperiments(routing.defaultLocale);
+  return [
+    ...buildEntriesForPathname(''),
+    ...experiments.flatMap((experiment) =>
+      buildEntriesForPathname(routes.experiment(experiment.slug))
+    ),
+  ];
 }

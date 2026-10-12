@@ -73,6 +73,10 @@
     "githubLabel": "GitHub",
     "coverPlaceholder": "{title} — демо",
     "backToWork": "Назад до вибраних проєктів",
+    "backToExperiments": "Назад до експериментів",
+    "nextExperiment": "Наступний експеримент",
+    "overview": "Про експеримент",
+    "gallery": "Зображення та відео",
     "empty": "Експерименти додаються. Завітайте трохи пізніше."
   },
   "About": {

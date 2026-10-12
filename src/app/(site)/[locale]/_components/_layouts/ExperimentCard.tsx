@@ -8,13 +8,13 @@ type Props = {
   experiment: ExperimentData;
 };
 
-/** Compact Playground teaser card on the home page; links to the full article on `/playground`. */
+/** Compact Playground teaser card linking to the experiment's own case study. */
 export function ExperimentCard({ experiment }: Props) {
   const t = useTranslations('Playground');
 
   return (
     <Link
-      href={`${routes.playground}#exp-${experiment.slug}`}
+      href={routes.experiment(experiment.slug)}
       data-component="ExperimentCard"
       className="project-placeholder border-app-line hover:border-app-accent-bright/30 grid min-h-49 gap-3.5 border p-5.5 transition-colors"
     >

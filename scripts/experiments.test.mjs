@@ -317,6 +317,7 @@ test('experiment card renders the short description instead of the full article 
     {
       'next-intl': { useTranslations: () => (_key, values) => `EXP ${values.index}` },
       '@/i18n/navigation': { Link: 'a' },
+      './ProjectArticle/ProjectStack': { ProjectStack: () => null },
     }
   );
   const markup = renderToStaticMarkup(
@@ -332,4 +333,101 @@ test('experiment card renders the short description instead of the full article 
   );
   assert.ok(markup.includes('Card summary'));
   assert.ok(!markup.includes('Full article text'));
+  assert.ok(markup.includes('href="/playground/experiment"'));
+});
+
+function loadExperimentPage(experiments) {
+  const locales = [];
+  const mocks = {
+    react: { ...require('react'), cache: (fn) => fn },
+    'next/navigation': {
+      notFound: () => {
+        throw new Error('404');
+      },
+    },
+    'next-intl/server': {
+      setRequestLocale: (locale) => locales.push(locale),
+      getTranslations: async () => (key, values) => (values?.index ? `EXP ${values.index}` : key),
+    },
+    '@/i18n/navigation': { Link: 'a' },
+    '@/lib/data/experiments': {
+      getPublishedExperiments: async (locale) => {
+        locales.push(locale);
+        return experiments;
+      },
+    },
+    '@/lib/seo/build-metadata': { buildPageMetadata: (input) => input },
+  };
+  for (const component of ['AppLink', 'ImageFrame', 'ImagesGallery', 'Label', 'MetaList']) {
+    mocks[`@/app/(site)/[locale]/_components/_ui/${component}`] = {
+      [component]:
+        component === 'AppLink'
+          ? ({ href, children }) => require('react').createElement('a', { href }, children)
+          : ({ children }) => children ?? null,
+    };
+  }
+  mocks['@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack'] = {
+    ProjectStack: () => null,
+  };
+  return {
+    ...load('src/app/(site)/[locale]/playground/[slug]/page.tsx', mocks),
+    locales,
+  };
+}
+
+const publicExperiment = {
+  slug: 'first',
+  index: '01',
+  title: 'First experiment',
+  shortDescription: 'Summary',
+  description: 'Paragraph one\n\nParagraph two',
+  stack: null,
+  demoUrl: null,
+  githubUrl: null,
+  cover: null,
+  photos: [],
+};
+
+test('experiment page shows only the selected article and links to its next sibling', async () => {
+  const { renderToStaticMarkup } = require('react-dom/server');
+  const page = loadExperimentPage([
+    publicExperiment,
+    {
+      ...publicExperiment,
+      slug: 'second',
+      title: 'Second experiment',
+      description: 'Other article',
+    },
+  ]);
+  const params = Promise.resolve({ locale: 'uk', slug: 'first' });
+  const markup = renderToStaticMarkup(await page.default({ params }));
+  assert.ok(markup.includes('First experiment'));
+  assert.ok(markup.includes('Paragraph one'));
+  assert.ok(markup.includes('Paragraph two'));
+  assert.ok(!markup.includes('Other article'));
+  assert.ok(markup.includes('href="/playground/second"'));
+  assert.ok(markup.includes('href="/#playground"'));
+  const metadata = await page.generateMetadata({ params });
+  assert.equal(metadata.pathname, '/playground/first');
+  assert.equal(metadata.description, 'Summary');
+  assert.ok(page.locales.every((locale) => locale === 'uk'));
+});
+
+test('missing experiments return 404 for both the article and metadata', async () => {
+  const page = loadExperimentPage([publicExperiment]);
+  const params = Promise.resolve({ locale: 'en', slug: 'missing' });
+  await assert.rejects(page.default({ params }), /404/);
+  await assert.rejects(page.generateMetadata({ params }), /404/);
+});
+
+test('a single experiment renders without a next link or media', async () => {
+  const { renderToStaticMarkup } = require('react-dom/server');
+  const page = loadExperimentPage([publicExperiment]);
+  const markup = renderToStaticMarkup(
+    await page.default({
+      params: Promise.resolve({ locale: 'en', slug: 'first' }),
+    })
+  );
+  assert.ok(!markup.includes('nextExperiment'));
+  assert.ok(!markup.includes('Other article'));
 });

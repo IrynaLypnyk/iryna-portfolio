@@ -3,6 +3,7 @@ export const routes = {
 
   project: (slug: string) => `/projects/${slug}`,
   playground: '/playground',
+  experiment: (slug: string) => `/playground/${slug}`,
 
   admin: {
     root: '/admin',
