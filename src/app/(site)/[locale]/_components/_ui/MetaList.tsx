@@ -19,6 +19,7 @@ type Props = {
    */
   variant?: 'compact' | 'roomy' | 'panel';
   className?: string;
+  labelClassName?: string;
   labelColor?: 'blue' | 'gray';
   textColor?: 'gray' | 'black';
 };
@@ -31,6 +32,7 @@ export function MetaList({
   labelColor = 'gray',
   textColor = 'gray',
   className,
+  labelClassName,
 }: Props) {
   if (variant === 'panel') {
     return (
@@ -47,7 +49,7 @@ export function MetaList({
         {items.map((item) => (
           <div key={item.label} className="grid gap-1.5">
             <dt>
-              <Label color={labelColor} size="xs">
+              <Label color={labelColor} size="xs" className={labelClassName}>
                 {item.label}
               </Label>
             </dt>

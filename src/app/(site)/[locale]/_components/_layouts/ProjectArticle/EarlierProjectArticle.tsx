@@ -95,6 +95,7 @@ export function EarlierProjectArticle({ project }: Props) {
                       variant="compact"
                       labelColor="gray"
                       labelWidth={120}
+                      labelClassName="inline-block padding-t-4"
                     />
                   </>
                 )}

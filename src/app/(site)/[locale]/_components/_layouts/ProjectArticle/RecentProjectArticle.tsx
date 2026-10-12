@@ -105,6 +105,7 @@ export function RecentProjectArticle({ project, index }: Props) {
                   variant="compact"
                   labelColor="gray"
                   labelWidth={120}
+                  labelClassName="inline-block padding-t-4"
                 />
               )}
             </motion.div>
