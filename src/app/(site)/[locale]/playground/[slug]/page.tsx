@@ -14,7 +14,12 @@ import type { LocaleType } from '@/i18n/routing';
 import { getPublishedExperiments } from '@/lib/data/experiments';
 import { buildPageMetadata } from '@/lib/seo/build-metadata';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
+
+// Render new slugs on demand and cache the resulting page for later visits.
+export function generateStaticParams() {
+  return [];
+}
 
 type Props = {
   params: Promise<{ locale: LocaleType; slug: string }>;

@@ -223,6 +223,7 @@ test('public data uses localized summary, full description and mixed media galle
     },
   ];
   const { getPublishedExperiments } = load('src/lib/data/experiments.ts', {
+    'next/cache': { unstable_cache: (fn) => fn },
     '@/lib/prisma': { prisma: { experiment: { findMany: async () => experiments } } },
     '@/lib/imagekit/get-image-url': { getImageUrl: (src) => src },
   });
@@ -315,9 +316,12 @@ test('experiment card renders the short description instead of the full article 
   const { ExperimentCard } = load(
     'src/app/(site)/[locale]/_components/_layouts/ExperimentCard.tsx',
     {
-      'next-intl': { useTranslations: () => (_key, values) => `EXP ${values.index}` },
-      '@/i18n/navigation': { Link: 'a' },
+      'next-intl': { useTranslations: () => (_key, values) => `EXP ${values?.index ?? ''}` },
+      '@/i18n/navigation': {
+        Link: ({ href, children }) => React.createElement('a', { href }, children),
+      },
       './ProjectArticle/ProjectStack': { ProjectStack: () => null },
+      './ExperimentLinkIndicator': { ExperimentLinkIndicator: () => null },
     }
   );
   const markup = renderToStaticMarkup(
@@ -430,4 +434,28 @@ test('a single experiment renders without a next link or media', async () => {
   );
   assert.ok(!markup.includes('nextExperiment'));
   assert.ok(!markup.includes('Other article'));
+});
+
+test('experiment link gives accessible feedback while navigation is pending', () => {
+  const React = require('react');
+  const { renderToStaticMarkup } = require('react-dom/server');
+  let pending = false;
+  const { ExperimentLinkIndicator } = load(
+    'src/app/(site)/[locale]/_components/_layouts/ExperimentLinkIndicator.tsx',
+    { 'next/link': { useLinkStatus: () => ({ pending }) } }
+  );
+  const render = () =>
+    renderToStaticMarkup(
+      React.createElement(ExperimentLinkIndicator, {
+        loadingLabel: 'Завантаження експерименту…',
+      })
+    );
+  const idle = render();
+  assert.ok(idle.includes('↗'));
+  assert.ok(!idle.includes('role="status"'));
+  pending = true;
+  const loading = render();
+  assert.ok(loading.includes('role="status"'));
+  assert.ok(loading.includes('Завантаження експерименту…'));
+  assert.ok(!loading.includes('↗'));
 });

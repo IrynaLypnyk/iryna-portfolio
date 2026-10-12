@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import type { LocaleType } from '@/i18n/routing';
 import type { ExperimentData } from '@/types/experiments';
+import { unstable_cache } from 'next/cache';
 
 /** "3" → "03", matching the design's two-digit counters. */
 function pad(position: number): string {
@@ -9,16 +10,23 @@ function pad(position: number): string {
 }
 
 export async function getPublishedExperiments(locale: LocaleType): Promise<ExperimentData[]> {
-  const experiments = await prisma.experiment.findMany({
-    where: { published: true },
-    orderBy: [{ order: 'asc' }, { id: 'asc' }],
-    include: {
-      photos: {
-        orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
-        include: { asset: true, assetUk: true },
-      },
-    },
-  });
+  // Share the raw data across locales and invalidate it using the admin's
+  // existing experiments tag, including photo changes.
+  const experiments = await unstable_cache(
+    () =>
+      prisma.experiment.findMany({
+        where: { published: true },
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
+        include: {
+          photos: {
+            orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
+            include: { asset: true, assetUk: true },
+          },
+        },
+      }),
+    ['published-experiments', 'localized-media-v1'],
+    { revalidate: 60, tags: ['experiments'] }
+  )();
 
   const isUkrainian = locale === 'uk';
 
