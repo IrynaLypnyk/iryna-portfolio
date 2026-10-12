@@ -8,7 +8,7 @@ export function ProjectFeatures({ features }: Props) {
       {features.map((feature) => (
         <li
           key={feature}
-          className="text-app-muted border-app-violet-light flex items-start gap-1 border-t-2 py-1 text-base tracking-wide last:border-b-2 last:pb-2"
+          className="text-app-muted border-app-accent-bright/30 flex items-start gap-1 border-t py-1 text-base tracking-wide last:border-b last:pb-2"
         >
           {feature}
         </li>

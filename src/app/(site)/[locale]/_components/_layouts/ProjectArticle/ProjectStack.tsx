@@ -15,8 +15,8 @@ export function ProjectStack({ items, separator = 'dot', size = 'lg', color = 'g
     <span
       data-component="ProjectStack"
       className={cn(
-        'inline-flex flex-wrap items-center gap-x-2 gap-y-1',
-        size === 'sm' ? 'font-mono text-xs' : 'text-base',
+        'inline-flex flex-wrap items-center gap-x-2 gap-y-1 font-mono',
+        size === 'sm' ? 'text-xs' : 'text-sm',
         color === 'blue' ? 'text-app-accent' : 'text-app-muted'
       )}
     >
