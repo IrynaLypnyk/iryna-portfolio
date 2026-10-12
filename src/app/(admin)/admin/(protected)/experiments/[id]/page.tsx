@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import { ExperimentForm } from '../_components/ExperimentForm';
 import { PhotoManager } from '../../projects/[id]/PhotoManager';
+import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,12 +49,14 @@ export default async function EditExperimentPage({ params }: Props) {
     <main className="px-6 py-10">
       <div className="mx-auto max-w-5xl space-y-8">
         <div>
-          <Link
+          <AppLink
             href={routes.admin.experiments}
-            className="text-sm text-neutral-500 hover:text-neutral-900"
+            color="blueBright"
+            arrowPosition="before"
+            arrow="left"
           >
-            ← All experiments
-          </Link>
+            All experiments
+          </AppLink>
 
           <h1 className="mt-3 mb-8 text-3xl font-semibold text-neutral-900">
             {experimentFields.titleEn}

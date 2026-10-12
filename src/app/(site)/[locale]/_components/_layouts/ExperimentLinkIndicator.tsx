@@ -1,6 +1,7 @@
 'use client';
 
 import { useLinkStatus } from 'next/link';
+import { MoveUpRight } from 'lucide-react';
 
 export function ExperimentLinkIndicator({ loadingLabel }: { loadingLabel: string }) {
   const { pending } = useLinkStatus();
@@ -16,7 +17,9 @@ export function ExperimentLinkIndicator({ loadingLabel }: { loadingLabel: string
           />
         </span>
       ) : (
-        <span aria-hidden="true">↗</span>
+        <span aria-hidden="true">
+          <MoveUpRight className="h-4 w-4" strokeWidth={1.5} />
+        </span>
       )}
     </span>
   );

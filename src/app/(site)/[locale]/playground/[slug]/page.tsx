@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
@@ -125,14 +124,6 @@ export default async function ExperimentPage({ params }: Props) {
           {meta.length > 0 && <MetaList variant="panel" labelColor="blue" items={meta} />}
         </div>
       </section>
-
-      <ImageFrame
-        photo={experiment.cover}
-        placeholder={t('coverPlaceholder', { title: experiment.title })}
-        priority
-        sizes="(min-width: 1280px) 1280px, 100vw"
-        className="aspect-video"
-      />
 
       {experiment.description && (
         <section className="pt-[clamp(56px,10vh,128px)]">
