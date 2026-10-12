@@ -69,7 +69,7 @@
     "title": "Playground",
     "intro": "Small experiments: AI, animation, UI ideas and prototypes.",
     "expLabel": "EXP {index}",
-    "demoLabel": "Live demo",
+    "demoLabel": "Try it",
     "githubLabel": "GitHub",
     "coverPlaceholder": "{title} — demo",
     "backToWork": "Back to selected work",

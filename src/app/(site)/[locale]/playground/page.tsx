@@ -101,7 +101,7 @@ export default async function PlaygroundPage({ params }: Props) {
                         external
                         arrow="upRight"
                         variant="underline"
-                        color="black"
+                        color="blue"
                         fontMono
                       >
                         {t('demoLabel')}
@@ -114,7 +114,7 @@ export default async function PlaygroundPage({ params }: Props) {
                         external
                         arrow="upRight"
                         variant="underline"
-                        color="black"
+                        color="blue"
                         fontMono
                       >
                         {t('githubLabel')}

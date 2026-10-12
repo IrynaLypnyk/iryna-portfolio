@@ -69,7 +69,7 @@
     "title": "Експерименти",
     "intro": "Невеликі експерименти: AI, анімація, UI-ідеї та прототипи.",
     "expLabel": "EXP {index}",
-    "demoLabel": "Демо",
+    "demoLabel": "Спробувати",
     "githubLabel": "GitHub",
     "coverPlaceholder": "{title} — демо",
     "backToWork": "Назад до вибраних проєктів",
