@@ -61,11 +61,6 @@ export function validateExperimentInput(body: unknown): ValidationResult {
   if (!isNonEmptyString(descriptionUk)) return { error: "Поле «Опис (UA)» обов'язкове" };
   if (!isNonEmptyString(descriptionEn)) return { error: "Поле «Опис (EN)» обов'язкове" };
 
-  if (!isNonEmptyString(shortDescriptionUk))
-    return { error: "Поле «Короткий опис (UK)» обов'язкове" };
-  if (!isNonEmptyString(shortDescriptionEn))
-    return { error: "Поле «Короткий опис (EN)» обов'язкове" };
-
   if (typeof order !== 'number' || !Number.isInteger(order)) {
     return { error: 'Порядок має бути цілим числом' };
   }
@@ -89,8 +84,8 @@ export function validateExperimentInput(body: unknown): ValidationResult {
       titleEn: titleEn.trim(),
       descriptionUk: descriptionUk.trim(),
       descriptionEn: descriptionEn.trim(),
-      shortDescriptionUk: shortDescriptionUk.trim(),
-      shortDescriptionEn: shortDescriptionEn.trim(),
+      shortDescriptionUk: optionalText(shortDescriptionUk) ?? '',
+      shortDescriptionEn: optionalText(shortDescriptionEn) ?? '',
       stack: optionalText(stack),
       demoUrl: normalizedDemoUrl,
       githubUrl: normalizedGithubUrl,

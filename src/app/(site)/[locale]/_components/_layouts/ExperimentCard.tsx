@@ -28,9 +28,11 @@ export function ExperimentCard({ experiment }: Props) {
         <span className="text-app-ink text-xl leading-none font-medium tracking-tight">
           {experiment.title}
         </span>
-        <span className="text-app-muted text-[15px] leading-[1.55] text-pretty">
-          {experiment.shortDescription}
-        </span>
+        {experiment.shortDescription && (
+          <span className="text-app-muted text-[15px] leading-[1.55] text-pretty">
+            {experiment.shortDescription}
+          </span>
+        )}
       </div>
 
       {experiment.stack && (

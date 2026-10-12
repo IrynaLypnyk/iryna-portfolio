@@ -175,9 +175,8 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Short description (UK)</span>
+          <span className={labelStyles}>Short description (UK, optional)</span>
           <AdminTextarea
-            required
             rows={2}
             value={form.shortDescriptionUk}
             onChange={(event) => updateField('shortDescriptionUk', event.target.value)}
@@ -186,9 +185,8 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </label>
 
         <label>
-          <span className={labelStyles}>Short description (EN)</span>
+          <span className={labelStyles}>Short description (EN, optional)</span>
           <AdminTextarea
-            required
             rows={2}
             value={form.shortDescriptionEn}
             onChange={(event) => updateField('shortDescriptionEn', event.target.value)}
