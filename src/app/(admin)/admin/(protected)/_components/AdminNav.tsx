@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { routes } from '@/constants/routes';
 import { ADMIN_NAV_LINKS } from '@/app/(admin)/admin/constants';
-import { Header } from '@/components/Header';
+import { AdminHeader } from '@/app/(admin)/admin/_components/AdminHeader';
 import LogoutButton from './LogoutButton';
 import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
 import { BurgerMenuButton } from '@/app/(site)/[locale]/_components/_ui/BurgerMenuButton';
@@ -29,7 +29,7 @@ export function AdminNav() {
 
   return (
     <>
-      <Header
+      <AdminHeader
         title={
           <span className="flex flex-wrap items-baseline gap-1 md:gap-2.5">
             <span className="text-app-text text-[18px] leading-5 font-medium uppercase">Admin</span>

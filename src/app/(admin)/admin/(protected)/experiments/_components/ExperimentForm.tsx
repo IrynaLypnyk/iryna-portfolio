@@ -257,8 +257,11 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        <span role="status" className="text-app-danger mr-auto text-sm">
+      <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
+        <span
+          role="status"
+          className="text-app-danger mr-auto w-full text-sm empty:hidden sm:w-auto"
+        >
           {isDirty ? 'Unsaved changes' : ''}
         </span>
         <AdminButton

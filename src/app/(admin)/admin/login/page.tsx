@@ -2,7 +2,7 @@
 import { LoginForm } from './_components/LoginForm';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
-import { Header } from '@/components/Header';
+import { AdminHeader } from '@/app/(admin)/admin/_components/AdminHeader';
 import { OpenSiteButton } from '@/app/(admin)/admin/_components/OpenSiteButton';
 import { routes } from '@/constants/routes';
 
@@ -20,7 +20,7 @@ export default function LoginPage() {
             backgroundSize: '60px 60px',
           }}
         />
-        <Header
+        <AdminHeader
           title={
             <span className="flex flex-wrap items-baseline gap-1 md:gap-2.5">
               <span className="text-app-text text-[18px] leading-5 font-medium">Admin</span>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { routes } from '@/constants/routes';
 import { LogoIcon } from '@/assets/icons';
 
-export function Header({
+export function AdminHeader({
   title,
   nav,
   rightContent,
