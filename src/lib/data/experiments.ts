@@ -19,12 +19,13 @@ export async function getPublishedExperiments(locale: LocaleType): Promise<Exper
         orderBy: [{ order: 'asc' }, { id: 'asc' }],
         include: {
           photos: {
+            where: { contentBlockId: null },
             orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
             include: { asset: true, assetUk: true },
           },
         },
       }),
-    ['published-experiments', 'localized-media-v1'],
+    ['published-experiments', 'localized-media-v1', 'additional-media-v2'],
     { revalidate: 60, tags: ['experiments'] }
   )();
 

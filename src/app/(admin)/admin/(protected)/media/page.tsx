@@ -70,6 +70,10 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
           experiment: { select: { id: true, slug: true, titleUk: true } },
         },
       },
+      projectCovers: { select: { id: true, slug: true, titleUk: true } },
+      projectCoversUk: { select: { id: true, slug: true, titleUk: true } },
+      experimentCovers: { select: { id: true, slug: true, titleUk: true } },
+      experimentCoversUk: { select: { id: true, slug: true, titleUk: true } },
     },
     orderBy: {
       createdAt: 'desc',
@@ -77,7 +81,18 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
   });
 
   const mediaItems: MediaLibraryItem[] = assets.map((asset) => {
-    const allPhotoUsages = [...asset.defaultForPhotos, ...asset.ukrainianForPhotos];
+    const allPhotoUsages = [
+      ...asset.defaultForPhotos,
+      ...asset.ukrainianForPhotos,
+      ...[...asset.projectCovers, ...asset.projectCoversUk].map((project) => ({
+        project,
+        experiment: null,
+      })),
+      ...[...asset.experimentCovers, ...asset.experimentCoversUk].map((experiment) => ({
+        project: null,
+        experiment,
+      })),
+    ];
 
     const usageCount = allPhotoUsages.length;
 

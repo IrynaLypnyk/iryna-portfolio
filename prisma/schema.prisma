@@ -30,6 +30,12 @@ enum ProjectStatus {
   ARCHIVED
 }
 
+enum DetailPageStatus {
+  NONE
+  DRAFT
+  PUBLISHED
+}
+
 /// A portfolio case study.
 ///
 /// `featured` splits the home page: featured projects render as full
@@ -43,22 +49,22 @@ model Project {
   projectTypeUk String?
   status        ProjectStatus @default(COMPLETED)
 
-  shortLabel String
+  shortLabel String?
 
   titleUk String
   titleEn String
 
-  subtitleUk String
-  subtitleEn String
+  subtitleUk String?
+  subtitleEn String?
 
-  contextUk String
-  contextEn String
+  contextUk String?
+  contextEn String?
 
-  leadUk String
-  leadEn String
+  leadUk String?
+  leadEn String?
 
-  roleUk String
-  roleEn String
+  roleUk String?
+  roleEn String?
 
   stack String[] @default([])
 
@@ -86,14 +92,25 @@ model Project {
   featured  Boolean @default(false)
   published Boolean @default(true)
 
-  photos   Photo[]
-  sections ProjectSection[]
+  detailPageStatus DetailPageStatus @default(NONE)
+
+  coverAssetId String?
+  coverAsset   MediaAsset? @relation("ProjectCover", fields: [coverAssetId], references: [id], onDelete: Restrict)
+
+  coverAssetUkId String?
+  coverAssetUk   MediaAsset? @relation("ProjectCoverUk", fields: [coverAssetUkId], references: [id], onDelete: Restrict)
+
+  photos        Photo[]
+  sections      ProjectSection[]
+  contentBlocks ContentBlock[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([featured, order])
   @@index([published])
+  @@index([coverAssetId])
+  @@index([coverAssetUkId])
 }
 
 /// One numbered block of a case study ("01 Context", "02 My role", …).
@@ -121,6 +138,34 @@ model ProjectSection {
   @@index([projectId, order])
 }
 
+/// Shared plain-text content for a Project or Experiment; no selectable layouts.
+/// The migration enforces exactly one owner. Save logic must also verify that
+/// every attached Photo has the same owner as this block.
+model ContentBlock {
+  id String @id @default(cuid())
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  experimentId String?
+  experiment   Experiment? @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+
+  order Int @default(0)
+
+  titleEn String?
+  titleUk String?
+  bodyEn  String?
+  bodyUk  String?
+
+  photos Photo[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, order])
+  @@index([experimentId, order])
+}
+
 model MediaAsset {
   mimeType       String?
   id             String  @id @default(cuid())
@@ -131,6 +176,11 @@ model MediaAsset {
 
   defaultForPhotos   Photo[] @relation("DefaultPhotoAsset")
   ukrainianForPhotos Photo[] @relation("UkrainianPhotoAsset")
+
+  projectCovers      Project[]    @relation("ProjectCover")
+  projectCoversUk    Project[]    @relation("ProjectCoverUk")
+  experimentCovers   Experiment[] @relation("ExperimentCover")
+  experimentCoversUk Experiment[] @relation("ExperimentCoverUk")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -162,10 +212,22 @@ model Experiment {
   order     Int     @default(0)
   published Boolean @default(true)
 
+  detailPageStatus DetailPageStatus @default(NONE)
+
+  coverAssetId String?
+  coverAsset   MediaAsset? @relation("ExperimentCover", fields: [coverAssetId], references: [id], onDelete: Restrict)
+
+  coverAssetUkId String?
+  coverAssetUk   MediaAsset? @relation("ExperimentCoverUk", fields: [coverAssetUkId], references: [id], onDelete: Restrict)
+
+  contentBlocks ContentBlock[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([published, order])
+  @@index([coverAssetId])
+  @@index([coverAssetUkId])
 }
 
 model Photo {
@@ -182,6 +244,9 @@ model Photo {
 
   experimentId String?
   experiment   Experiment? @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+
+  contentBlockId String?
+  contentBlock   ContentBlock? @relation(fields: [contentBlockId], references: [id], onDelete: Cascade)
 
   orderInProject Int     @default(0)
   isProjectCover Boolean @default(false)
@@ -200,4 +265,5 @@ model Photo {
   @@index([assetUkId])
   @@index([projectId, orderInProject])
   @@index([experimentId, orderInProject])
+  @@index([contentBlockId, orderInProject])
 }

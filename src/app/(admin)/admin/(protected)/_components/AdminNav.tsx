@@ -38,7 +38,7 @@ export function AdminNav() {
         nav={
           <>
             <nav className="hidden items-center gap-10 md:flex">
-              {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => (
+              {ADMIN_NAV_LINKS.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}

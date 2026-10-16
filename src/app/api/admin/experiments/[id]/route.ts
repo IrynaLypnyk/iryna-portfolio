@@ -2,13 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
-import { validateExperimentInput } from '../validation';
-import { isRecordNotFoundError, isUniqueConstraintError } from '@/lib/api/prisma-errors';
+import { saveExperiment } from '@/lib/content/save';
+import { contentSaveErrorResponse } from '@/lib/content/http';
+import { isRecordNotFoundError } from '@/lib/api/prisma-errors';
 import { deleteMediaAssetIfUnused } from '@/lib/media/delete-media-asset';
 
-type Params = {
-  params: Promise<{ id: string }>;
-};
+type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
@@ -16,32 +15,18 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   } catch {
     return NextResponse.json({ message: 'Немає доступу' }, { status: 401 });
   }
-
   const { id } = await params;
   const body = await request.json().catch(() => null);
-  const result = validateExperimentInput(body);
-
-  if ('error' in result) {
-    return NextResponse.json({ message: result.error }, { status: 400 });
-  }
-
   try {
-    const experiment = await prisma.experiment.update({ where: { id }, data: result.data });
+    const saved = await saveExperiment(prisma, body, id);
+    revalidateTag('experiments', { expire: 0 });
 
-    revalidateTag('experiments', 'max');
-
-    return NextResponse.json({ experiment });
+    return NextResponse.json({
+      experiment: saved.experiment,
+      cleanupCandidateAssetIds: saved.cleanupCandidateAssetIds,
+    });
   } catch (error) {
-    if (isUniqueConstraintError(error)) {
-      return NextResponse.json({ message: 'Експеримент з таким slug вже існує' }, { status: 409 });
-    }
-
-    if (isRecordNotFoundError(error)) {
-      return NextResponse.json({ message: 'Експеримент не знайдено' }, { status: 404 });
-    }
-
-    console.error('Failed to update experiment:', error);
-    return NextResponse.json({ message: 'Не вдалося оновити експеримент' }, { status: 500 });
+    return contentSaveErrorResponse(error, 'Experiment');
   }
 }
 

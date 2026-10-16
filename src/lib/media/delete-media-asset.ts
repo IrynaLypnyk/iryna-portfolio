@@ -1,17 +1,14 @@
 import { prisma } from '@/lib/prisma';
 import { getImageKit } from '@/lib/imagekit/client';
 import { assertSafeImageKitPath } from '@/lib/imagekit/assertSafeImageKitPath';
+import { unusedMediaAssetWhere } from './unused-media-asset';
 
 function isMissingFile(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'status' in error && error.status === 404;
 }
 
 export async function deleteMediaAssetIfUnused(assetId: string): Promise<{ deleted: boolean }> {
-  const unusedAsset = {
-    id: assetId,
-    defaultForPhotos: { none: {} },
-    ukrainianForPhotos: { none: {} },
-  };
+  const unusedAsset = unusedMediaAssetWhere(assetId);
   const asset = await prisma.mediaAsset.findFirst({
     where: unusedAsset,
     select: { imageKitFileId: true },

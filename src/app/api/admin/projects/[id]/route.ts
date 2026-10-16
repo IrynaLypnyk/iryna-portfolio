@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
-import { validateProjectInput } from '../validation';
-import { isRecordNotFoundError, isUniqueConstraintError } from '@/lib/api/prisma-errors';
+import { saveProject } from '@/lib/content/save';
+import { contentSaveErrorResponse } from '@/lib/content/http';
+import { isRecordNotFoundError } from '@/lib/api/prisma-errors';
 
-type Params = {
-  params: Promise<{ id: string }>;
-};
+type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
@@ -15,55 +14,21 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   } catch {
     return NextResponse.json({ message: 'Немає доступу' }, { status: 401 });
   }
-
   const { id } = await params;
   const body = await request.json().catch(() => null);
-  const result = validateProjectInput(body);
-
-  if ('error' in result) {
-    return NextResponse.json({ message: result.error, field: result.field }, { status: 400 });
-  }
-
-  const { sections, ...fields } = result.data;
-
   try {
-    const existing = await prisma.project.findUnique({ where: { id }, select: { slug: true } });
-
-    // Sections are positional content, so the incoming array replaces the
-    // stored set outright — a positional merge would silently reorder text.
-    const project = await prisma.project.update({
-      where: { id },
-      data: {
-        ...fields,
-        sections: {
-          deleteMany: {},
-          create: sections.map((section, index) => ({ ...section, order: index + 1 })),
-        },
-      },
+    const saved = await saveProject(prisma, body, id);
+    revalidateTag('projects', { expire: 0 });
+    revalidateTag(`project-${saved.project.slug}`, { expire: 0 });
+    if (saved.previousSlug && saved.previousSlug !== saved.project.slug) {
+      revalidateTag(`project-${saved.previousSlug}`, { expire: 0 });
+    }
+    return NextResponse.json({
+      project: saved.project,
+      cleanupCandidateAssetIds: saved.cleanupCandidateAssetIds,
     });
-
-    revalidateTag('projects', 'max');
-    revalidateTag(`project-${project.slug}`, 'max');
-
-    if (existing && existing.slug !== project.slug) {
-      revalidateTag(`project-${existing.slug}`, 'max');
-    }
-
-    return NextResponse.json({ project });
   } catch (error) {
-    if (isUniqueConstraintError(error)) {
-      return NextResponse.json(
-        { message: 'Проєкт з таким slug вже існує', field: 'slug' },
-        { status: 409 }
-      );
-    }
-
-    if (isRecordNotFoundError(error)) {
-      return NextResponse.json({ message: 'Проєкт не знайдено' }, { status: 404 });
-    }
-
-    console.error('Failed to update project:', error);
-    return NextResponse.json({ message: 'Не вдалося оновити проєкт' }, { status: 500 });
+    return contentSaveErrorResponse(error, 'Project');
   }
 }
 

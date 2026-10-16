@@ -45,14 +45,19 @@ const input = {
   order: 0,
 };
 
-test('short descriptions are required in both languages and trimmed independently', () => {
+test('short descriptions are optional, trimmed independently and reject malformed values', () => {
   const { validateExperimentInput } = load('src/app/api/admin/experiments/validation.ts');
   const result = validateExperimentInput(input);
   assert.equal(result.data.shortDescriptionUk, 'Короткий опис');
   assert.equal(result.data.shortDescriptionEn, 'Short summary');
   assert.equal(result.data.descriptionEn, 'Full description');
   for (const key of ['shortDescriptionUk', 'shortDescriptionEn']) {
-    for (const value of [undefined, null, '', '  ', 42, {}]) {
+    for (const value of [undefined, null, '', '  ']) {
+      const optional = validateExperimentInput({ ...input, [key]: value });
+      assert.equal(optional.error, undefined);
+      assert.ok(optional.data[key] === '' || optional.data[key] === undefined);
+    }
+    for (const value of [42, {}]) {
       assert.ok(validateExperimentInput({ ...input, [key]: value }).error);
     }
   }
@@ -451,11 +456,11 @@ test('experiment link gives accessible feedback while navigation is pending', ()
       })
     );
   const idle = render();
-  assert.ok(idle.includes('↗'));
+  assert.ok(idle.includes('lucide-move-up-right'));
   assert.ok(!idle.includes('role="status"'));
   pending = true;
   const loading = render();
   assert.ok(loading.includes('role="status"'));
   assert.ok(loading.includes('Завантаження експерименту…'));
-  assert.ok(!loading.includes('↗'));
+  assert.ok(!loading.includes('lucide-move-up-right'));
 });

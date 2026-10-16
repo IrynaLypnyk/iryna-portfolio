@@ -87,9 +87,7 @@ export function MediaTable({ items }: MediaTableProps) {
                     ))}
 
                     {item.usageCount > item.projects.length && (
-                      <p className="text-xs text-neutral-500">
-                        {item.usageCount} використань у фото
-                      </p>
+                      <p className="text-xs text-neutral-500">{item.usageCount} використань</p>
                     )}
                   </div>
                 ) : (

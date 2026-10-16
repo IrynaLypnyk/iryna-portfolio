@@ -8,11 +8,11 @@ import type { ProjectStatus } from '@/generated/prisma/enums';
  */
 export type ProjectData = {
   slug: string;
-  shortLabel: string;
+  shortLabel: string | null;
   title: string;
-  subtitle: string;
-  context: string;
-  role: string;
+  subtitle: string | null;
+  context: string | null;
+  role: string | null;
   stack: string[];
   projectType: string | null;
   status: ProjectStatus;
@@ -32,7 +32,7 @@ export type ProjectData = {
 /** A localized case study with its sections, photos, and next project. */
 export type ProjectDetail = ProjectData & {
   index: string;
-  lead: string;
+  lead: string | null;
   linkNote: string | null;
   sections: {
     id: string;

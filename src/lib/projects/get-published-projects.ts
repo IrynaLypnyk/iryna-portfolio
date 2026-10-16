@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import type { LocaleType } from '@/i18n/routing';
 import type { ProjectData } from '@/types/projects';
+import { nullableText } from '@/lib/content/text';
 
 export async function getPublishedProjects(locale: LocaleType): Promise<ProjectData[]> {
   const projects = await prisma.project.findMany({
@@ -9,6 +10,7 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
     orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
     include: {
       photos: {
+        where: { contentBlockId: null },
         orderBy: [{ isProjectCover: 'desc' }, { orderInProject: 'asc' }, { id: 'asc' }],
         include: { asset: true, assetUk: true },
       },
@@ -47,11 +49,11 @@ export async function getPublishedProjects(locale: LocaleType): Promise<ProjectD
 
     return {
       slug: project.slug,
-      shortLabel: project.shortLabel,
+      shortLabel: nullableText(project.shortLabel),
       title,
-      subtitle: isUkrainian ? project.subtitleUk : project.subtitleEn,
-      context: isUkrainian ? project.contextUk : project.contextEn,
-      role: isUkrainian ? project.roleUk : project.roleEn,
+      subtitle: nullableText(isUkrainian ? project.subtitleUk : project.subtitleEn),
+      context: nullableText(isUkrainian ? project.contextUk : project.contextEn),
+      role: nullableText(isUkrainian ? project.roleUk : project.roleEn),
       stack: project.stack,
       projectType: locale === 'uk' ? project.projectTypeUk : project.projectTypeEn,
       status: project.status,

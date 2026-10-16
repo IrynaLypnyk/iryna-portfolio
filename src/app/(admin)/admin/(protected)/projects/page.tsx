@@ -51,7 +51,7 @@ export default async function AdminProjectsListPage() {
                       <p className="mt-0.5 font-mono text-xs text-neutral-500">{project.slug}</p>
                     </td>
                     <td className="px-3 py-3 font-mono text-xs text-neutral-600">
-                      {project.shortLabel}
+                      {project.shortLabel?.trim() || null}
                     </td>
                     <td className="px-3 py-3 text-neutral-600">{project.order}</td>
                     <td className="px-3 py-3 text-neutral-600">{project._count.photos}</td>

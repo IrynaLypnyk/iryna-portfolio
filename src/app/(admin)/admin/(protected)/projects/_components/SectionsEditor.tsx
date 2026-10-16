@@ -5,6 +5,7 @@ import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import { ProjectField } from './ProjectField';
 
 export type SectionDraft = {
+  id?: string;
   /** Stable key for React only — never sent to the API. */
   key: string;
   titleUk: string;
@@ -41,7 +42,7 @@ type Props = {
  * from position, so moving a row is the only thing that renumbers it.
  */
 export function SectionsEditor({ sections, onChangeAction }: Props) {
-  function update(key: string, field: keyof Omit<SectionDraft, 'key'>, value: string) {
+  function update(key: string, field: keyof Omit<SectionDraft, 'key' | 'id'>, value: string) {
     onChangeAction(
       sections.map((section) => (section.key === key ? { ...section, [field]: value } : section))
     );

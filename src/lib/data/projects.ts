@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 
 const projectInclude = {
   photos: {
+    where: { contentBlockId: null },
     orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
     include: { asset: true },
   },
@@ -24,7 +25,13 @@ export async function getPublishedProjects(): Promise<ProjectWithRelations[]> {
         orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
         include: projectInclude,
       }),
-    ['published-projects', 'media-mime-v2', 'stack-array-v1', 'project-type-text-v1'],
+    [
+      'published-projects',
+      'media-mime-v2',
+      'stack-array-v1',
+      'project-type-text-v1',
+      'additional-media-v2',
+    ],
     {
       revalidate: 60,
       tags: ['projects'],

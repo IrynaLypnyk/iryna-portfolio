@@ -19,6 +19,7 @@ export default async function EditExperimentPage({ params }: Props) {
     where: { id },
     include: {
       photos: {
+        where: { contentBlockId: null },
         orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
         include: { asset: true },
       },

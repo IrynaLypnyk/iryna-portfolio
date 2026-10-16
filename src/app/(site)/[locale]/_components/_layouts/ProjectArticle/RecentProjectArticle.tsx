@@ -59,7 +59,9 @@ export function RecentProjectArticle({ project, index }: Props) {
       >
         <ImageFrame
           photo={project.coverPhoto}
-          placeholder={t('coverPlaceholder', { title: project.shortLabel })}
+          placeholder={
+            project.shortLabel ? t('coverPlaceholder', { title: project.shortLabel }) : null
+          }
           priority={index === 1}
           sizes="(min-width: 768px) 20vw, 40vw"
           className="aspect-4/3 [grid-area:image]"
@@ -75,15 +77,17 @@ export function RecentProjectArticle({ project, index }: Props) {
             {project.title}
           </h3>
 
-          <p className="text-app-muted text-base leading-normal tracking-wide whitespace-pre-line">
-            {project.context}
-          </p>
+          {project.context && (
+            <p className="text-app-muted text-base leading-normal tracking-wide whitespace-pre-line">
+              {project.context}
+            </p>
+          )}
 
-          <div className="flex flex-col gap-2">
-            {meta.length > 0 && (
+          {meta.length > 0 && (
+            <div className="flex flex-col gap-2">
               <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <AnimatePresence initial={false}>

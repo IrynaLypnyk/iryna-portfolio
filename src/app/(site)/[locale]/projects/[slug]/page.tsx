@@ -46,11 +46,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: detail.title,
-    description: detail.lead,
+    ...(detail.lead ? { description: detail.lead } : {}),
     alternates: buildAlternates(routes.project(slug), locale),
     openGraph: {
       title: detail.title,
-      description: detail.lead,
+      ...(detail.lead ? { description: detail.lead } : {}),
       ...(detail.coverPhoto ? { images: [{ url: detail.coverPhoto.src }] } : {}),
     },
   };
@@ -70,7 +70,8 @@ export default async function ProjectPage({ params }: Props) {
   const tMetadata = await getTranslations('ProjectMetadata');
   const tProject = await getTranslations('Project');
 
-  const meta: MetaItem[] = [{ label: t('labelRole'), value: detail.role }];
+  const meta: MetaItem[] = [];
+  if (detail.role) meta.push({ label: t('labelRole'), value: detail.role });
 
   if (detail.stack.length) {
     meta.push({ label: t('labelStack'), value: <ProjectStack items={detail.stack} /> });
@@ -106,24 +107,32 @@ export default async function ProjectPage({ params }: Props) {
           <div className="grid gap-6">
             <div className="text-muted flex items-baseline gap-3 font-mono text-xs tracking-[0.12em]">
               <span>{detail.index}</span>
-              <span className="text-accent-pale">/</span>
-              <span className="text-ink">{detail.shortLabel}</span>
+              {detail.shortLabel && (
+                <>
+                  <span className="text-accent-pale">/</span>
+                  <span className="text-ink">{detail.shortLabel}</span>
+                </>
+              )}
             </div>
 
             <h1 className="text-[clamp(40px,6.4vw,88px)] leading-[0.94] font-semibold tracking-[-0.038em]">
               {detail.title}
             </h1>
 
-            <p className="text-accent text-[clamp(20px,2.4vw,30px)] leading-[1.24] font-medium tracking-[-0.024em]">
-              {detail.subtitle}
-            </p>
+            {detail.subtitle && (
+              <p className="text-accent text-[clamp(20px,2.4vw,30px)] leading-[1.24] font-medium tracking-[-0.024em]">
+                {detail.subtitle}
+              </p>
+            )}
 
-            <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty">
-              {detail.lead}
-            </p>
+            {detail.lead && (
+              <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty">
+                {detail.lead}
+              </p>
+            )}
           </div>
 
-          <MetaList variant="panel" labelColor="blue" items={meta} />
+          {meta.length > 0 && <MetaList variant="panel" labelColor="blue" items={meta} />}
         </div>
       </section>
 

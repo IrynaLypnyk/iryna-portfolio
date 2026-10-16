@@ -2,6 +2,7 @@ import type { LocaleType } from '@/i18n/routing';
 import { getImageUrl } from '@/lib/imagekit/get-image-url';
 import type { ProjectWithRelations } from '@/lib/data/projects';
 import type { Photo, ProjectData, ProjectDetail } from '@/types/projects';
+import { nullableText } from '@/lib/content/text';
 
 type DbPhoto = ProjectWithRelations['photos'][number];
 
@@ -42,11 +43,11 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
 
   return {
     slug: project.slug,
-    shortLabel: project.shortLabel,
+    shortLabel: nullableText(project.shortLabel),
     title: pick(locale, project.titleUk, project.titleEn),
-    subtitle: pick(locale, project.subtitleUk, project.subtitleEn),
-    context: pick(locale, project.contextUk, project.contextEn),
-    role: pick(locale, project.roleUk, project.roleEn),
+    subtitle: nullableText(pick(locale, project.subtitleUk, project.subtitleEn)),
+    context: nullableText(pick(locale, project.contextUk, project.contextEn)),
+    role: nullableText(pick(locale, project.roleUk, project.roleEn)),
     stack: project.stack,
     projectType: locale === 'uk' ? project.projectTypeUk : project.projectTypeEn,
     status: project.status,
@@ -86,7 +87,7 @@ export function toProjectDetail(
   return {
     ...toProjectData(project, locale),
     index: pad(position >= 0 ? position + 1 : project.order),
-    lead: pick(locale, project.leadUk, project.leadEn),
+    lead: nullableText(pick(locale, project.leadUk, project.leadEn)),
     linkNote: pick(locale, project.linkNoteUk, project.linkNoteEn),
     sections: project.sections.map((section, index) => ({
       id: section.id,

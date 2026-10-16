@@ -69,7 +69,7 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
       featuresTitleUk: '',
       projectTypeEn: '',
       projectTypeUk: '',
-      status: ProjectStatus.IN_DEVELOPMENT,
+      status: ProjectStatus.COMPLETED,
       slug: '',
       shortLabel: '',
       titleUk: '',
@@ -106,17 +106,17 @@ function toFormState(project: ProjectWithSections | undefined): FormState {
     projectTypeUk: project.projectTypeUk ?? '',
     status: project.status,
     slug: project.slug,
-    shortLabel: project.shortLabel,
+    shortLabel: project.shortLabel ?? '',
     titleUk: project.titleUk,
     titleEn: project.titleEn,
-    subtitleUk: project.subtitleUk,
-    subtitleEn: project.subtitleEn,
-    contextUk: project.contextUk,
-    contextEn: project.contextEn,
-    leadUk: project.leadUk,
-    leadEn: project.leadEn,
-    roleUk: project.roleUk,
-    roleEn: project.roleEn,
+    subtitleUk: project.subtitleUk ?? '',
+    subtitleEn: project.subtitleEn ?? '',
+    contextUk: project.contextUk ?? '',
+    contextEn: project.contextEn ?? '',
+    leadUk: project.leadUk ?? '',
+    leadEn: project.leadEn ?? '',
+    roleUk: project.roleUk ?? '',
+    roleEn: project.roleEn ?? '',
     stack: project.stack.join(', '),
     statusUk: project.statusUk ?? '',
     statusEn: project.statusEn ?? '',
@@ -141,6 +141,7 @@ function toSectionDrafts(project: ProjectWithSections | undefined): SectionDraft
 
   return project.sections.map((section) => ({
     key: section.id,
+    id: section.id,
     titleUk: section.titleUk,
     titleEn: section.titleEn,
     bodyUk: section.bodyUk,
@@ -169,7 +170,7 @@ const labelStyles = 'mb-1 block text-xs font-semibold tracking-wider text-neutra
 function snapshot(form: FormState, sections: SectionDraft[], features: FeatureDraft[]) {
   return JSON.stringify({
     form,
-    sections: sections.map(({ key: _key, ...section }) => section),
+    sections: sections.map(({ key: _key, id: _id, ...section }) => section),
     features: features.map(({ uk, en }) => ({ uk, en })),
   });
 }
@@ -251,7 +252,7 @@ export function ProjectForm({ mode, project }: Props) {
       const result = (await response.json().catch(() => ({}))) as {
         message?: string;
         field?: string;
-        project?: DbProject;
+        project?: ProjectWithSections;
       };
 
       if (!response.ok) {
@@ -268,6 +269,19 @@ export function ProjectForm({ mode, project }: Props) {
       toast.success(mode === 'create' ? 'Project created and saved' : 'Changes saved');
       // Only mark the submitted values as saved; edits made during the request remain dirty.
       setSavedSnapshot(currentSnapshot);
+      // Match saved IDs to submitted keys without discarding edits made in flight.
+      const savedSections = result.project?.sections;
+      if (savedSections) {
+        const idsByKey = new Map(
+          sections.map((section, index) => [section.key, savedSections[index]?.id])
+        );
+        setSections((current) =>
+          current.map((section) => {
+            const id = idsByKey.get(section.key);
+            return id ? { ...section, id } : section;
+          })
+        );
+      }
 
       if (mode === 'create' && result.project) {
         router.push(routes.admin.project(result.project.id));
@@ -310,7 +324,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Short label</span>
           <ProjectField
             type="text"
-            required
             name="shortLabel"
             error={fieldErrors.shortLabel}
             value={form.shortLabel}
@@ -347,7 +360,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Підзаголовок (UA)</span>
           <ProjectField
             type="text"
-            required
             name="subtitleUk"
             error={fieldErrors.subtitleUk}
             value={form.subtitleUk}
@@ -359,7 +371,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Підзаголовок (EN)</span>
           <ProjectField
             type="text"
-            required
             name="subtitleEn"
             error={fieldErrors.subtitleEn}
             value={form.subtitleEn}
@@ -371,7 +382,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Home context (UA)</span>
           <ProjectField
             multiline
-            required
             rows={3}
             name="contextUk"
             error={fieldErrors.contextUk}
@@ -384,7 +394,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Home context (EN)</span>
           <ProjectField
             multiline
-            required
             rows={3}
             name="contextEn"
             error={fieldErrors.contextEn}
@@ -397,7 +406,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Лід case study (UA)</span>
           <ProjectField
             multiline
-            required
             rows={4}
             name="leadUk"
             error={fieldErrors.leadUk}
@@ -410,7 +418,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Лід case study (EN)</span>
           <ProjectField
             multiline
-            required
             rows={4}
             name="leadEn"
             error={fieldErrors.leadEn}
@@ -423,7 +430,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Role (UA)</span>
           <ProjectField
             type="text"
-            required
             name="roleUk"
             error={fieldErrors.roleUk}
             value={form.roleUk}
@@ -435,7 +441,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Role (EN)</span>
           <ProjectField
             type="text"
-            required
             name="roleEn"
             error={fieldErrors.roleEn}
             value={form.roleEn}
@@ -476,7 +481,6 @@ export function ProjectForm({ mode, project }: Props) {
         <label>
           <span className={labelStyles}>{tMetadata('labelStatus')}</span>
           <AdminSelect
-            required
             name="status"
             value={form.status}
             aria-invalid={!!fieldErrors.status}
@@ -512,7 +516,6 @@ export function ProjectForm({ mode, project }: Props) {
           <span className={labelStyles}>Order</span>
           <ProjectField
             type="number"
-            required
             name="order"
             error={fieldErrors.order}
             value={form.order}
