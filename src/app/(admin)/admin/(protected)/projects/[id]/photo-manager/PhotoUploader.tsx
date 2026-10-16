@@ -78,7 +78,7 @@ export function PhotoUploader({
         onChange={handleFileChange}
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-white p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-sm border border-neutral-200 bg-white p-4">
         <div>
           <p className="text-sm text-neutral-600">{photoCount} медіафайлів</p>
           <p className="mt-1 text-xs text-neutral-500">
@@ -118,7 +118,7 @@ export function PhotoUploader({
       </div>
 
       {uploadItems.length > 0 && (
-        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+        <div className="rounded-sm border border-neutral-200 bg-white p-4">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-sm font-medium text-neutral-700">Стан завантаження</p>
 

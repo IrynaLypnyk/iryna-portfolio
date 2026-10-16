@@ -67,7 +67,7 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
       </div>
 
       {features.length === 0 && (
-        <p className="rounded-xl border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">
+        <p className="rounded-sm border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">
           No features. Section &quot;Key features&quot; on project card will not be shown.
         </p>
       )}
@@ -75,7 +75,7 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
       {features.map((feature, index) => (
         <div
           key={feature.key}
-          className="grid gap-3 rounded-xl border border-neutral-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto]"
+          className="grid gap-3 rounded-sm border border-neutral-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto]"
         >
           <label>
             <span className={labelStyles}>UA</span>

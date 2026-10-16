@@ -204,7 +204,7 @@ export function PhotoManager({ projectId, photos, ownerType = 'projects' }: Phot
       {isReorderMode ? (
         <ReorderGrid items={reorderItems} onReorderChangeAction={setReorderItems} />
       ) : (
-        <div className="min-w-0 overflow-hidden rounded-xl border border-neutral-200 bg-white">
+        <div className="min-w-0 overflow-hidden rounded-sm border border-neutral-200 bg-white">
           <PhotoTable
             items={sortedItems}
             statuses={statuses}

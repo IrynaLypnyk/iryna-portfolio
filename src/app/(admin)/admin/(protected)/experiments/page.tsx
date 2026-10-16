@@ -23,7 +23,7 @@ export default async function AdminExperimentsListPage() {
           <AdminButton href={routes.admin.experimentNew}>New experiment</AdminButton>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-sm border border-neutral-200 bg-white">
           <div className="overflow-x-auto">
             <table className="w-full min-w-200 border-separate border-spacing-0 text-sm">
               <thead>

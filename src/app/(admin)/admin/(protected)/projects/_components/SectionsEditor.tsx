@@ -78,7 +78,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
       </div>
 
       {sections.length === 0 && (
-        <p className="rounded-xl border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">
+        <p className="rounded-sm border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500">
           Секцій немає. Сторінка case study покаже лише заголовок і зображення.
         </p>
       )}
@@ -86,7 +86,7 @@ export function SectionsEditor({ sections, onChangeAction }: Props) {
       {sections.map((section, index) => (
         <div
           key={section.key}
-          className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5 sm:grid-cols-2"
+          className="grid gap-4 rounded-sm border border-neutral-200 bg-white p-5 sm:grid-cols-2"
         >
           <div className="flex items-center justify-between sm:col-span-2">
             <span className="font-mono text-sm text-neutral-500">

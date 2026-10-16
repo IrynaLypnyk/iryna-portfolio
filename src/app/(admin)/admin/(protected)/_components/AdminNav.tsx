@@ -51,7 +51,6 @@ export function AdminNav() {
                   aria-current={isActive(pathname, href) ? 'page' : undefined}
                 >
                   {label}
-                  <Icon size={16} strokeWidth={1.5} />
                 </Link>
               ))}
             </nav>
@@ -88,7 +87,7 @@ export function AdminNav() {
                   key={href}
                   href={href}
                   className={cn(
-                    'flex items-center gap-2 rounded-lg px-3 py-2 text-base font-semibold tracking-wide uppercase transition-colors',
+                    'flex items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold tracking-wide uppercase transition-colors',
                     active ? 'text-app-accent-bright' : 'hover:bg-app-accent-lightest'
                   )}
                   aria-current={active ? 'page' : undefined}

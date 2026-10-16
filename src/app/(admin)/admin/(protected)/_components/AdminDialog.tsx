@@ -36,14 +36,14 @@ export function AdminDialog({
       <div
         role="dialog"
         aria-modal="true"
-        className={cn('relative w-full max-w-sm rounded-xl bg-white p-6 shadow-xl', className)}
+        className={cn('relative w-full max-w-sm rounded-sm bg-white p-6 shadow-xl', className)}
       >
         <button
           type="button"
           aria-label="Close"
           disabled={closeDisabled}
           onClick={onCloseAction}
-          className="text-app-muted hover:text-app-text absolute top-3 right-3 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
+          className="text-app-muted hover:text-app-text absolute top-3 right-3 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <X size={16} strokeWidth={1.75} aria-hidden="true" />
         </button>

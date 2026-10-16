@@ -28,7 +28,7 @@ export function AdminMediaPreview({
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100',
+        'relative overflow-hidden rounded-sm border border-neutral-200 bg-neutral-100',
         className
       )}
     >

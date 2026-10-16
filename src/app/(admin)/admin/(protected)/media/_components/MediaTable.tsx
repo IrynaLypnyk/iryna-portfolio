@@ -36,7 +36,7 @@ const dateFormatter = new Intl.DateTimeFormat('uk-UA', {
 
 export function MediaTable({ items }: MediaTableProps) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white">
+    <div className="overflow-x-auto rounded-sm border border-neutral-200 bg-white">
       <table className="w-full min-w-[900px] border-collapse text-sm">
         <thead className="bg-neutral-100 text-left">
           <tr>

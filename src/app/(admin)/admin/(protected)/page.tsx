@@ -93,13 +93,13 @@ export default async function AdminDashboard() {
 
         <dl className="mb-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {stats.map(({ label, value, detail, href }) => (
-            <div key={label} className="border-app-line bg-app-surface rounded-xl border p-4">
+            <div key={label} className="border-app-line bg-app-surface rounded-sm border p-4">
               <dt className="text-app-muted text-sm">
                 <Link href={href} className="hover:text-app-accent hover:underline">
                   {label}
                 </Link>
               </dt>
-              <dd className="text-app-text mt-1 text-2xl font-semibold tabular-nums">{value}</dd>
+              <dd className="text-app-accent mt-1 text-2xl font-semibold tabular-nums">{value}</dd>
               <dd className="text-app-muted mt-1 text-xs">{detail}</dd>
             </div>
           ))}
@@ -107,17 +107,17 @@ export default async function AdminDashboard() {
 
         <div className="mb-6 grid gap-3 lg:grid-cols-2">
           {breakdowns.map(({ title, items }) => (
-            <section key={title} className="border-app-line bg-app-surface rounded-xl border p-4">
+            <section key={title} className="border-app-line bg-app-surface rounded-sm border p-4">
               <h2 className="text-app-text text-sm font-semibold">{title}</h2>
               <p className="text-app-muted mt-1 text-xs">All projects, including drafts</p>
               <dl className="mt-3 flex flex-wrap gap-2">
                 {items.map(({ label, count }) => (
                   <div
                     key={label}
-                    className="border-app-line flex items-center gap-2 rounded-md border px-2.5 py-1.5"
+                    className="border-app-line flex items-center gap-2 rounded-sm border px-2.5 py-1.5"
                   >
                     <dt className="text-app-muted text-xs">{label}</dt>
-                    <dd className="text-app-text text-sm font-semibold tabular-nums">{count}</dd>
+                    <dd className="text-app-accent text-sm font-semibold tabular-nums">{count}</dd>
                   </div>
                 ))}
               </dl>
@@ -134,10 +134,10 @@ export default async function AdminDashboard() {
                 href={href}
                 className="group border-app-line hover:border-app-accent-bright bg-app-surface border p-6 transition"
               >
-                <div className="text-app-accent-bright mb-4 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                <div className="text-app-accent mb-4 flex h-10 w-10 items-center justify-center rounded-sm transition-colors">
                   <Icon size={40} strokeWidth={1} aria-hidden="true" />
                 </div>
-                <h2 className="text-app-accent-bright text-base font-semibold tracking-widest uppercase">
+                <h2 className="text-app-accent text-xl font-bold tracking-widest uppercase">
                   {label}
                 </h2>
                 <p className="text-app-muted mt-2 text-sm">{description}</p>

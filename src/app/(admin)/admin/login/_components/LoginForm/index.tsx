@@ -60,7 +60,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-white p-8 shadow-sm">
+    <div className="w-full max-w-md rounded-sm border border-neutral-200 bg-white p-8 shadow-sm">
       <div className="mb-8 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
           <LogIn className="h-8 w-8" />

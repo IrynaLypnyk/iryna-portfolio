@@ -36,7 +36,7 @@ function SortablePhotoCard({ item, index }: CardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`relative cursor-grab overflow-hidden rounded-lg border transition-shadow select-none active:cursor-grabbing ${isDragging ? 'z-10 border-neutral-400 opacity-80 shadow-xl' : 'border-neutral-200 shadow-sm hover:shadow-md'}`}
+      className={`relative cursor-grab overflow-hidden rounded-sm border transition-shadow select-none active:cursor-grabbing ${isDragging ? 'z-10 border-neutral-400 opacity-80 shadow-xl' : 'border-neutral-200 shadow-sm hover:shadow-md'}`}
     >
       <AdminMediaPreview
         src={item.imageUrl}
@@ -70,7 +70,7 @@ export function ReorderGrid({ items, onReorderChangeAction }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4" data-component="ReorderGrid">
+    <div className="rounded-sm border border-neutral-200 bg-white p-4" data-component="ReorderGrid">
       <p className="mb-4 text-sm text-neutral-500">
         Drag photos to reorder. Save using the toolbar button.
       </p>

@@ -290,7 +290,7 @@ export function ProjectForm({ mode, project }: Props) {
 
   return (
     <form noValidate onSubmit={handleSubmit} className="space-y-8">
-      <div className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5 sm:grid-cols-2">
+      <div className="grid gap-4 rounded-sm border border-neutral-200 bg-white p-5 sm:grid-cols-2">
         <label>
           <span className={labelStyles}>Slug</span>
           <ProjectField
@@ -629,7 +629,7 @@ export function ProjectForm({ mode, project }: Props) {
 
       <SectionsEditor sections={sections} onChangeAction={setSections} />
 
-      <div className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5 sm:grid-cols-2">
+      <div className="grid gap-4 rounded-sm border border-neutral-200 bg-white p-5 sm:grid-cols-2">
         <label>
           <span className={labelStyles}>Features title (UK, optional)</span>
           <ProjectField
@@ -658,12 +658,12 @@ export function ProjectForm({ mode, project }: Props) {
       {saveError && (
         <p
           role="alert"
-          className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+          className="rounded-sm border border-red-200 bg-red-50 p-3 text-sm text-red-700"
         >
           Changes not saved. {saveError}
         </p>
       )}
-      <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
+      <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-sm border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
         <span
           role="status"
           className="text-app-danger mr-auto w-full text-sm empty:hidden sm:w-auto"

@@ -37,7 +37,7 @@ export type AdminButtonProps = AsButton | AsLink;
 
 // Base layout styles — shared across all variants/sizes
 const base =
-  'inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg font-medium transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 shrink-0';
+  'inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-sm font-medium transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 shrink-0';
 
 const sizeStyles: Record<AdminButtonSize, string> = {
   md: 'px-4 py-2 text-sm',
