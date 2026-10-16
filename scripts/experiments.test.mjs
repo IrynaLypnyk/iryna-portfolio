@@ -110,10 +110,14 @@ function setup(options = {}) {
         return { _max: { orderInProject: 2 } };
       },
     },
-    mediaAsset: { findUnique: async () => (options.registered ? { id: 'existing' } : null) },
+    mediaAsset: {
+      findUnique: async () => (options.registered ? { id: 'existing' } : null),
+      upsert: async ({ create }) => tx.mediaAsset.create({ data: create }),
+    },
     $transaction: async (fn) => fn(tx),
   };
   const mocks = {
+    './file-lock': { withMediaFileLock: async (_fileId, action) => action() },
     'next/server': {
       NextResponse: { json: (body, init = {}) => ({ body, status: init.status ?? 200 }) },
     },
@@ -144,29 +148,29 @@ function setup(options = {}) {
 }
 
 for (const mime of ['image/png', 'video/mp4', 'video/webm']) {
-  test(`experiment upload registers ${mime} with experiment owner, order and MIME`, async () => {
+  test(`experiment upload registers ${mime} as a draft asset without creating a Photo`, async () => {
     const { calls, finalize } = setup({
       metadata: { mime, fileType: mime.startsWith('video/') ? 'non-image' : 'image' },
     });
     const response = await finalize();
     assert.equal(response.status, 201);
-    assert.equal(response.body.photo.mimeType, mime);
-    assert.equal(calls.writes[1].experimentId, 'owner');
-    assert.equal(calls.writes[1].projectId, undefined);
-    assert.equal(calls.writes[1].orderInProject, 3);
-    assert.deepEqual(calls.tags, ['experiments']);
+    assert.equal(response.body.asset.mimeType, mime);
+    assert.equal(calls.writes.length, 1);
+    assert.equal(calls.scopes.length, 0);
+    assert.equal(response.body.photo, undefined);
+    assert.deepEqual(calls.tags, []);
     assert.deepEqual(calls.deletes, []);
   });
 }
 
-test('project uploads retain project ownership and cache invalidation', async () => {
+test('project uploads verify the owner folder and defer all Photo and cache changes', async () => {
   const { calls, finalize } = setup({
     metadata: { filePath: '/test/projects/experiment/photos/file' },
   });
   assert.equal((await finalize('projects')).status, 201);
-  assert.equal(calls.writes[1].projectId, 'owner');
-  assert.equal(calls.writes[1].experimentId, undefined);
-  assert.deepEqual(calls.tags, ['projects', 'project-experiment']);
+  assert.equal(calls.writes.length, 1);
+  assert.equal(calls.writes[0].src, '/test/projects/experiment/photos/file');
+  assert.deepEqual(calls.tags, []);
 });
 
 for (const metadata of [

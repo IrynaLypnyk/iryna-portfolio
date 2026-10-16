@@ -6,40 +6,47 @@ import { upload } from '@imagekit/javascript';
 import { getProjectMediaValidationError } from '@/lib/media/project-media-policy';
 import { toast } from 'sonner';
 
-import type { PhotoRow, UploadItem } from './types';
+import type { UploadItem } from './types';
+import type { MediaAssetPreview } from '@/lib/media/media-draft';
 import { apiRoutes } from '@/constants/routes';
 
 type UploadApiResponse = {
-  photo: PhotoRow;
+  asset: MediaAssetPreview;
   message?: string;
 };
 
 type Props = {
   projectId: string;
   ownerType?: 'projects' | 'experiments';
-  onPhotoUploadedAction: (photo: PhotoRow) => void;
+  onAssetUploadedAction: (asset: MediaAssetPreview) => void;
+  onUploadingChangeAction: (uploading: boolean) => void;
+  multiple?: boolean;
 };
 
 export function usePhotoUpload({
   projectId,
   ownerType = 'projects',
-  onPhotoUploadedAction,
+  onAssetUploadedAction,
+  onUploadingChangeAction,
+  multiple = true,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const busyRef = useRef(false);
 
   function handleFilePickerClick() {
     fileInputRef.current?.click();
   }
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []);
+    const selected = Array.from(event.target.files ?? []);
+    const files = multiple ? selected : selected.slice(0, 1);
 
     // Reset so the same file can be re-selected after an error.
     event.target.value = '';
 
-    if (files.length === 0) {
+    if (files.length === 0 || busyRef.current) {
       return;
     }
 
@@ -57,8 +64,10 @@ export function usePhotoUpload({
 
     setUploadItems(queue);
     setIsUploading(true);
+    busyRef.current = true;
+    onUploadingChangeAction(true);
 
-    // Sequential upload: one file at a time to avoid duplicate orderInProject.
+    // Sequential uploads keep progress and errors readable. No Photo is saved here.
     for (const item of queue) {
       updateUploadItem(item.uid, { status: 'uploading' });
 
@@ -84,6 +93,10 @@ export function usePhotoUpload({
           folder: authJson.folder,
           useUniqueFileName: true,
           overwriteFile: false,
+          onProgress: (event) =>
+            updateUploadItem(item.uid, {
+              progress: event.total ? Math.round((event.loaded / event.total) * 100) : 0,
+            }),
         });
 
         if (!imageKitResult.fileId) {
@@ -111,7 +124,8 @@ export function usePhotoUpload({
           throw new Error(json.message ?? 'Не вдалося зберегти медіафайл');
         }
 
-        onPhotoUploadedAction(json.photo);
+        if (!json.asset?.id) throw new Error('The server did not register the asset.');
+        onAssetUploadedAction(json.asset);
         updateUploadItem(item.uid, { status: 'done' });
       } catch (error) {
         updateUploadItem(item.uid, {
@@ -122,6 +136,8 @@ export function usePhotoUpload({
     }
 
     setIsUploading(false);
+    busyRef.current = false;
+    onUploadingChangeAction(false);
   }
 
   function dismissUploadStatus() {

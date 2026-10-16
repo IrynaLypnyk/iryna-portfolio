@@ -1,41 +1,24 @@
 'use client';
-
-import { useState } from 'react';
 import { PROJECT_MEDIA_ACCEPT } from '@/lib/media/project-media-policy';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
-import { ConfirmReorderExitDialog } from './ConfirmReorderExitDialog';
-import type { PhotoRow, UploadItem, UploadStatus } from './types';
+import type { MediaAssetPreview } from '@/lib/media/media-draft';
 import { usePhotoUpload } from './usePhotoUpload';
-
 type Props = {
   projectId: string;
-  ownerType?: 'projects' | 'experiments';
-  photoCount: number;
-  onPhotoUploadedAction: (photo: PhotoRow) => void;
-  // Normal mode
-  onEnterReorderAction: () => void;
-  // Reorder mode
-  isReorderMode: boolean;
-  isSavingOrder: boolean;
-  hasUnsavedOrder: boolean;
-  onSaveOrderAction: () => void;
-  onExitReorderAction: (save: boolean) => void;
+  ownerType: 'projects' | 'experiments';
+  onAssetUploadedAction: (asset: MediaAssetPreview) => void;
+  onUploadingChangeAction: (uploading: boolean) => void;
+  disabled?: boolean;
+  multiple?: boolean;
+  label?: string;
 };
-
+/** One upload implementation for new usages and either localized variant. */
 export function PhotoUploader({
-  projectId,
-  ownerType = 'projects',
-  photoCount,
-  onPhotoUploadedAction,
-  onEnterReorderAction,
-  isReorderMode,
-  isSavingOrder,
-  hasUnsavedOrder,
-  onSaveOrderAction,
-  onExitReorderAction,
+  disabled,
+  multiple = true,
+  label = 'Upload photos / videos',
+  ...props
 }: Props) {
-  const [confirmingExit, setConfirmingExit] = useState(false);
-
   const {
     fileInputRef,
     uploadItems,
@@ -43,150 +26,53 @@ export function PhotoUploader({
     handleFilePickerClick,
     handleFileChange,
     dismissUploadStatus,
-  } = usePhotoUpload({ projectId, ownerType, onPhotoUploadedAction });
-
-  function handleExitClick() {
-    if (hasUnsavedOrder) {
-      setConfirmingExit(true);
-    } else {
-      onExitReorderAction(false);
-    }
-  }
-
-  function handleExitWithSave() {
-    setConfirmingExit(false);
-    onExitReorderAction(true);
-  }
-
-  function handleExitWithoutSave() {
-    setConfirmingExit(false);
-    onExitReorderAction(false);
-  }
-
-  function handleCancelExit() {
-    setConfirmingExit(false);
-  }
-
+  } = usePhotoUpload({ ...props, multiple });
   return (
-    <>
+    <div className="min-w-0 space-y-2">
       <input
         ref={fileInputRef}
         type="file"
         accept={PROJECT_MEDIA_ACCEPT}
-        multiple
+        multiple={multiple}
         className="hidden"
+        disabled={disabled || isUploading}
+        aria-label={label}
         onChange={handleFileChange}
       />
-
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-sm border border-neutral-200 bg-white p-4">
-        <div>
-          <p className="text-sm text-neutral-600">{photoCount} медіафайлів</p>
-          <p className="mt-1 text-xs text-neutral-500">
-            Images: up to 25 MB · MP4 / WebM: up to 100 MB
-          </p>
-        </div>
-
-        {isReorderMode ? (
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Reorder mode toolbar */}
-            <AdminButton
-              tone={hasUnsavedOrder ? 'danger' : 'default'}
-              onClickAction={onSaveOrderAction}
-              disabled={isSavingOrder}
-            >
-              {isSavingOrder ? 'Saving…' : 'Save order'}
-            </AdminButton>
-            <AdminButton variant="outline" onClickAction={handleExitClick} disabled={isSavingOrder}>
-              ← Назад до таблиці
-            </AdminButton>
-          </div>
-        ) : (
-          /* Normal mode toolbar */
-          <div className="flex flex-wrap gap-2">
-            <AdminButton onClickAction={handleFilePickerClick} disabled={isUploading}>
-              {isUploading ? 'Uploading…' : 'Upload photos / videos'}
-            </AdminButton>
-            <AdminButton
-              variant="outline"
-              onClickAction={onEnterReorderAction}
-              disabled={isUploading}
-            >
-              Reorder
-            </AdminButton>
-          </div>
-        )}
-      </div>
-
+      <AdminButton
+        size="sm"
+        variant="outline"
+        disabled={disabled || isUploading}
+        onClickAction={handleFilePickerClick}
+      >
+        {isUploading ? 'Uploading…' : label}
+      </AdminButton>
       {uploadItems.length > 0 && (
-        <div className="rounded-sm border border-neutral-200 bg-white p-4">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-sm font-medium text-neutral-700">Стан завантаження</p>
-
-            {!isUploading && (
-              <AdminButton variant="ghost" size="sm" onClickAction={dismissUploadStatus}>
-                Close
-              </AdminButton>
-            )}
-          </div>
-
-          <ul className="space-y-1.5">
+        <div aria-live="polite" className="max-w-md text-xs">
+          <ul className="space-y-1">
             {uploadItems.map((item) => (
-              <li key={item.uid} className="flex items-center gap-2 text-sm">
-                <UploadStatusDot status={item.status} />
-                <span className="truncate text-neutral-700">{item.fileName}</span>
-                <UploadStatusText item={item} />
+              <li
+                key={item.uid}
+                className={item.status === 'error' ? 'text-red-700' : 'text-neutral-600'}
+              >
+                <span className="break-all">{item.fileName}</span>:{' '}
+                {item.status === 'uploading'
+                  ? `Uploading ${item.progress ?? 0}%`
+                  : item.status === 'done'
+                    ? 'Uploaded · save the form to apply'
+                    : item.status === 'error'
+                      ? item.errorMessage
+                      : 'Queued'}
               </li>
             ))}
           </ul>
+          {!isUploading && (
+            <AdminButton variant="ghost" size="sm" onClickAction={dismissUploadStatus}>
+              Dismiss upload status
+            </AdminButton>
+          )}
         </div>
       )}
-
-      {confirmingExit && (
-        <ConfirmReorderExitDialog
-          isSaving={isSavingOrder}
-          onSaveAndExitAction={handleExitWithSave}
-          onExitWithoutSavingAction={handleExitWithoutSave}
-          onCancelAction={handleCancelExit}
-        />
-      )}
-    </>
-  );
-}
-
-function UploadStatusDot({ status }: { status: UploadStatus }) {
-  if (status === 'queued') {
-    return <span className="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-neutral-300" />;
-  }
-
-  if (status === 'uploading') {
-    return (
-      <span className="inline-block h-2 w-2 flex-shrink-0 animate-pulse rounded-full bg-indigo-500" />
-    );
-  }
-
-  if (status === 'done') {
-    return <span className="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-green-500" />;
-  }
-
-  return <span className="inline-block h-2 w-2 flex-shrink-0 rounded-full bg-red-500" />;
-}
-
-function UploadStatusText({ item }: { item: UploadItem }) {
-  if (item.status === 'queued') {
-    return <span className="ml-auto flex-shrink-0 text-xs text-neutral-400">у черзі</span>;
-  }
-
-  if (item.status === 'uploading') {
-    return <span className="ml-auto flex-shrink-0 text-xs text-indigo-600">завантаження…</span>;
-  }
-
-  if (item.status === 'done') {
-    return <span className="ml-auto flex-shrink-0 text-xs text-green-600">готово ✓</span>;
-  }
-
-  return (
-    <span className="ml-auto flex-shrink-0 text-xs text-red-600">
-      {item.errorMessage ?? 'error'}
-    </span>
+    </div>
   );
 }

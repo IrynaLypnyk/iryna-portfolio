@@ -1,3 +1,4 @@
+import { cleanupMediaAssets } from '@/lib/media/delete-media-asset';
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
@@ -23,9 +24,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     if (saved.previousSlug && saved.previousSlug !== saved.project.slug) {
       revalidateTag(`project-${saved.previousSlug}`, { expire: 0 });
     }
+    const cleanup = await cleanupMediaAssets(saved.cleanupCandidateAssetIds);
     return NextResponse.json({
       project: saved.project,
       cleanupCandidateAssetIds: saved.cleanupCandidateAssetIds,
+      cleanup,
     });
   } catch (error) {
     return contentSaveErrorResponse(error, 'Project');
@@ -42,14 +45,20 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
-    // Photo.project uses onDelete: Cascade, so this also deletes all of the
-    // project's Photo rows (not the underlying ImageKit files).
-    const project = await prisma.project.delete({ where: { id } });
+    const project = await prisma.project.delete({
+      where: { id },
+      include: { photos: { select: { assetId: true, assetUkId: true } } },
+    });
 
     revalidateTag('projects', 'max');
     revalidateTag(`project-${project.slug}`, 'max');
 
-    return NextResponse.json({ message: 'Видалено' });
+    const cleanup = await cleanupMediaAssets([
+      ...project.photos.flatMap((photo) => [photo.assetId, photo.assetUkId]),
+      project.coverAssetId,
+      project.coverAssetUkId,
+    ]);
+    return NextResponse.json({ message: 'Видалено', cleanup });
   } catch (error) {
     if (isRecordNotFoundError(error)) {
       return NextResponse.json({ message: 'Проєкт не знайдено' }, { status: 404 });

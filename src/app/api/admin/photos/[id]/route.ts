@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { validatePhotoUpdateInput } from '../validation';
 import { isRecordNotFoundError } from '@/lib/api/prisma-errors';
-import { deleteMediaAssetIfUnused } from '@/lib/media/delete-media-asset';
+import { cleanupMediaAssets } from '@/lib/media/delete-media-asset';
 
 type Params = {
   params: Promise<{ id: string }>;
@@ -110,11 +110,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
       },
     });
 
-    const assetResult = await deleteMediaAssetIfUnused(photo.assetId);
-    if (photo.assetUkId && photo.assetUkId !== photo.assetId) {
-      await deleteMediaAssetIfUnused(photo.assetUkId);
-    }
-
     if (photo.project) {
       revalidateTag('projects', 'max');
       revalidateTag(`project-${photo.project.slug}`, 'max');
@@ -122,9 +117,11 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
       revalidateTag('experiments', 'max');
     }
 
+    const cleanup = await cleanupMediaAssets([photo.assetId, photo.assetUkId]);
     return NextResponse.json({
       message: 'Видалено',
-      assetDeleted: assetResult.deleted,
+      assetDeleted: cleanup.deletedAssetIds.includes(photo.assetId),
+      cleanup,
     });
   } catch (error) {
     if (isRecordNotFoundError(error)) {

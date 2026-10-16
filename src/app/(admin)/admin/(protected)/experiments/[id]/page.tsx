@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
-import { getImageUrl } from '@/lib/imagekit/get-image-url';
+import { adminMediaDraft } from '@/lib/media/admin-media';
 import { ExperimentForm } from '../_components/ExperimentForm';
-import { PhotoManager } from '../../projects/[id]/PhotoManager';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
 export const dynamic = 'force-dynamic';
@@ -18,10 +17,19 @@ export default async function EditExperimentPage({ params }: Props) {
   const experiment = await prisma.experiment.findUnique({
     where: { id },
     include: {
+      contentBlocks: {
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
+        include: {
+          photos: {
+            orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
+            include: { asset: true, assetUk: true },
+          },
+        },
+      },
       photos: {
         where: { contentBlockId: null },
         orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
-        include: { asset: true },
+        include: { asset: true, assetUk: true },
       },
     },
   });
@@ -30,21 +38,8 @@ export default async function EditExperimentPage({ params }: Props) {
     notFound();
   }
 
-  const { photos, ...experimentFields } = experiment;
-  const photoRows = photos.map((photo) => ({
-    id: photo.id,
-    imageUrl: getImageUrl(photo.asset.src),
-    mimeType: photo.asset.mimeType,
-    width: photo.asset.width,
-    height: photo.asset.height,
-    orderInProject: photo.orderInProject,
-    isProjectCover: photo.isProjectCover,
-    captionUk: photo.captionUk,
-    captionEn: photo.captionEn,
-    linkUrl: photo.linkUrl,
-    descriptionUk: photo.descriptionUk,
-    descriptionEn: photo.descriptionEn,
-  }));
+  const initialMedia = adminMediaDraft(experiment);
+  const { photos: _photos, contentBlocks: _blocks, ...experimentFields } = experiment;
 
   return (
     <main className="px-6 py-10">
@@ -64,15 +59,7 @@ export default async function EditExperimentPage({ params }: Props) {
           </h1>
         </div>
 
-        <ExperimentForm mode="edit" experiment={experimentFields} />
-
-        <h2 className="text-xl font-semibold text-neutral-900">Photos & videos</h2>
-        <PhotoManager
-          ownerType="experiments"
-          projectId={experimentFields.id}
-          projectSlug={experimentFields.slug}
-          photos={photoRows}
-        />
+        <ExperimentForm mode="edit" experiment={experimentFields} initialMedia={initialMedia} />
       </div>
     </main>
   );

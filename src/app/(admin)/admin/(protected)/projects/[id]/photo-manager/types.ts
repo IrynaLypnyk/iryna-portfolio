@@ -51,4 +51,5 @@ export type UploadItem = {
   file: File;
   status: UploadStatus;
   errorMessage?: string;
+  progress?: number;
 };

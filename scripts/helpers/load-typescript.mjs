@@ -34,6 +34,8 @@ export function loadTypeScript(file, mocks = {}, cache = new Map()) {
       Error,
       console,
       process,
+      fetch: mocks.fetch ?? globalThis.fetch,
+      crypto: globalThis.crypto,
       Set,
       Map,
       URL,

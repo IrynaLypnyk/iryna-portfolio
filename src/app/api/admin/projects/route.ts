@@ -1,3 +1,4 @@
+import { cleanupMediaAssets } from '@/lib/media/delete-media-asset';
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
@@ -18,10 +19,12 @@ export async function POST(request: NextRequest) {
     revalidateTag('projects', { expire: 0 });
     revalidateTag(`project-${saved.project.slug}`, { expire: 0 });
 
+    const cleanup = await cleanupMediaAssets(saved.cleanupCandidateAssetIds);
     return NextResponse.json(
       {
         project: saved.project,
         cleanupCandidateAssetIds: saved.cleanupCandidateAssetIds,
+        cleanup,
       },
       { status: 201 }
     );

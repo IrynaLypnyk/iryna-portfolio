@@ -2,9 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { routes } from '@/constants/routes';
-import { getImageUrl } from '@/lib/imagekit/get-image-url';
+import { adminMediaDraft } from '@/lib/media/admin-media';
 import { ProjectForm } from '../_components/ProjectForm';
-import { PhotoManager } from './PhotoManager';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,10 +17,19 @@ export default async function EditProjectPage({ params }: Props) {
   const project = await prisma.project.findUnique({
     where: { id },
     include: {
+      contentBlocks: {
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
+        include: {
+          photos: {
+            orderBy: [{ orderInProject: 'asc' }, { id: 'asc' }],
+            include: { asset: true, assetUk: true },
+          },
+        },
+      },
       photos: {
         where: { contentBlockId: null },
         orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
-        include: { asset: true },
+        include: { asset: true, assetUk: true },
       },
       sections: {
         orderBy: { order: 'asc' },
@@ -33,22 +41,8 @@ export default async function EditProjectPage({ params }: Props) {
     notFound();
   }
 
-  const { photos, ...projectFields } = project;
-
-  const photoRows = photos.map((photo) => ({
-    id: photo.id,
-    imageUrl: getImageUrl(photo.asset.src),
-    mimeType: photo.asset.mimeType,
-    width: photo.asset.width,
-    height: photo.asset.height,
-    orderInProject: photo.orderInProject,
-    isProjectCover: photo.isProjectCover,
-    captionUk: photo.captionUk,
-    captionEn: photo.captionEn,
-    linkUrl: photo.linkUrl,
-    descriptionUk: photo.descriptionUk,
-    descriptionEn: photo.descriptionEn,
-  }));
+  const initialMedia = adminMediaDraft(project);
+  const { photos: _photos, contentBlocks: _blocks, ...projectFields } = project;
 
   return (
     <main className="px-6 py-10">
@@ -64,15 +58,7 @@ export default async function EditProjectPage({ params }: Props) {
           {projectFields.titleEn}
         </h1>
 
-        <ProjectForm mode="edit" project={projectFields} />
-
-        <h2 className="mt-12 mb-4 text-xl font-semibold text-neutral-900">Photos & videos</h2>
-
-        <PhotoManager
-          projectId={projectFields.id}
-          projectSlug={projectFields.slug}
-          photos={photoRows}
-        />
+        <ProjectForm mode="edit" project={projectFields} initialMedia={initialMedia} />
       </div>
     </main>
   );

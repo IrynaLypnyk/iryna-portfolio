@@ -210,9 +210,11 @@ export async function saveOwnerContent(
       const ukrainianId = assetUkId === undefined ? current?.assetUkId : assetUkId;
       if (!defaultId)
         throw new ContentSaveError('A new Photo requires assetId.', 'additionalMedia');
-      if (!current || assetId !== undefined)
+      // Controlled forms send the full draft. Unchanged legacy references do
+      // not become new assignments requiring modern MIME/cover verification.
+      if (!current || (assetId !== undefined && assetId !== current.assetId))
         await asset(defaultId, 'assetId', current?.isProjectCover === true);
-      if (ukrainianId && (!current || assetUkId !== undefined))
+      if (ukrainianId && (!current || (assetUkId !== undefined && assetUkId !== current.assetUkId)))
         await asset(ukrainianId, 'assetUkId', current?.isProjectCover === true);
       if (current) {
         await tx.photo.update({

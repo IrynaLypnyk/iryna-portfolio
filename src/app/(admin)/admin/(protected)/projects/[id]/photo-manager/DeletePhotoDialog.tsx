@@ -2,10 +2,9 @@
 
 import { AdminDeleteDialog } from '@/app/(admin)/admin/(protected)/_components/AdminDeleteDialog';
 import { AdminMediaPreview } from '@/app/(admin)/admin/(protected)/_components/AdminMediaPreview';
-import type { EditablePhoto } from './types';
 
 type Props = {
-  photo: EditablePhoto;
+  photo: { imageUrl: string; mimeType?: string | null };
   onConfirmAction: () => void;
   onCancelAction: () => void;
 };
@@ -13,8 +12,8 @@ type Props = {
 export function DeletePhotoDialog({ photo, onConfirmAction, onCancelAction }: Props) {
   return (
     <AdminDeleteDialog
-      title="Delete media?"
-      description="Якщо цей медіафайл більше ніде не використовується, файл також буде видалений з ImageKit."
+      title="Remove media from this collection?"
+      description="Removal applies when you save the main form. A file still used by another media usage or a cover will be kept."
       onConfirmAction={onConfirmAction}
       onCancelAction={onCancelAction}
     >

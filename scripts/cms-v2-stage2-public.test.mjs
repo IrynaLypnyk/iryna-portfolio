@@ -108,6 +108,7 @@ test('ProjectForm supports nullable values and requires only slug and bilingual 
           React.createElement(multiline ? 'textarea' : 'input', props),
         validateProjectControl() {},
       },
+      '../../_components/OwnerMediaFields': { OwnerMediaFields: () => null },
       './StackInput': { StackInput: () => null },
       './SectionsEditor': { SectionsEditor: () => null },
       './FeaturesEditor': { FeaturesEditor: () => null },

@@ -13,6 +13,14 @@ import { AdminInput } from '@/app/(admin)/admin/(protected)/_components/AdminInp
 import { AdminTextarea } from '@/app/(admin)/admin/(protected)/_components/AdminTextarea';
 import { apiRoutes, routes } from '@/constants/routes';
 
+import { useOwnerMediaDraft } from '../../_components/useOwnerMediaDraft';
+import { OwnerMediaFields } from '../../_components/OwnerMediaFields';
+import {
+  ownerMediaInput,
+  type OwnerMediaDraft,
+  type SavedOwnerMedia,
+} from '@/lib/media/owner-media-draft';
+
 /** Every field is held as a string so the inputs stay controlled. */
 type FormState = {
   slug: string;
@@ -29,9 +37,10 @@ type FormState = {
   published: boolean;
 };
 
-type Props =
+type Props = { initialMedia?: OwnerMediaDraft } & (
   | { mode: 'create'; experiment?: undefined }
-  | { mode: 'edit'; experiment: DbExperiment };
+  | { mode: 'edit'; experiment: DbExperiment }
+);
 
 function toFormState(experiment: DbExperiment | undefined): FormState {
   if (!experiment) {
@@ -73,14 +82,15 @@ function snapshot(form: FormState) {
   return JSON.stringify(form);
 }
 
-export function ExperimentForm({ mode, experiment }: Props) {
+export function ExperimentForm({ mode, experiment, initialMedia }: Props) {
   const router = useRouter();
+  const mediaDraft = useOwnerMediaDraft(initialMedia);
   const [form, setForm] = useState<FormState>(() => toFormState(experiment));
   const [isSaving, setIsSaving] = useState(false);
   const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form));
   const currentSnapshot = snapshot(form);
-  const isDirty = currentSnapshot !== savedSnapshot;
-  useUnsavedChanges(isDirty);
+  const isDirty = currentSnapshot !== savedSnapshot || mediaDraft.isDirty;
+  useUnsavedChanges(isDirty || mediaDraft.isUploading);
   const confirmLeave = useConfirmLeave();
 
   function updateField<Key extends keyof FormState>(key: Key, value: FormState[Key]) {
@@ -90,13 +100,17 @@ export function ExperimentForm({ mode, experiment }: Props) {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    if (isSaving) {
+    if (isSaving || mediaDraft.isUploading) {
       return;
     }
 
     setIsSaving(true);
 
-    const payload = { ...form, order: Number(form.order || 0) };
+    const payload = {
+      ...form,
+      ...ownerMediaInput(mediaDraft.media),
+      order: Number(form.order || 0),
+    };
 
     try {
       const url =
@@ -109,7 +123,11 @@ export function ExperimentForm({ mode, experiment }: Props) {
         body: JSON.stringify(payload),
       });
 
-      const result = (await response.json()) as { message?: string; experiment?: DbExperiment };
+      const result = (await response.json()) as {
+        message?: string;
+        experiment?: DbExperiment & SavedOwnerMedia;
+        cleanup?: { failedAssetIds: string[] };
+      };
 
       if (!response.ok) {
         throw new Error(result.message || 'Failed to save experiment');
@@ -117,6 +135,9 @@ export function ExperimentForm({ mode, experiment }: Props) {
 
       toast.success(mode === 'create' ? 'Experiment created' : 'Experiment updated');
       setSavedSnapshot(currentSnapshot);
+      if (result.experiment) mediaDraft.markSaved(result.experiment, mediaDraft.media);
+      if (result.cleanup?.failedAssetIds.length)
+        toast.warning('Changes saved. Some unused files could not be removed from storage.');
 
       if (mode === 'create' && result.experiment) {
         router.push(routes.admin.experiment(result.experiment.id));
@@ -257,12 +278,22 @@ export function ExperimentForm({ mode, experiment }: Props) {
         </div>
       </div>
 
+      {mode === 'edit' && (
+        <OwnerMediaFields
+          ownerId={experiment.id}
+          ownerType="experiments"
+          media={mediaDraft.media}
+          onChangeAction={mediaDraft.setMedia}
+          onUploadingChangeAction={mediaDraft.onUploadingChange}
+          disabled={isSaving || mediaDraft.isUploading}
+        />
+      )}
       <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-sm border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
         <span
           role="status"
           className="text-app-danger mr-auto w-full text-sm empty:hidden sm:w-auto"
         >
-          {isDirty ? 'Unsaved changes' : ''}
+          {mediaDraft.isUploading ? 'Uploading media…' : isDirty ? 'Unsaved changes' : ''}
         </span>
         <AdminButton
           variant="outline"
@@ -270,11 +301,15 @@ export function ExperimentForm({ mode, experiment }: Props) {
           onClickAction={() => {
             if (confirmLeave()) router.push(routes.admin.experiments);
           }}
-          disabled={isSaving}
+          disabled={isSaving || mediaDraft.isUploading}
         >
           Discard changes
         </AdminButton>
-        <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
+        <AdminButton
+          type="submit"
+          tone={isDirty ? 'danger' : 'default'}
+          disabled={isSaving || mediaDraft.isUploading}
+        >
           {isSaving ? 'Saving…' : mode === 'create' ? 'Create experiment' : 'Save changes'}
         </AdminButton>
       </div>

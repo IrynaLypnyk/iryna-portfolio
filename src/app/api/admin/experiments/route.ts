@@ -1,3 +1,4 @@
+import { cleanupMediaAssets } from '@/lib/media/delete-media-asset';
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
@@ -17,10 +18,12 @@ export async function POST(request: NextRequest) {
     const saved = await saveExperiment(prisma, body);
     revalidateTag('experiments', { expire: 0 });
 
+    const cleanup = await cleanupMediaAssets(saved.cleanupCandidateAssetIds);
     return NextResponse.json(
       {
         experiment: saved.experiment,
         cleanupCandidateAssetIds: saved.cleanupCandidateAssetIds,
+        cleanup,
       },
       { status: 201 }
     );

@@ -8,6 +8,7 @@ import test from 'node:test';
 import dotenv from 'dotenv';
 import pg from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { loadTypeScript } from './helpers/load-typescript.mjs';
 
 register('./helpers/typescript-loader.mjs', import.meta.url);
 process.env.IMAGEKIT_ROOT_FOLDER = '/cms-v2-stage2-test';
@@ -26,6 +27,8 @@ assert.equal(target.pathname, '/portfolio_case_study_v2');
 assert.ok(['localhost', '127.0.0.1', '[::1]'].includes(target.hostname));
 assert.ok(['postgresql:', 'postgres:'].includes(target.protocol));
 assert.ok([...target.searchParams.keys()].every((key) => key === 'schema'));
+process.env.DATABASE_URL = connectionString;
+const { withMediaFileLock } = await import('../src/lib/media/file-lock.ts');
 const migrationRoot = path.join(root, 'prisma/migrations');
 const migrations = readdirSync(migrationRoot)
   .filter((name) => /^\d/.test(name))
@@ -595,4 +598,99 @@ test('legacy cover Photos cannot be changed to video through the shared save', (
     assert.equal(unchanged.assetId, image.id);
     assert.equal(unchanged.assetUkId, null);
     assert.equal(unchanged.isProjectCover, true);
+  }));
+
+for (const type of ['project', 'experiment']) {
+  test(`Stage 3 ${type}: post-save cleanup preserves covers and deletes only unused default/UK assets`, () =>
+    withDatabase(async (db) => {
+      const save = type === 'project' ? saveProject : saveExperiment;
+      const owner = (await save(db, type === 'project' ? minimal() : experimentInput()))[type];
+      const folder = type === 'project' ? 'projects' : 'experiments';
+      const image = await upload(db, owner, folder);
+      const uk = await upload(db, owner, folder);
+      const video = await upload(db, owner, folder, 'video/webm');
+      await save(
+        db,
+        {
+          coverAssetId: image.id,
+          coverAssetUkId: uk.id,
+          contentBlocks: [{ photos: [{ assetId: image.id, assetUkId: uk.id }] }],
+          additionalMedia: [{ assetId: video.id }],
+        },
+        owner.id
+      );
+      const deleted = [];
+      const { cleanupMediaAssets } = loadTypeScript('src/lib/media/delete-media-asset.ts', {
+        '@/lib/prisma': { prisma: db },
+        './file-lock': { withMediaFileLock },
+        '@/lib/imagekit/client': {
+          getImageKit: () => ({
+            files: {
+              get: async () => ({ filePath: '/safe/test' }),
+              delete: async (id) => deleted.push(id),
+            },
+          }),
+        },
+        '@/lib/imagekit/assertSafeImageKitPath': { assertSafeImageKitPath() {} },
+      });
+      const removal = await save(db, { contentBlocks: [], additionalMedia: [] }, owner.id);
+      assert.equal(removal[type].photos.length, 0);
+      assert.equal(await db.mediaAsset.count(), 3);
+      const cleanup = await cleanupMediaAssets(removal.cleanupCandidateAssetIds);
+      assert.deepEqual([...cleanup.failedAssetIds], []);
+      assert.deepEqual(deleted, [video.imageKitFileId]);
+      assert.equal(await db.mediaAsset.count(), 2);
+      const covers = await save(db, { coverAssetId: null, coverAssetUkId: null }, owner.id);
+      await cleanupMediaAssets(covers.cleanupCandidateAssetIds);
+      assert.deepEqual(
+        new Set(deleted),
+        new Set([image.imageKitFileId, uk.imageKitFileId, video.imageKitFileId])
+      );
+      assert.equal(await db.mediaAsset.count(), 0);
+    }));
+}
+
+test('Stage 3: file registration and cleanup serialize on the same PostgreSQL file lock', async () => {
+  const events = [];
+  let unlock;
+  let entered;
+  const started = new Promise((resolve) => {
+    entered = resolve;
+  });
+  const pending = new Promise((resolve) => {
+    unlock = resolve;
+  });
+  const first = withMediaFileLock('cms-v2-test-lock', async () => {
+    events.push('first');
+    entered();
+    await pending;
+    events.push('release');
+  });
+  await started;
+  const second = withMediaFileLock('cms-v2-test-lock', async () => events.push('second'));
+  unlock();
+  await Promise.all([first, second]);
+  assert.deepEqual(events, ['first', 'release', 'second']);
+});
+
+test('Stage 3: full draft saves preserve an unchanged legacy cover with unknown MIME', () =>
+  withDatabase(async (db) => {
+    const { project: owner } = await saveProject(db, minimal());
+    const image = await upload(db, owner);
+    await db.mediaAsset.update({ where: { id: image.id }, data: { mimeType: null } });
+    const photo = await db.photo.create({
+      data: { projectId: owner.id, assetId: image.id, isProjectCover: true },
+    });
+    const saved = await saveProject(
+      db,
+      {
+        additionalMedia: [
+          { id: photo.id, assetId: image.id, assetUkId: null, captionEn: 'Preserved' },
+        ],
+      },
+      owner.id
+    );
+    assert.equal(saved.project.photos[0].captionEn, 'Preserved');
+    assert.equal(saved.project.photos[0].isProjectCover, true);
+    assert.equal(saved.project.photos[0].asset.mimeType, null);
   }));

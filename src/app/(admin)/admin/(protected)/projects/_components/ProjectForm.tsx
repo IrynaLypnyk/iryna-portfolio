@@ -21,6 +21,14 @@ import { StackInput } from './StackInput';
 
 const tMetadata = createTranslator({ locale: 'en', messages, namespace: 'ProjectMetadata' });
 
+import { useOwnerMediaDraft } from '../../_components/useOwnerMediaDraft';
+import { OwnerMediaFields } from '../../_components/OwnerMediaFields';
+import {
+  ownerMediaInput,
+  type OwnerMediaDraft,
+  type SavedOwnerMedia,
+} from '@/lib/media/owner-media-draft';
+
 /** Text and number inputs are held as strings to keep them controlled. */
 type FormState = {
   featuresTitleEn: string;
@@ -58,9 +66,10 @@ type FormState = {
 
 export type ProjectWithSections = DbProject & { sections: DbSection[] };
 
-type Props =
+type Props = { initialMedia?: OwnerMediaDraft } & (
   | { mode: 'create'; project?: undefined }
-  | { mode: 'edit'; project: ProjectWithSections };
+  | { mode: 'edit'; project: ProjectWithSections }
+);
 
 function toFormState(project: ProjectWithSections | undefined): FormState {
   if (!project) {
@@ -175,8 +184,9 @@ function snapshot(form: FormState, sections: SectionDraft[], features: FeatureDr
   });
 }
 
-export function ProjectForm({ mode, project }: Props) {
+export function ProjectForm({ mode, project, initialMedia }: Props) {
   const router = useRouter();
+  const mediaDraft = useOwnerMediaDraft(initialMedia);
   const [form, setForm] = useState<FormState>(() => toFormState(project));
   const [sections, setSections] = useState<SectionDraft[]>(() => toSectionDrafts(project));
   const [features, setFeatures] = useState<FeatureDraft[]>(() =>
@@ -187,8 +197,8 @@ export function ProjectForm({ mode, project }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form, sections, features));
   const currentSnapshot = snapshot(form, sections, features);
-  const isDirty = currentSnapshot !== savedSnapshot;
-  useUnsavedChanges(isDirty);
+  const isDirty = currentSnapshot !== savedSnapshot || mediaDraft.isDirty;
+  useUnsavedChanges(isDirty || mediaDraft.isUploading);
   const confirmLeave = useConfirmLeave();
 
   function updateField<Key extends keyof FormState>(key: Key, value: FormState[Key]) {
@@ -199,7 +209,7 @@ export function ProjectForm({ mode, project }: Props) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (isSaving) {
+    if (isSaving || mediaDraft.isUploading) {
       return;
     }
 
@@ -225,6 +235,7 @@ export function ProjectForm({ mode, project }: Props) {
     setIsSaving(true);
 
     const payload = {
+      ...ownerMediaInput(mediaDraft.media),
       ...form,
       stack: form.stack
         .split(',')
@@ -252,7 +263,8 @@ export function ProjectForm({ mode, project }: Props) {
       const result = (await response.json().catch(() => ({}))) as {
         message?: string;
         field?: string;
-        project?: ProjectWithSections;
+        project?: ProjectWithSections & SavedOwnerMedia;
+        cleanup?: { failedAssetIds: string[] };
       };
 
       if (!response.ok) {
@@ -269,6 +281,9 @@ export function ProjectForm({ mode, project }: Props) {
       toast.success(mode === 'create' ? 'Project created and saved' : 'Changes saved');
       // Only mark the submitted values as saved; edits made during the request remain dirty.
       setSavedSnapshot(currentSnapshot);
+      if (result.project) mediaDraft.markSaved(result.project, mediaDraft.media);
+      if (result.cleanup?.failedAssetIds.length)
+        toast.warning('Changes saved. Some unused files could not be removed from storage.');
       // Match saved IDs to submitted keys without discarding edits made in flight.
       const savedSections = result.project?.sections;
       if (savedSections) {
@@ -666,12 +681,22 @@ export function ProjectForm({ mode, project }: Props) {
           Changes not saved. {saveError}
         </p>
       )}
+      {mode === 'edit' && (
+        <OwnerMediaFields
+          ownerId={project.id}
+          ownerType="projects"
+          media={mediaDraft.media}
+          onChangeAction={mediaDraft.setMedia}
+          onUploadingChangeAction={mediaDraft.onUploadingChange}
+          disabled={isSaving || mediaDraft.isUploading}
+        />
+      )}
       <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-sm border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
         <span
           role="status"
           className="text-app-danger mr-auto w-full text-sm empty:hidden sm:w-auto"
         >
-          {isDirty ? 'Unsaved changes' : ''}
+          {mediaDraft.isUploading ? 'Uploading media…' : isDirty ? 'Unsaved changes' : ''}
         </span>
         <AdminButton
           variant="outline"
@@ -679,11 +704,15 @@ export function ProjectForm({ mode, project }: Props) {
           onClickAction={() => {
             if (confirmLeave()) router.push(routes.admin.projects);
           }}
-          disabled={isSaving}
+          disabled={isSaving || mediaDraft.isUploading}
         >
           Discard changes
         </AdminButton>
-        <AdminButton type="submit" tone={isDirty ? 'danger' : 'default'} disabled={isSaving}>
+        <AdminButton
+          type="submit"
+          tone={isDirty ? 'danger' : 'default'}
+          disabled={isSaving || mediaDraft.isUploading}
+        >
           {isSaving ? 'Saving…' : mode === 'create' ? 'Create project' : 'Save changes'}
         </AdminButton>
       </div>
