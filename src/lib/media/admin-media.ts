@@ -33,8 +33,16 @@ function draft(photo: Photo): MediaDraft {
 export function adminMediaDraft(owner: {
   photos: Photo[];
   contentBlocks: Block[];
+  coverAsset?: Photo['asset'] | null;
+  coverAssetUk?: Photo['asset'] | null;
 }): OwnerMediaDraft {
   return {
+    ...(owner.coverAsset !== undefined
+      ? { coverAsset: owner.coverAsset ? preview(owner.coverAsset) : null }
+      : {}),
+    ...(owner.coverAssetUk !== undefined
+      ? { coverAssetUk: owner.coverAssetUk ? preview(owner.coverAssetUk) : null }
+      : {}),
     additionalMedia: owner.photos.filter((photo) => photo.contentBlockId === null).map(draft),
     contentBlocks: owner.contentBlocks.map((block) => ({
       key: block.id,

@@ -1,10 +1,11 @@
 'use client';
 
+import { DetailPageStatus } from '@/generated/prisma/enums';
 import type { Experiment as DbExperiment } from '@/generated/prisma/browser';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
+import { EditorSaveBar } from '../../_components/EditorSaveBar';
 import {
   useConfirmLeave,
   useUnsavedChanges,
@@ -15,6 +16,8 @@ import { apiRoutes, routes } from '@/constants/routes';
 
 import { useOwnerMediaDraft } from '../../_components/useOwnerMediaDraft';
 import { OwnerMediaFields } from '../../_components/OwnerMediaFields';
+import { EditorTabs, EditorPanel, useEditorTabs } from '../../_components/EditorTabs';
+import { DetailPageSettings } from '../../_components/DetailPageSettings';
 import {
   ownerMediaInput,
   type OwnerMediaDraft,
@@ -35,12 +38,12 @@ type FormState = {
   githubUrl: string;
   order: string;
   published: boolean;
+  detailPageStatus: DetailPageStatus;
 };
 
-type Props = { initialMedia?: OwnerMediaDraft } & (
-  | { mode: 'create'; experiment?: undefined }
-  | { mode: 'edit'; experiment: DbExperiment }
-);
+type Props =
+  | { mode: 'create'; experiment?: undefined; initialMedia?: undefined }
+  | { mode: 'edit'; experiment: DbExperiment; initialMedia: OwnerMediaDraft };
 
 function toFormState(experiment: DbExperiment | undefined): FormState {
   if (!experiment) {
@@ -57,6 +60,7 @@ function toFormState(experiment: DbExperiment | undefined): FormState {
       githubUrl: '',
       order: '0',
       published: true,
+      detailPageStatus: DetailPageStatus.NONE,
     };
   }
 
@@ -73,6 +77,7 @@ function toFormState(experiment: DbExperiment | undefined): FormState {
     githubUrl: experiment.githubUrl ?? '',
     order: String(experiment.order),
     published: experiment.published,
+    detailPageStatus: experiment.detailPageStatus,
   };
 }
 
@@ -84,9 +89,11 @@ function snapshot(form: FormState) {
 
 export function ExperimentForm({ mode, experiment, initialMedia }: Props) {
   const router = useRouter();
+  const tabs = useEditorTabs();
   const mediaDraft = useOwnerMediaDraft(initialMedia);
   const [form, setForm] = useState<FormState>(() => toFormState(experiment));
   const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [savedSnapshot, setSavedSnapshot] = useState(() => snapshot(form));
   const currentSnapshot = snapshot(form);
   const isDirty = currentSnapshot !== savedSnapshot || mediaDraft.isDirty;
@@ -97,14 +104,22 @@ export function ExperimentForm({ mode, experiment, initialMedia }: Props) {
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (isSaving || mediaDraft.isUploading) {
       return;
     }
 
+    const element = event.currentTarget;
+    if (!element.checkValidity()) {
+      const invalid = element.querySelector<HTMLInputElement | HTMLTextAreaElement>(':invalid');
+      tabs.reveal(invalid);
+      setSaveError(invalid?.validationMessage || 'Please correct the highlighted fields.');
+      return;
+    }
     setIsSaving(true);
+    setSaveError('');
 
     const payload = {
       ...form,
@@ -145,174 +160,203 @@ export function ExperimentForm({ mode, experiment, initialMedia }: Props) {
         router.refresh();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to save experiment');
+      const message = error instanceof Error ? error.message : 'Failed to save experiment';
+      setSaveError(message);
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="grid gap-4 rounded-sm border border-neutral-200 bg-white p-5 sm:grid-cols-2">
-        <label>
-          <span className={labelStyles}>Slug</span>
-          <AdminInput
-            type="text"
-            required
-            value={form.slug}
-            onChange={(event) => updateField('slug', event.target.value)}
-            placeholder="ai-cv-assistant"
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Order</span>
-          <AdminInput
-            type="number"
-            required
-            value={form.order}
-            onChange={(event) => updateField('order', event.target.value)}
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Title (UA)</span>
-          <AdminInput
-            type="text"
-            required
-            value={form.titleUk}
-            onChange={(event) => updateField('titleUk', event.target.value)}
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Title (EN)</span>
-          <AdminInput
-            type="text"
-            required
-            value={form.titleEn}
-            onChange={(event) => updateField('titleEn', event.target.value)}
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Short description (UK, optional)</span>
-          <AdminTextarea
-            rows={2}
-            value={form.shortDescriptionUk}
-            onChange={(event) => updateField('shortDescriptionUk', event.target.value)}
-            placeholder="Короткий опис для картки"
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Short description (EN, optional)</span>
-          <AdminTextarea
-            rows={2}
-            value={form.shortDescriptionEn}
-            onChange={(event) => updateField('shortDescriptionEn', event.target.value)}
-            placeholder="Short summary for the card"
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Description (UA)</span>
-          <AdminTextarea
-            required
-            rows={3}
-            value={form.descriptionUk}
-            onChange={(event) => updateField('descriptionUk', event.target.value)}
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>Description (EN)</span>
-          <AdminTextarea
-            required
-            rows={3}
-            value={form.descriptionEn}
-            onChange={(event) => updateField('descriptionEn', event.target.value)}
-          />
-        </label>
-
-        <label className="sm:col-span-2">
-          <span className={labelStyles}>{'Stack (optional)'}</span>
-          <AdminInput
-            type="text"
-            value={form.stack}
-            onChange={(event) => updateField('stack', event.target.value)}
-            placeholder="AI · Next.js · TypeScript"
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>{'Demo (optional)'}</span>
-          <AdminInput
-            type="url"
-            value={form.demoUrl}
-            onChange={(event) => updateField('demoUrl', event.target.value)}
-            placeholder="https://example.com"
-          />
-        </label>
-
-        <label>
-          <span className={labelStyles}>{'GitHub (optional)'}</span>
-          <AdminInput
-            type="url"
-            value={form.githubUrl}
-            onChange={(event) => updateField('githubUrl', event.target.value)}
-            placeholder="https://github.com/user/repo"
-          />
-        </label>
-
-        <div className="sm:col-span-2">
-          <label className="flex items-center gap-2 text-sm text-neutral-700">
-            <input
-              type="checkbox"
-              checked={form.published}
-              onChange={(event) => updateField('published', event.target.checked)}
-              className="h-4 w-4"
+    <form noValidate onSubmit={handleSubmit} className="min-w-0 space-y-6">
+      <div className="grid items-start gap-5 lg:grid-cols-[170px_minmax(0,1fr)] lg:gap-6">
+        <EditorTabs tabs={tabs} />
+        <div className="min-w-0 space-y-6">
+          <EditorPanel tabs={tabs} name="General">
+            <section className="space-y-4 rounded-sm border border-neutral-200 bg-white p-4 sm:p-5">
+              <h2 className="text-base font-semibold">Basic information</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="sm:col-span-2">
+                  <span className={labelStyles}>Slug</span>
+                  <AdminInput
+                    type="text"
+                    required
+                    value={form.slug}
+                    onChange={(event) => updateField('slug', event.target.value)}
+                    placeholder="ai-cv-assistant"
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>Title (EN)</span>
+                  <AdminInput
+                    type="text"
+                    required
+                    value={form.titleEn}
+                    onChange={(event) => updateField('titleEn', event.target.value)}
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>Title (UK)</span>
+                  <AdminInput
+                    type="text"
+                    required
+                    value={form.titleUk}
+                    onChange={(event) => updateField('titleUk', event.target.value)}
+                  />
+                </label>
+              </div>
+            </section>
+            <section className="space-y-4 rounded-sm border border-neutral-200 bg-white p-4 sm:p-5">
+              <h2 className="text-base font-semibold">Descriptions</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  <span className={labelStyles}>Short description (EN, optional)</span>
+                  <AdminTextarea
+                    rows={2}
+                    value={form.shortDescriptionEn}
+                    onChange={(event) => updateField('shortDescriptionEn', event.target.value)}
+                    placeholder="Short summary for the card"
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>Short description (UK, optional)</span>
+                  <AdminTextarea
+                    rows={2}
+                    value={form.shortDescriptionUk}
+                    onChange={(event) => updateField('shortDescriptionUk', event.target.value)}
+                    placeholder="Короткий опис для картки"
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>Description (EN)</span>
+                  <AdminTextarea
+                    required
+                    rows={3}
+                    value={form.descriptionEn}
+                    onChange={(event) => updateField('descriptionEn', event.target.value)}
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>Description (UK)</span>
+                  <AdminTextarea
+                    required
+                    rows={3}
+                    value={form.descriptionUk}
+                    onChange={(event) => updateField('descriptionUk', event.target.value)}
+                  />
+                </label>
+              </div>
+            </section>
+            <section className="space-y-4 rounded-sm border border-neutral-200 bg-white p-4 sm:p-5">
+              <h2 className="text-base font-semibold">Technology</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="sm:col-span-2">
+                  <span className={labelStyles}>{'Stack (optional)'}</span>
+                  <AdminInput
+                    type="text"
+                    value={form.stack}
+                    onChange={(event) => updateField('stack', event.target.value)}
+                    placeholder="AI · Next.js · TypeScript"
+                  />
+                </label>
+              </div>
+            </section>
+          </EditorPanel>
+          <EditorPanel tabs={tabs} name="Content">
+            <OwnerMediaFields
+              view="content"
+              ownerId={mode === 'edit' ? experiment.id : undefined}
+              ownerType="experiments"
+              media={mediaDraft.media}
+              onChangeAction={mediaDraft.setMedia}
+              onUploadingChangeAction={mediaDraft.onUploadingChange}
+              disabled={isSaving || mediaDraft.isUploading}
             />
-            Published
-          </label>
+          </EditorPanel>
+          <EditorPanel tabs={tabs} name="Media">
+            <OwnerMediaFields
+              view="media"
+              ownerId={mode === 'edit' ? experiment.id : undefined}
+              ownerType="experiments"
+              media={mediaDraft.media}
+              onChangeAction={mediaDraft.setMedia}
+              onUploadingChangeAction={mediaDraft.onUploadingChange}
+              disabled={isSaving || mediaDraft.isUploading}
+            />
+          </EditorPanel>
+          <EditorPanel tabs={tabs} name="Settings">
+            <DetailPageSettings
+              value={form.detailPageStatus}
+              onChangeAction={(value) => updateField('detailPageStatus', value)}
+              disabled={isSaving || mediaDraft.isUploading}
+            />
+            <section className="space-y-4 rounded-sm border border-neutral-200 bg-white p-4 sm:p-5">
+              <h2 className="text-base font-semibold">Publication & ordering</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  <span className={labelStyles}>Order</span>
+                  <AdminInput
+                    type="number"
+                    required
+                    value={form.order}
+                    onChange={(event) => updateField('order', event.target.value)}
+                  />
+                </label>
+                <label className="flex items-center gap-2 text-sm text-neutral-700">
+                  <input
+                    type="checkbox"
+                    checked={form.published}
+                    onChange={(event) => updateField('published', event.target.checked)}
+                    className="h-4 w-4"
+                  />
+                  Published
+                </label>
+              </div>
+            </section>
+            <section className="space-y-4 rounded-sm border border-neutral-200 bg-white p-4 sm:p-5">
+              <h2 className="text-base font-semibold">External links</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  <span className={labelStyles}>{'Demo (optional)'}</span>
+                  <AdminInput
+                    type="url"
+                    value={form.demoUrl}
+                    onChange={(event) => updateField('demoUrl', event.target.value)}
+                    placeholder="https://example.com"
+                  />
+                </label>
+                <label>
+                  <span className={labelStyles}>{'GitHub (optional)'}</span>
+                  <AdminInput
+                    type="url"
+                    value={form.githubUrl}
+                    onChange={(event) => updateField('githubUrl', event.target.value)}
+                    placeholder="https://github.com/user/repo"
+                  />
+                </label>
+              </div>
+            </section>
+          </EditorPanel>
+          {saveError && (
+            <p
+              role="alert"
+              className="rounded-sm border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+            >
+              Changes not saved. {saveError}
+            </p>
+          )}
         </div>
       </div>
-
-      {mode === 'edit' && (
-        <OwnerMediaFields
-          ownerId={experiment.id}
-          ownerType="experiments"
-          media={mediaDraft.media}
-          onChangeAction={mediaDraft.setMedia}
-          onUploadingChangeAction={mediaDraft.onUploadingChange}
-          disabled={isSaving || mediaDraft.isUploading}
-        />
-      )}
-      <div className="sticky bottom-0 z-20 flex flex-wrap items-center justify-end gap-3 rounded-sm border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgb(0_0_0/0.06)]">
-        <span
-          role="status"
-          className="text-app-danger mr-auto w-full text-sm empty:hidden sm:w-auto"
-        >
-          {mediaDraft.isUploading ? 'Uploading media…' : isDirty ? 'Unsaved changes' : ''}
-        </span>
-        <AdminButton
-          variant="outline"
-          type="button"
-          onClickAction={() => {
-            if (confirmLeave()) router.push(routes.admin.experiments);
-          }}
-          disabled={isSaving || mediaDraft.isUploading}
-        >
-          Discard changes
-        </AdminButton>
-        <AdminButton
-          type="submit"
-          tone={isDirty ? 'danger' : 'default'}
-          disabled={isSaving || mediaDraft.isUploading}
-        >
-          {isSaving ? 'Saving…' : mode === 'create' ? 'Create experiment' : 'Save changes'}
-        </AdminButton>
-      </div>
+      <EditorSaveBar
+        dirty={isDirty || mode === 'create'}
+        error={!!saveError}
+        saving={isSaving}
+        uploading={mediaDraft.isUploading}
+        onDiscardAction={() => {
+          if (confirmLeave()) router.push(routes.admin.experiments);
+        }}
+      />
     </form>
   );
 }

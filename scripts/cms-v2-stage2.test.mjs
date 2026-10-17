@@ -694,3 +694,178 @@ test('Stage 3: full draft saves preserve an unchanged legacy cover with unknown 
     assert.equal(saved.project.photos[0].isProjectCover, true);
     assert.equal(saved.project.photos[0].asset.mimeType, null);
   }));
+
+for (const type of ['project', 'experiment']) {
+  test(`Stage 4 ${type}: full form blocks, independent covers, publication and stable repeat saves`, () =>
+    withDatabase(async (db) => {
+      const save = type === 'project' ? saveProject : saveExperiment;
+      const { ownerMediaInput, reconcileOwnerMedia, newContentBlock, moveContentBlock } =
+        loadTypeScript('src/lib/media/owner-media-draft.ts');
+      const { newMediaDraft } = loadTypeScript('src/lib/media/media-draft.ts');
+      const legacy = {
+        titleEn: 'Legacy',
+        titleUk: 'Стара секція',
+        bodyEn: 'Keep',
+        bodyUk: 'Зберегти',
+      };
+      const original = (
+        await save(db, {
+          ...(type === 'project'
+            ? {
+                ...minimal(),
+                status: 'ARCHIVED',
+                sections: [legacy],
+                featuresEn: ['Feature'],
+                featuresUk: ['Можливість'],
+              }
+            : experimentInput()),
+          published: true,
+        })
+      )[type];
+      const folder = type === 'project' ? 'projects' : 'experiments';
+      const image = await upload(db, original, folder);
+      const uk = await upload(db, original, folder);
+      const additional = await upload(db, original, folder, 'video/webm');
+      const preview = (asset) => ({
+        id: asset.id,
+        imageUrl: asset.src,
+        mimeType: asset.mimeType,
+        width: asset.width,
+        height: asset.height,
+      });
+      const text = {
+        ...newContentBlock('text'),
+        titleEn: 'Title',
+        titleUk: 'Заголовок',
+        bodyEn: 'One paragraph.\n\nAnother paragraph.',
+        bodyUk: 'Перший абзац.\n\nДругий абзац.',
+      };
+      const media = {
+        ...newContentBlock('media'),
+        photos: [
+          {
+            ...newMediaDraft(preview(image), 'block-photo'),
+            assetUk: preview(uk),
+            captionEn: 'Caption',
+            descriptionUk: 'Опис',
+          },
+        ],
+      };
+      let draft = {
+        coverAsset: preview(image),
+        coverAssetUk: preview(uk),
+        contentBlocks: [text, media],
+        additionalMedia: [newMediaDraft(preview(additional), 'additional')],
+      };
+      let saved = (
+        await save(db, { ...ownerMediaInput(draft), detailPageStatus: 'DRAFT' }, original.id)
+      )[type];
+      assert.equal(saved.detailPageStatus, 'DRAFT');
+      assert.equal(saved.published, true);
+      assert.equal(saved.contentBlocks[0].bodyEn, text.bodyEn);
+      assert.equal(saved.contentBlocks[0].photos.length, 0);
+      assert.equal(saved.contentBlocks[1].titleEn, null);
+      assert.equal(saved.contentBlocks[1].photos[0].assetId, saved.coverAssetId);
+      assert.equal(saved.contentBlocks[1].photos[0].assetUkId, saved.coverAssetUkId);
+      assert.equal(saved.photos.filter((photo) => !photo.contentBlockId).length, 1);
+      if (type === 'project') {
+        assert.equal(saved.status, 'ARCHIVED');
+        assert.equal(saved.sections[0].id, original.sections[0].id);
+        assert.deepEqual(saved.featuresEn, ['Feature']);
+      }
+      draft = reconcileOwnerMedia(draft, draft, saved);
+      const photoId = draft.contentBlocks[1].photos[0].id;
+      const textId = draft.contentBlocks[0].id;
+      const mediaId = draft.contentBlocks[1].id;
+      const additionalId = draft.additionalMedia[0].id;
+      draft.contentBlocks = moveContentBlock(draft.contentBlocks, 'media', -1);
+      draft.contentBlocks[1].titleEn = 'Edited title';
+      draft.contentBlocks[1].bodyUk = 'Оновлений текст.\n\nЩе абзац.';
+      saved = (
+        await save(db, { ...ownerMediaInput(draft), detailPageStatus: 'PUBLISHED' }, original.id)
+      )[type];
+      assert.equal(saved.detailPageStatus, 'PUBLISHED');
+      assert.deepEqual(
+        saved.contentBlocks.map((block) => block.id),
+        [mediaId, textId]
+      );
+      assert.deepEqual(
+        saved.contentBlocks.map((block) => block.order),
+        [1, 2]
+      );
+      assert.equal(saved.contentBlocks[0].photos[0].id, photoId);
+      assert.equal(saved.contentBlocks[1].bodyUk, draft.contentBlocks[1].bodyUk);
+      const again = (await save(db, ownerMediaInput(draft), original.id))[type];
+      assert.equal(again.contentBlocks[0].photos[0].id, photoId);
+      assert.equal(await db.contentBlock.count(), 2);
+      assert.equal(await db.photo.count(), 2);
+      // Removing block media must neither move it into Additional Media nor remove the cover.
+      const removal = await save(db, { contentBlocks: [{ id: textId }] }, original.id);
+      assert.equal(removal[type].coverAssetId, image.id);
+      assert.equal(removal[type].coverAssetUkId, uk.id);
+      assert.deepEqual(
+        removal[type].photos.map((photo) => photo.id),
+        [additionalId]
+      );
+      assert.equal(await db.mediaAsset.count({ where: unusedMediaAssetWhere(image.id) }), 0);
+      const replacement = await upload(db, original, folder);
+      const replaced = await save(
+        db,
+        { coverAssetId: replacement.id, coverAssetUkId: null, detailPageStatus: 'NONE' },
+        original.id
+      );
+      assert.equal(replaced[type].coverAssetId, replacement.id);
+      assert.equal(replaced[type].coverAssetUkId, null);
+      assert.equal(replaced[type].detailPageStatus, 'NONE');
+      const removed = await save(db, { coverAssetId: null, coverAssetUkId: null }, original.id);
+      assert.equal(removed[type].coverAssetId, null);
+      assert.equal(removed[type].contentBlocks[0].id, textId);
+      assert.equal(removed[type].photos[0].id, additionalId);
+    }));
+}
+
+test('Stage 4: rejects invalid publication values and rolls publication back with invalid covers', () =>
+  withDatabase(async (db) => {
+    for (const type of ['project', 'experiment']) {
+      const save = type === 'project' ? saveProject : saveExperiment;
+      const owner = (await save(db, type === 'project' ? minimal() : experimentInput()))[type];
+      const video = await upload(
+        db,
+        owner,
+        type === 'project' ? 'projects' : 'experiments',
+        'video/webm'
+      );
+      await assert.rejects(save(db, { detailPageStatus: 'INVALID' }, owner.id), ContentSaveError);
+      await assert.rejects(
+        save(db, { detailPageStatus: 'DRAFT', coverAssetId: video.id }, owner.id),
+        ContentSaveError
+      );
+      const unchanged = (await save(db, {}, owner.id))[type];
+      assert.equal(unchanged.detailPageStatus, 'NONE');
+    }
+  }));
+
+test('Stage 4: new owners can save text blocks in their first main form transaction', () =>
+  withDatabase(async (db) => {
+    for (const type of ['project', 'experiment']) {
+      const save = type === 'project' ? saveProject : saveExperiment;
+      const first = (
+        await save(db, {
+          ...(type === 'project' ? minimal() : experimentInput()),
+          detailPageStatus: 'DRAFT',
+          contentBlocks: [{ bodyEn: 'First paragraph.\n\nSecond paragraph.' }],
+        })
+      )[type];
+      assert.equal(first.contentBlocks.length, 1);
+      assert.equal(first.contentBlocks[0].titleEn, null);
+      assert.equal(first.contentBlocks[0].bodyEn, 'First paragraph.\n\nSecond paragraph.');
+      assert.equal(first.photos.length, 0);
+      assert.equal(first.detailPageStatus, 'DRAFT');
+      const block = first.contentBlocks[0];
+      const again = (
+        await save(db, { contentBlocks: [{ id: block.id, bodyUk: 'Текст' }] }, first.id)
+      )[type];
+      assert.equal(again.contentBlocks[0].id, block.id);
+      assert.equal(again.contentBlocks[0].bodyEn, block.bodyEn);
+    }
+  }));

@@ -1,4 +1,9 @@
-import { mediaInput, reconcileMediaIds, type MediaDraft } from './media-draft';
+import {
+  mediaInput,
+  reconcileMediaIds,
+  type MediaDraft,
+  type MediaAssetPreview,
+} from './media-draft';
 
 export type BlockMediaDraft = {
   key: string;
@@ -9,7 +14,25 @@ export type BlockMediaDraft = {
   bodyUk: string | null;
   photos: MediaDraft[];
 };
-export type OwnerMediaDraft = { additionalMedia: MediaDraft[]; contentBlocks: BlockMediaDraft[] };
+export type OwnerMediaDraft = {
+  additionalMedia: MediaDraft[];
+  contentBlocks: BlockMediaDraft[];
+  coverAsset?: MediaAssetPreview | null;
+  coverAssetUk?: MediaAssetPreview | null;
+};
+
+export function newContentBlock(key: string): BlockMediaDraft {
+  return { key, titleEn: null, titleUk: null, bodyEn: null, bodyUk: null, photos: [] };
+}
+
+export function moveContentBlock(blocks: BlockMediaDraft[], key: string, direction: -1 | 1) {
+  const index = blocks.findIndex((block) => block.key === key);
+  const target = index + direction;
+  if (index < 0 || target < 0 || target >= blocks.length) return blocks;
+  const next = [...blocks];
+  [next[index], next[target]] = [next[target], next[index]];
+  return next;
+}
 export type SavedOwnerMedia = {
   photos: { id: string; contentBlockId: string | null }[];
   contentBlocks: { id: string; photos: { id: string }[] }[];
@@ -17,6 +40,8 @@ export type SavedOwnerMedia = {
 
 export function ownerMediaInput(media: OwnerMediaDraft) {
   return {
+    ...(media.coverAsset !== undefined ? { coverAssetId: media.coverAsset?.id ?? null } : {}),
+    ...(media.coverAssetUk !== undefined ? { coverAssetUkId: media.coverAssetUk?.id ?? null } : {}),
     additionalMedia: mediaInput(media.additionalMedia),
     contentBlocks: media.contentBlocks.map(({ id, titleEn, titleUk, bodyEn, bodyUk, photos }) => ({
       ...(id ? { id } : {}),
@@ -30,7 +55,19 @@ export function ownerMediaInput(media: OwnerMediaDraft) {
 }
 
 export function mediaSnapshot(media: OwnerMediaDraft) {
-  return JSON.stringify(ownerMediaInput(media), (key, value) => (key === 'id' ? undefined : value));
+  // Stable draft keys detect ordering changes even for identical blocks/usages.
+  // Database IDs are excluded so reconciling a successful save stays clean.
+  return JSON.stringify(
+    {
+      ...ownerMediaInput(media),
+      blockKeys: media.contentBlocks.map((block) => [
+        block.key,
+        ...block.photos.map((photo) => photo.key),
+      ]),
+      additionalKeys: media.additionalMedia.map((photo) => photo.key),
+    },
+    (key, value) => (key === 'id' ? undefined : value)
+  );
 }
 
 export function reconcileOwnerMedia(
@@ -39,6 +76,7 @@ export function reconcileOwnerMedia(
   saved: SavedOwnerMedia
 ): OwnerMediaDraft {
   return {
+    ...current,
     additionalMedia: reconcileMediaIds(
       current.additionalMedia,
       submitted.additionalMedia,

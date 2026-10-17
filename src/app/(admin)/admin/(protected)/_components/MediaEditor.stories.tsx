@@ -171,16 +171,17 @@ const exercise: Story['play'] = async ({ canvasElement, args }) => {
     new File(['video'], 'clip.webm', { type: 'video/webm' }),
   ]);
   await waitFor(() =>
-    expect(canvas.getAllByText('New usage · not saved', { exact: false })).toHaveLength(2)
+    expect(canvas.getAllByText('New · not saved', { exact: false })).toHaveLength(2)
   );
   await expect(canvasElement.querySelector('video')).toHaveAttribute(
     'src',
     '/storybook/media-editor.webm'
   );
   await waitFor(() => expect(canvasElement.querySelector('video')?.videoWidth).toBeGreaterThan(0));
-  await userEvent.type(canvas.getByLabelText('Caption (EN) media 1'), 'Caption');
-  await userEvent.type(canvas.getByLabelText('Description (UK) media 1'), 'Опис');
-  await userEvent.type(canvas.getByLabelText('External link media 1'), 'https://example.com');
+  await userEvent.click(canvas.getByRole('button', { name: 'Edit media 1' }));
+  await userEvent.type(canvas.getByLabelText('Caption (EN)'), 'Caption');
+  await userEvent.type(canvas.getByLabelText('Description (UK)'), 'Опис');
+  await userEvent.type(canvas.getByLabelText('External link'), 'https://example.com');
   await userEvent.upload(
     canvas.getAllByLabelText('Upload Ukrainian')[0],
     new File(['uk'], 'uk.png', { type: 'image/png' })
@@ -188,27 +189,29 @@ const exercise: Story['play'] = async ({ canvasElement, args }) => {
   await waitFor(() =>
     expect(canvas.getByRole('button', { name: 'Remove Ukrainian variant' })).toBeEnabled()
   );
+  await userEvent.click(canvas.getByRole('button', { name: 'Done' }));
   await userEvent.click(canvas.getByRole('button', { name: 'Move media 1 down' }));
-  await expect(canvas.getByLabelText('Caption (EN) media 2')).toHaveValue('Caption');
-  await userEvent.click(canvas.getByRole('button', { name: 'Reorder' }));
-  await expect(canvasElement.querySelector('[data-component="ReorderGrid"]')).toBeInTheDocument();
-  await userEvent.click(canvas.getByRole('button', { name: 'Back to metadata' }));
+  await userEvent.click(canvas.getByRole('button', { name: 'Edit media 2' }));
+  await expect(canvas.getByLabelText('Caption (EN)')).toHaveValue('Caption');
+  await userEvent.click(canvas.getByRole('button', { name: 'Done' }));
   await expect(canvas.getByTestId('saved')).toHaveTextContent('No form save yet');
   await userEvent.click(canvas.getByRole('button', { name: 'Save main form' }));
   await expect(canvas.getByTestId('saved')).toHaveTextContent('uk.png');
   await expect(canvas.getByTestId('saved')).toHaveTextContent('Caption');
-  await expect(canvas.getAllByText('Existing usage', { exact: false })).toHaveLength(2);
+  await expect(canvas.getAllByText('Saved usage', { exact: false })).toHaveLength(2);
   await expect(canvas.getByText('All changes saved', { exact: true })).toBeInTheDocument();
   // A second save includes persisted IDs rather than inserting duplicates.
   await userEvent.click(canvas.getByRole('button', { name: 'Save main form' }));
   await expect(canvas.getByTestId('saved')).toHaveTextContent('saved-photo-0');
   await expect(canvas.getByTestId('saved')).toHaveTextContent('saved-photo-1');
+  await userEvent.click(canvas.getByRole('button', { name: 'Edit media 2' }));
   await userEvent.click(canvas.getByRole('button', { name: 'Remove Ukrainian variant' }));
+  await userEvent.click(canvas.getByRole('button', { name: 'Done' }));
   await expect(canvas.getByText('Unsaved changes', { exact: true })).toBeInTheDocument();
-  await userEvent.click(canvas.getAllByRole('button', { name: /^Remove$/ })[0]);
+  await userEvent.click(canvas.getByRole('button', { name: 'Remove media 1' }));
   const dialog = within(canvasElement.ownerDocument.body).getByRole('dialog');
   await userEvent.click(within(dialog).getByRole('button', { name: /^Delete$/ }));
-  await expect(canvas.getAllByText('Existing usage', { exact: false })).toHaveLength(1);
+  await expect(canvas.getAllByText('Saved usage', { exact: false })).toHaveLength(1);
   await userEvent.click(canvas.getByRole('button', { name: 'Save main form' }));
   await expect(canvas.getByTestId('saved')).not.toHaveTextContent('clip.webm');
   await expect(canvas.getByTestId('saved')).not.toHaveTextContent('uk.png');
@@ -234,14 +237,12 @@ export const FailedUploadsAndDiscard: Story = {
       new File(['ok'], 'ok.png', { type: 'image/png' }),
     ]);
     await waitFor(() =>
-      expect(canvas.getByText('New usage · not saved', { exact: false })).toBeInTheDocument()
+      expect(canvas.getByText('New · not saved', { exact: false })).toBeInTheDocument()
     );
     await expect(canvas.getByText(/Simulated upload failure/)).toBeInTheDocument();
     await expect(canvas.getByTestId('saved')).toHaveTextContent('No form save yet');
     await userEvent.click(canvas.getByRole('button', { name: 'Discard draft' }));
-    await expect(
-      canvas.queryByText('New usage · not saved', { exact: false })
-    ).not.toBeInTheDocument();
+    await expect(canvas.queryByText('New · not saved', { exact: false })).not.toBeInTheDocument();
     await expect(canvas.getByTestId('saved')).toHaveTextContent('No form save yet');
     canvasElement.dataset.mediaTestResult = 'discard-passed';
   },

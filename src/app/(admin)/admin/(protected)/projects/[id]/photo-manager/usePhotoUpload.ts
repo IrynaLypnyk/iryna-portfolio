@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { upload } from '@imagekit/javascript';
 import { getProjectMediaValidationError } from '@/lib/media/project-media-policy';
+import { getImageValidationError } from '@/lib/media/image-policy';
 import { toast } from 'sonner';
 
 import type { UploadItem } from './types';
@@ -21,6 +22,7 @@ type Props = {
   onAssetUploadedAction: (asset: MediaAssetPreview) => void;
   onUploadingChangeAction: (uploading: boolean) => void;
   multiple?: boolean;
+  imagesOnly?: boolean;
 };
 
 export function usePhotoUpload({
@@ -29,6 +31,7 @@ export function usePhotoUpload({
   onAssetUploadedAction,
   onUploadingChangeAction,
   multiple = true,
+  imagesOnly = false,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
@@ -51,7 +54,9 @@ export function usePhotoUpload({
     }
 
     const validFiles = files.filter((file) => {
-      const error = getProjectMediaValidationError(file.type, file.size);
+      const error = imagesOnly
+        ? getImageValidationError(file.type, file.size)
+        : getProjectMediaValidationError(file.type, file.size);
       if (error) toast.error(`«${file.name}»: ${error}`);
       return !error;
     });

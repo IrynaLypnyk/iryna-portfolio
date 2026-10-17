@@ -55,7 +55,7 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-neutral-900">Key features</h3>
+        <h3 className="text-base font-semibold text-neutral-900">Key features</h3>
         <AdminButton
           type="button"
           variant="outline"
@@ -78,22 +78,22 @@ export function FeaturesEditor({ features, onChangeAction }: Props) {
           className="grid gap-3 rounded-sm border border-neutral-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto]"
         >
           <label>
-            <span className={labelStyles}>UA</span>
-            <AdminInput
-              type="text"
-              required
-              value={feature.uk}
-              onChange={(event) => update(feature.key, 'uk', event.target.value)}
-            />
-          </label>
-
-          <label>
             <span className={labelStyles}>EN</span>
             <AdminInput
               type="text"
               required
               value={feature.en}
               onChange={(event) => update(feature.key, 'en', event.target.value)}
+            />
+          </label>
+
+          <label>
+            <span className={labelStyles}>UK</span>
+            <AdminInput
+              type="text"
+              required
+              value={feature.uk}
+              onChange={(event) => update(feature.key, 'uk', event.target.value)}
             />
           </label>
 

@@ -13,6 +13,7 @@ type AdminMediaPreviewProps = {
   className?: string;
   imageClassName?: string;
   priority?: boolean;
+  controls?: boolean;
 };
 
 export function AdminMediaPreview({
@@ -24,6 +25,7 @@ export function AdminMediaPreview({
   className,
   imageClassName,
   priority,
+  controls = false,
 }: AdminMediaPreviewProps) {
   return (
     <div
@@ -36,6 +38,7 @@ export function AdminMediaPreview({
         <>
           <video
             src={src}
+            controls={controls}
             muted
             playsInline
             preload="metadata"
@@ -46,9 +49,11 @@ export function AdminMediaPreview({
               imageClassName
             )}
           />
-          <span className="absolute right-1 bottom-1 rounded bg-black/70 px-1.5 py-0.5 text-xs text-white">
-            Video
-          </span>
+          {!controls && (
+            <span className="absolute right-1 bottom-1 rounded bg-black/70 px-1.5 py-0.5 text-xs text-white">
+              Video
+            </span>
+          )}
         </>
       ) : (
         <Image

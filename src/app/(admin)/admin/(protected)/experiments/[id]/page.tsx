@@ -17,6 +17,8 @@ export default async function EditExperimentPage({ params }: Props) {
   const experiment = await prisma.experiment.findUnique({
     where: { id },
     include: {
+      coverAsset: true,
+      coverAssetUk: true,
       contentBlocks: {
         orderBy: [{ order: 'asc' }, { id: 'asc' }],
         include: {
@@ -39,7 +41,13 @@ export default async function EditExperimentPage({ params }: Props) {
   }
 
   const initialMedia = adminMediaDraft(experiment);
-  const { photos: _photos, contentBlocks: _blocks, ...experimentFields } = experiment;
+  const {
+    photos: _photos,
+    contentBlocks: _blocks,
+    coverAsset: _cover,
+    coverAssetUk: _coverUk,
+    ...experimentFields
+  } = experiment;
 
   return (
     <main className="px-6 py-10">
@@ -59,7 +67,12 @@ export default async function EditExperimentPage({ params }: Props) {
           </h1>
         </div>
 
-        <ExperimentForm mode="edit" experiment={experimentFields} initialMedia={initialMedia} />
+        <ExperimentForm
+          key={experiment.id}
+          mode="edit"
+          experiment={experimentFields}
+          initialMedia={initialMedia}
+        />
       </div>
     </main>
   );

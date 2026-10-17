@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DetailPageStatus } from '@/generated/prisma/enums';
 import { nullableText } from './text';
 
 export const optionalText = z.string().nullable().transform(nullableText).optional();
@@ -44,6 +45,7 @@ export const contentBlockInputSchema = z.strictObject({
 });
 
 export const contentFields = {
+  detailPageStatus: z.enum(DetailPageStatus).optional(),
   contentBlocks: z.array(contentBlockInputSchema).optional(),
   additionalMedia: z.array(photoInputSchema).optional(),
   coverAssetId: identifier.nullable().optional(),

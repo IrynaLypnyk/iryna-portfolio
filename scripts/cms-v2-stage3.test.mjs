@@ -131,6 +131,7 @@ function hookHarness(ownerType, options = {}) {
     return runUploadHook({
       ownerType,
       projectId: 'owner',
+      imagesOnly: options.imagesOnly,
       onUploadingChangeAction: (busy) => calls.busy.push(busy),
       onAssetUploadedAction: (uploaded) => calls.uploaded.push(uploaded),
     });
@@ -356,3 +357,17 @@ for (const ownerType of ['projects', 'experiments']) {
     assert.ok(!events.includes('cleanup'));
   });
 }
+
+test('Stage 4 cover uploads reject videos while using the shared image upload workflow', async () => {
+  const { calls, render } = hookHarness('projects', { imagesOnly: true });
+  await render().handleFileChange({
+    target: {
+      value: '',
+      files: [file('video.webm', 'video/webm'), file('image.png', 'image/png')],
+    },
+  });
+  assert.equal(calls.errors.length, 1);
+  assert.equal(calls.sdk.length, 1);
+  assert.equal(calls.sdk[0].file.name, 'image.png');
+  assert.equal(calls.uploaded.length, 1);
+});

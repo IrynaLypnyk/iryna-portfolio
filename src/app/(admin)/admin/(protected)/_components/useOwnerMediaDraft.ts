@@ -9,7 +9,8 @@ import {
 
 export function useOwnerMediaDraft(initial?: OwnerMediaDraft) {
   const [media, setMedia] = useState<OwnerMediaDraft>(
-    () => initial ?? { additionalMedia: [], contentBlocks: [] }
+    () =>
+      initial ?? { additionalMedia: [], contentBlocks: [], coverAsset: null, coverAssetUk: null }
   );
   const [savedSnapshot, setSavedSnapshot] = useState(() => mediaSnapshot(media));
   const [uploadCount, setUploadCount] = useState(0);

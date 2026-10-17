@@ -17,6 +17,8 @@ export default async function EditProjectPage({ params }: Props) {
   const project = await prisma.project.findUnique({
     where: { id },
     include: {
+      coverAsset: true,
+      coverAssetUk: true,
       contentBlocks: {
         orderBy: [{ order: 'asc' }, { id: 'asc' }],
         include: {
@@ -42,7 +44,13 @@ export default async function EditProjectPage({ params }: Props) {
   }
 
   const initialMedia = adminMediaDraft(project);
-  const { photos: _photos, contentBlocks: _blocks, ...projectFields } = project;
+  const {
+    photos: _photos,
+    contentBlocks: _blocks,
+    coverAsset: _cover,
+    coverAssetUk: _coverUk,
+    ...projectFields
+  } = project;
 
   return (
     <main className="px-6 py-10">
@@ -58,7 +66,12 @@ export default async function EditProjectPage({ params }: Props) {
           {projectFields.titleEn}
         </h1>
 
-        <ProjectForm mode="edit" project={projectFields} initialMedia={initialMedia} />
+        <ProjectForm
+          key={project.id}
+          mode="edit"
+          project={projectFields}
+          initialMedia={initialMedia}
+        />
       </div>
     </main>
   );

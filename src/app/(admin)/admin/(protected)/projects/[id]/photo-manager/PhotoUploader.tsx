@@ -1,5 +1,6 @@
 'use client';
 import { PROJECT_MEDIA_ACCEPT } from '@/lib/media/project-media-policy';
+import { IMAGE_FILE_ACCEPT } from '@/lib/media/image-policy';
 import { AdminButton } from '@/app/(admin)/admin/_components/AdminButton';
 import type { MediaAssetPreview } from '@/lib/media/media-draft';
 import { usePhotoUpload } from './usePhotoUpload';
@@ -11,12 +12,14 @@ type Props = {
   disabled?: boolean;
   multiple?: boolean;
   label?: string;
+  imagesOnly?: boolean;
 };
 /** One upload implementation for new usages and either localized variant. */
 export function PhotoUploader({
   disabled,
   multiple = true,
   label = 'Upload photos / videos',
+  imagesOnly = false,
   ...props
 }: Props) {
   const {
@@ -26,13 +29,13 @@ export function PhotoUploader({
     handleFilePickerClick,
     handleFileChange,
     dismissUploadStatus,
-  } = usePhotoUpload({ ...props, multiple });
+  } = usePhotoUpload({ ...props, multiple, imagesOnly });
   return (
     <div className="min-w-0 space-y-2">
       <input
         ref={fileInputRef}
         type="file"
-        accept={PROJECT_MEDIA_ACCEPT}
+        accept={imagesOnly ? IMAGE_FILE_ACCEPT : PROJECT_MEDIA_ACCEPT}
         multiple={multiple}
         className="hidden"
         disabled={disabled || isUploading}
@@ -59,7 +62,7 @@ export function PhotoUploader({
                 {item.status === 'uploading'
                   ? `Uploading ${item.progress ?? 0}%`
                   : item.status === 'done'
-                    ? 'Uploaded · save the form to apply'
+                    ? 'Uploaded'
                     : item.status === 'error'
                       ? item.errorMessage
                       : 'Queued'}
