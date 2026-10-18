@@ -82,12 +82,17 @@ function setup(options = {}) {
     },
     mediaAsset: {
       findUnique: async () => (options.registered ? { id: 'existing' } : null),
-      upsert: async ({ create }) => tx.mediaAsset.create({ data: create }),
+      upsert: async ({ where, update, create }) => {
+        assert.equal(where.imageKitFileId, 'file');
+        assert.equal(Object.keys(update).length, 0);
+        if (options.failure) throw new Error('DB failed');
+        if (options.registered) return { id: 'existing', ...create };
+        return tx.mediaAsset.create({ data: create });
+      },
     },
     $transaction: async (fn) => fn(tx),
   };
   const mocks = {
-    './file-lock': { withMediaFileLock: async (_fileId, action) => action() },
     'next/server': {
       NextResponse: { json: (body, init = {}) => ({ body, status: init.status ?? 200 }) },
     },
@@ -169,15 +174,15 @@ test('unauthorized, missing owner and malformed file IDs cannot finalize media',
   }
 });
 
-test('failed DB write cleans only the new ImageKit file; registered files are preserved', async (t) => {
+test('failed registration retains both new and previously registered files for retry', async (t) => {
   t.mock.method(console, 'error', () => {});
   t.mock.method(console, 'info', () => {});
   t.mock.method(console, 'warn', () => {});
   const fresh = setup({ failure: true });
   assert.equal((await fresh.finalize()).status, 500);
-  assert.deepEqual(fresh.calls.deletes, ['file']);
+  assert.deepEqual(fresh.calls.deletes, []);
   const registered = setup({ failure: true, registered: true });
-  assert.equal((await registered.finalize()).status, 409);
+  assert.equal((await registered.finalize()).status, 500);
   assert.deepEqual(registered.calls.deletes, []);
 });
 
@@ -451,4 +456,21 @@ test('experiment link gives accessible feedback while navigation is pending', ()
   assert.ok(loading.includes('role="status"'));
   assert.ok(loading.includes('Завантаження експерименту…'));
   assert.ok(!loading.includes('lucide-move-up-right'));
+});
+
+test('registration reuses the unique file record while cleanup is deferred', async () => {
+  const { cleanupMediaAssets } = load('src/lib/media/delete-media-asset.ts');
+  const registered = setup({ registered: true });
+  const [first, second, cleanup] = await Promise.all([
+    registered.finalize(),
+    registered.finalize(),
+    cleanupMediaAssets(['existing']),
+  ]);
+  assert.equal(first.status, 201);
+  assert.equal(second.status, 201);
+  assert.equal(first.body.asset.id, 'existing');
+  assert.equal(second.body.asset.id, 'existing');
+  assert.deepEqual(registered.calls.writes, []);
+  assert.deepEqual(registered.calls.deletes, []);
+  assert.deepEqual([...cleanup.deferredAssetIds], ['existing']);
 });

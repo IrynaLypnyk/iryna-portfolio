@@ -33,7 +33,7 @@ export function EarlierProjectArticle({ project }: Props) {
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
   const expandedFeaturesMeta = selectProjectMeta(allMeta, ['features']);
   const expandable =
-    !project.hasDetailPage &&
+    (!project.hasDetailPage || project.preserveOverviewExpansion) &&
     (expandedMeta.length > 0 || expandedFeaturesMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);

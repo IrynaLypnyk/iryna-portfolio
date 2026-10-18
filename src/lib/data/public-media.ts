@@ -1,3 +1,7 @@
+import {
+  legacyProjectCoverPhotoIds,
+  legacyExperimentCoverPhotoId,
+} from './legacy-public-compatibility';
 import type { MediaAsset, Photo as DbPhoto, ContentBlock } from '@/generated/prisma/client';
 import type { LocaleType } from '@/i18n/routing';
 import type { Photo, CaseBlock } from '@/types/projects';
@@ -8,7 +12,11 @@ export type PublicPhoto = DbPhoto & { asset: MediaAsset; assetUk: MediaAsset | n
 export type PublicBlock = ContentBlock & { photos: PublicPhoto[] };
 export const detailPublished = { published: true, detailPageStatus: 'PUBLISHED' as const };
 export const publicPhotos = {
-  where: { contentBlockId: null, isProjectCover: false },
+  where: {
+    contentBlockId: null,
+    id: { not: legacyExperimentCoverPhotoId },
+    OR: [{ isProjectCover: false }, { id: { in: legacyProjectCoverPhotoIds } }],
+  },
   orderBy: [{ orderInProject: 'asc' as const }, { id: 'asc' as const }],
   include: { asset: true, assetUk: true },
 };

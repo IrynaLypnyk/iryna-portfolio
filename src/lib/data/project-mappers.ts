@@ -1,3 +1,4 @@
+import { legacyProjectIds, visibleAdditionalUsage } from './legacy-public-compatibility';
 import type { LocaleType } from '@/i18n/routing';
 import { coverPhoto, usagePhoto, contentBlocks, type PublicBlock } from './public-media';
 import type { ProjectWithRelations } from '@/lib/data/projects';
@@ -28,6 +29,7 @@ export function toPhoto(
 
 export function toProjectData(project: ProjectWithRelations, locale: LocaleType): ProjectData {
   return {
+    preserveOverviewExpansion: legacyProjectIds.has(project.id),
     hasDetailPage: project.published && project.detailPageStatus === 'PUBLISHED',
     slug: project.slug,
     shortLabel: nullableText(project.shortLabel),
@@ -49,7 +51,7 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
     githubUrl: project.githubUrl,
     storybookUrl: project.storybookUrl,
     photos: project.photos
-      .filter((photo) => !photo.isProjectCover)
+      .filter(visibleAdditionalUsage)
       .map((photo) => toPhoto(project, photo, locale)),
   };
 }

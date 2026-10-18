@@ -28,7 +28,6 @@ assert.ok(['localhost', '127.0.0.1', '[::1]'].includes(target.hostname));
 assert.ok(['postgresql:', 'postgres:'].includes(target.protocol));
 assert.ok([...target.searchParams.keys()].every((key) => key === 'schema'));
 process.env.DATABASE_URL = connectionString;
-const { withMediaFileLock } = await import('../src/lib/media/file-lock.ts');
 const migrationRoot = path.join(root, 'prisma/migrations');
 const migrations = readdirSync(migrationRoot)
   .filter((name) => /^\d/.test(name))
@@ -601,7 +600,7 @@ test('legacy cover Photos cannot be changed to video through the shared save', (
   }));
 
 for (const type of ['project', 'experiment']) {
-  test(`Stage 3 ${type}: post-save cleanup preserves covers and deletes only unused default/UK assets`, () =>
+  test(`Stage 3 ${type}: post-save cleanup retains default/UK assets after usage and cover removal`, () =>
     withDatabase(async (db) => {
       const save = type === 'project' ? saveProject : saveExperiment;
       const owner = (await save(db, type === 'project' ? minimal() : experimentInput()))[type];
@@ -622,7 +621,6 @@ for (const type of ['project', 'experiment']) {
       const deleted = [];
       const { cleanupMediaAssets } = loadTypeScript('src/lib/media/delete-media-asset.ts', {
         '@/lib/prisma': { prisma: db },
-        './file-lock': { withMediaFileLock },
         '@/lib/imagekit/client': {
           getImageKit: () => ({
             files: {
@@ -638,40 +636,14 @@ for (const type of ['project', 'experiment']) {
       assert.equal(await db.mediaAsset.count(), 3);
       const cleanup = await cleanupMediaAssets(removal.cleanupCandidateAssetIds);
       assert.deepEqual([...cleanup.failedAssetIds], []);
-      assert.deepEqual(deleted, [video.imageKitFileId]);
-      assert.equal(await db.mediaAsset.count(), 2);
+      assert.deepEqual(deleted, []);
+      assert.equal(await db.mediaAsset.count(), 3);
       const covers = await save(db, { coverAssetId: null, coverAssetUkId: null }, owner.id);
       await cleanupMediaAssets(covers.cleanupCandidateAssetIds);
-      assert.deepEqual(
-        new Set(deleted),
-        new Set([image.imageKitFileId, uk.imageKitFileId, video.imageKitFileId])
-      );
-      assert.equal(await db.mediaAsset.count(), 0);
+      assert.deepEqual(deleted, []);
+      assert.equal(await db.mediaAsset.count(), 3);
     }));
 }
-
-test('Stage 3: file registration and cleanup serialize on the same PostgreSQL file lock', async () => {
-  const events = [];
-  let unlock;
-  let entered;
-  const started = new Promise((resolve) => {
-    entered = resolve;
-  });
-  const pending = new Promise((resolve) => {
-    unlock = resolve;
-  });
-  const first = withMediaFileLock('cms-v2-test-lock', async () => {
-    events.push('first');
-    entered();
-    await pending;
-    events.push('release');
-  });
-  await started;
-  const second = withMediaFileLock('cms-v2-test-lock', async () => events.push('second'));
-  unlock();
-  await Promise.all([first, second]);
-  assert.deepEqual(events, ['first', 'release', 'second']);
-});
 
 test('Stage 3: full draft saves preserve an unchanged legacy cover with unknown MIME', () =>
   withDatabase(async (db) => {

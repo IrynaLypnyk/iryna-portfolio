@@ -1,3 +1,4 @@
+import { visibleAdditionalUsage } from './legacy-public-compatibility';
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@/generated/prisma/client';
 import type { LocaleType } from '@/i18n/routing';
@@ -37,7 +38,7 @@ export function toExperimentData(
     githubUrl: experiment.githubUrl,
     cover: coverPhoto(experiment, locale, title),
     photos: experiment.photos
-      .filter((photo) => !photo.isProjectCover)
+      .filter(visibleAdditionalUsage)
       .map((photo) => usagePhoto(photo, locale, title)),
   };
 }
@@ -49,7 +50,7 @@ export async function getPublishedExperiments(locale: LocaleType): Promise<Exper
         orderBy: [{ order: 'asc' }, { id: 'asc' }],
         include,
       }),
-    ['published-experiments', 'independent-covers-v3'],
+    ['published-experiments', 'legacy-gallery-compat-v4'],
     { revalidate: 60, tags: ['experiments'] }
   )();
   return rows.map((row, index) => toExperimentData(row, locale, index));

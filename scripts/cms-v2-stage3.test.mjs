@@ -227,93 +227,24 @@ test('MP4 and WebM without legacy MIME use video previews, never Next Image', ()
   }
 });
 
-function cleanupHarness(options = {}) {
-  const events = [];
-  const { deleteMediaAssetIfUnused, cleanupMediaAssets } = load(
-    'src/lib/media/delete-media-asset.ts',
-    {
-      './file-lock': {
-        withMediaFileLock: async (id, action) => {
-          events.push('lock:' + id);
-          return action();
-        },
-      },
-      '@/lib/prisma': {
-        prisma: {
-          mediaAsset: {
-            findFirst: async ({ where }) => {
-              for (const relation of [
-                'defaultForPhotos',
-                'ukrainianForPhotos',
-                'projectCovers',
-                'projectCoversUk',
-                'experimentCovers',
-                'experimentCoversUk',
-              ])
-                assert.ok(where[relation].none);
-              return options.shared ? null : { imageKitFileId: 'file' };
-            },
-            deleteMany: async () => {
-              events.push('db-commit');
-              if (options.dbFailure) throw new Error('FK conflict');
-              return { count: options.lateReference ? 0 : 1 };
-            },
-          },
-        },
-      },
-      '@/lib/imagekit/client': {
-        getImageKit: () => ({
-          files: {
-            get: async () => {
-              events.push('verify');
-              if (options.missing) throw { status: 404 };
-              if (options.verifyFailure) throw new Error('ImageKit unavailable');
-              return { filePath: '/safe/file' };
-            },
-            delete: async () => {
-              events.push('imagekit-delete');
-              if (options.deleteFailure) throw new Error('ImageKit unavailable');
-            },
-          },
-        }),
-      },
-      '@/lib/imagekit/assertSafeImageKitPath': {
-        assertSafeImageKitPath: (src) => assert.ok(src.startsWith('/safe/')),
-      },
-    }
-  );
-  return { events, deleteMediaAssetIfUnused, cleanupMediaAssets };
-}
-
-test('cleanup protects shared and cover-only assets, including a reference added after the first check', async () => {
-  const shared = cleanupHarness({ shared: true });
-  assert.equal((await shared.deleteMediaAssetIfUnused('asset')).deleted, false);
-  assert.deepEqual(shared.events, []);
-  const late = cleanupHarness({ lateReference: true });
-  assert.equal((await late.deleteMediaAssetIfUnused('asset')).deleted, false);
-  assert.ok(!late.events.includes('imagekit-delete'));
-});
-
-test('cleanup commits conditional DB deletion before ImageKit; DB/verification failures never delete files', async () => {
-  const success = cleanupHarness();
-  assert.equal((await success.deleteMediaAssetIfUnused('asset')).deleted, true);
-  assert.deepEqual(success.events, ['lock:file', 'verify', 'db-commit', 'imagekit-delete']);
-  for (const option of ['dbFailure', 'verifyFailure']) {
-    const failed = cleanupHarness({ [option]: true });
-    await assert.rejects(failed.deleteMediaAssetIfUnused('asset'));
-    assert.ok(!failed.events.includes('imagekit-delete'));
-  }
-  const missing = cleanupHarness({ missing: true });
-  assert.equal((await missing.deleteMediaAssetIfUnused('asset')).deleted, true);
-  assert.ok(!missing.events.includes('imagekit-delete'));
-});
-
-test('cleanup failures are separate from saved content and duplicate candidates are attempted once', async (t) => {
-  t.mock.method(console, 'error', () => {});
-  const { cleanupMediaAssets, events } = cleanupHarness({ deleteFailure: true });
-  const result = await cleanupMediaAssets(['asset', 'asset', null]);
-  assert.deepEqual(json(result), { failedAssetIds: ['asset'], deletedAssetIds: [] });
-  assert.equal(events.filter((event) => event === 'imagekit-delete').length, 1);
+test('cleanup defers all candidates without database or ImageKit access, including shared assets', async () => {
+  const forbidden = () => {
+    throw new Error('Cleanup must not access external resources');
+  };
+  const { cleanupMediaAssets } = load('src/lib/media/delete-media-asset.ts', {
+    '@/lib/prisma': { prisma: new Proxy({}, { get: forbidden }) },
+    '@/lib/imagekit/client': { getImageKit: forbidden },
+  });
+  assert.deepEqual(json(await cleanupMediaAssets(['shared', 'unused', 'shared', null])), {
+    failedAssetIds: [],
+    deletedAssetIds: [],
+    deferredAssetIds: ['shared', 'unused'],
+  });
+  assert.deepEqual(json(await cleanupMediaAssets([])), {
+    failedAssetIds: [],
+    deletedAssetIds: [],
+    deferredAssetIds: [],
+  });
 });
 
 for (const ownerType of ['projects', 'experiments']) {

@@ -40,7 +40,7 @@ export function RecentProjectArticle({ project, index }: Props) {
   const featuresMeta = selectProjectMeta(allMeta, ['features']);
   const stackMeta = selectProjectMeta(allMeta, ['stack']);
   const expandable =
-    !project.hasDetailPage &&
+    (!project.hasDetailPage || project.preserveOverviewExpansion) &&
     (featuresMeta.length > 0 || stackMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);

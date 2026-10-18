@@ -4,7 +4,10 @@ import { unstable_cache } from 'next/cache';
 
 import { detailPublished, publicPhotos, publicBlocks } from './public-media';
 const projectInclude = {
-  photos: publicPhotos,
+  photos: {
+    ...publicPhotos,
+    orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
+  },
   coverAsset: true,
   coverAssetUk: true,
 } satisfies Prisma.ProjectInclude;
@@ -48,7 +51,7 @@ export async function getPublishedProjects(): Promise<ProjectWithRelations[]> {
       'media-mime-v2',
       'stack-array-v1',
       'project-type-text-v1',
-      'independent-covers-v3',
+      'legacy-gallery-compat-v4',
     ],
     {
       revalidate: 60,

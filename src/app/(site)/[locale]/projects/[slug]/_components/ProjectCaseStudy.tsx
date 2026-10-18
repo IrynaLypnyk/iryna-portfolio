@@ -1,3 +1,4 @@
+import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectFeatures';
 import { useTranslations } from 'next-intl';
 import type { ProjectDetail } from '@/types/projects';
 import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
@@ -79,6 +80,24 @@ export function ProjectCaseStudy({ detail }: { detail: ProjectDetail }) {
           {meta.length > 0 && <MetaList variant="panel" labelColor="blue" items={meta} />}
         </div>
       </section>
+
+      {detail.features.some((feature) => feature.trim()) && (
+        <section data-component="CaseStudyFeatures" className="pt-6">
+          <MetaList
+            variant="compact"
+            labelColor="gray"
+            labelWidth={120}
+            items={[
+              {
+                label: detail.featuresTitle?.trim() || t('labelFeatures'),
+                value: (
+                  <ProjectFeatures features={detail.features.filter((feature) => feature.trim())} />
+                ),
+              },
+            ]}
+          />
+        </section>
+      )}
 
       {detail.sections.length > 0 && (
         <section className="grid gap-[clamp(40px,7vh,80px)] pt-[clamp(56px,10vh,128px)]">

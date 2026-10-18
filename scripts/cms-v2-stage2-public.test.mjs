@@ -208,36 +208,16 @@ for (const type of ['projects', 'experiments']) {
   }
 }
 
-test('legacy cleanup skips ImageKit entirely when any independent cover still uses an asset', async () => {
-  let imageKitCalls = 0;
-  const { deleteMediaAssetIfUnused } = loadTypeScript('src/lib/media/delete-media-asset.ts', {
-    '@/lib/prisma': {
-      prisma: {
-        mediaAsset: {
-          findFirst: async ({ where }) => {
-            for (const key of [
-              'defaultForPhotos',
-              'ukrainianForPhotos',
-              'projectCovers',
-              'projectCoversUk',
-              'experimentCovers',
-              'experimentCoversUk',
-            ]) {
-              assert.ok(where[key].none);
-            }
-            return null;
-          },
-        },
-      },
-    },
-    '@/lib/imagekit/client': {
-      getImageKit: () => {
-        imageKitCalls++;
-        throw new Error('Must not call ImageKit');
-      },
-    },
-    '@/lib/imagekit/assertSafeImageKitPath': { assertSafeImageKitPath() {} },
+test('cleanup retains assets even when database and ImageKit are unavailable', async () => {
+  const forbidden = () => {
+    throw new Error('Must not connect');
+  };
+  const { cleanupMediaAssets } = loadTypeScript('src/lib/media/delete-media-asset.ts', {
+    '@/lib/prisma': { prisma: new Proxy({}, { get: forbidden }) },
+    '@/lib/imagekit/client': { getImageKit: forbidden },
   });
-  assert.equal((await deleteMediaAssetIfUnused('covered')).deleted, false);
-  assert.equal(imageKitCalls, 0);
+  const result = await cleanupMediaAssets(['covered']);
+  assert.deepEqual([...result.deferredAssetIds], ['covered']);
+  assert.equal(result.deletedAssetIds.length, 0);
+  assert.equal(result.failedAssetIds.length, 0);
 });

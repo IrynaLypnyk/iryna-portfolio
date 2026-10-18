@@ -133,7 +133,8 @@ for (const entity of ['project', 'experiment'])
       assert.equal(q.where.detailPageStatus, 'PUBLISHED');
     }
     const included = queries[0].include;
-    assert.equal(included.photos.where.isProjectCover, false);
+    assert.equal(included.photos.where.OR[0].isProjectCover, false);
+    assert.ok(included.photos.where.id.not);
     assert.equal(included.photos.where.contentBlockId, null);
     assert.equal(included.contentBlocks.orderBy[0].order, 'asc');
     assert.equal(included.contentBlocks.include.photos.orderBy[0].orderInProject, 'asc');
@@ -189,4 +190,39 @@ test('numbered sections keep the editorial columns with paragraphs and media ben
   assert.ok(html.includes('md:grid-cols-'));
   assert.equal((html.match(/<p /g) || []).length, 2);
   assert.ok(html.indexOf('data-gallery') > html.indexOf('Two'));
+});
+
+test('approved legacy cover usages stay in Project galleries without promoting other cover usages', () => {
+  const { legacyProjectCoverPhotoIds, legacyProjectIds } = load(
+    'src/lib/data/legacy-public-compatibility.ts'
+  );
+  const p = {
+    ...row,
+    id: [...legacyProjectIds][0],
+    photos: [
+      ...legacyProjectCoverPhotoIds.map((id) => ({ ...usage(id), isProjectCover: true })),
+      { ...usage('unrelated-cover'), isProjectCover: true },
+      usage('new-usage', row.coverAsset),
+    ],
+  };
+  const result = toProjectData(p, 'en');
+  assert.deepEqual(
+    Array.from(result.photos, (x) => x.id),
+    [...legacyProjectCoverPhotoIds, 'new-usage']
+  );
+  assert.equal(result.hasDetailPage, true);
+  assert.equal(result.preserveOverviewExpansion, true);
+  assert.equal(toProjectData({ ...p, id: 'new-project' }, 'en').preserveOverviewExpansion, false);
+  assert.equal(toProjectData({ ...p, published: false }, 'en').hasDetailPage, false);
+});
+
+test('legacy Experiment hides only its original cover usage, not another usage of the same asset', () => {
+  const { legacyExperimentCoverPhotoId, visibleAdditionalUsage } = load(
+    'src/lib/data/legacy-public-compatibility.ts'
+  );
+  assert.equal(
+    visibleAdditionalUsage({ ...usage(legacyExperimentCoverPhotoId), assetId: 'shared' }),
+    false
+  );
+  assert.equal(visibleAdditionalUsage({ ...usage('new-copy'), assetId: 'shared' }), true);
 });

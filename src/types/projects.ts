@@ -8,6 +8,7 @@ import type { ProjectStatus } from '@/generated/prisma/enums';
  */
 export type ProjectData = {
   hasDetailPage?: boolean;
+  preserveOverviewExpansion?: boolean;
   slug: string;
   shortLabel: string | null;
   title: string;
