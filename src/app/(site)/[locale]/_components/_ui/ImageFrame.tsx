@@ -4,6 +4,7 @@ import type { Photo } from '@/types/projects';
 
 type Props = {
   photo: Photo<string> | null;
+  compact?: boolean;
   /** Shown inside the empty frame while a project has no cover yet. */
   placeholder?: string | null;
   priority?: boolean;
@@ -18,11 +19,33 @@ type Props = {
  */
 export function ImageFrame({
   photo,
+  compact = false,
   placeholder,
   priority = false,
   sizes = '(min-width: 1024px) 60vw, 100vw',
   className,
 }: Props) {
+  if (compact) {
+    if (!photo) return null;
+    const width = `min(${photo.width}px, clamp(280px, 28vw, 360px))`;
+    return (
+      <div
+        data-component="CaseCover"
+        className="border-app-line bg-shell max-w-full overflow-hidden border"
+        style={{ width }}
+      >
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          priority={priority}
+          sizes="(min-width: 1286px) 360px, (min-width: 1000px) 28vw, 280px"
+          className="h-auto w-full object-contain"
+        />
+      </div>
+    );
+  }
   return (
     <div
       data-component="ImageFrame"

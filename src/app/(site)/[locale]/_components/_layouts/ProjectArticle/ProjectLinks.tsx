@@ -1,7 +1,11 @@
 import { cn } from '@/lib/utils';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 
-type Props = { open: boolean; links: { href: string; label: string }[]; className?: string };
+type Props = {
+  open: boolean;
+  links: { href: string; label: string; internal?: boolean }[];
+  className?: string;
+};
 
 export function ProjectLinks({ open, links, className }: Props) {
   return (
@@ -16,7 +20,8 @@ export function ProjectLinks({ open, links, className }: Props) {
         <AppLink
           key={link.label}
           href={link.href}
-          external
+          external={!link.internal}
+          internal={link.internal}
           arrow="upRight"
           color="blueBright"
           variant="underline"

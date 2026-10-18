@@ -2,16 +2,34 @@ import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@/generated/prisma/client';
 import { unstable_cache } from 'next/cache';
 
+import { detailPublished, publicPhotos, publicBlocks } from './public-media';
 const projectInclude = {
-  photos: {
-    where: { contentBlockId: null },
-    orderBy: [{ orderInProject: 'asc' }, { createdAt: 'asc' }],
-    include: { asset: true },
-  },
-  sections: {
-    orderBy: { order: 'asc' },
-  },
+  photos: publicPhotos,
+  coverAsset: true,
+  coverAssetUk: true,
 } satisfies Prisma.ProjectInclude;
+
+export async function getPublishedProjectDetail(slug: string) {
+  return prisma.project.findFirst({
+    where: { slug, ...detailPublished },
+    include: { ...projectInclude, contentBlocks: publicBlocks },
+  });
+}
+
+export async function getDetailProjectNeighbours() {
+  return prisma.project.findMany({
+    where: detailPublished,
+    orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
+    select: {
+      slug: true,
+      titleEn: true,
+      titleUk: true,
+      featured: true,
+      published: true,
+      detailPageStatus: true,
+    },
+  });
+}
 
 export type ProjectWithRelations = Prisma.ProjectGetPayload<{
   include: typeof projectInclude;
@@ -30,7 +48,7 @@ export async function getPublishedProjects(): Promise<ProjectWithRelations[]> {
       'media-mime-v2',
       'stack-array-v1',
       'project-type-text-v1',
-      'additional-media-v2',
+      'independent-covers-v3',
     ],
     {
       revalidate: 60,
@@ -46,20 +64,12 @@ export type ProjectSlugForSitemap = {
 
 /**
  * Lightweight query (slug + updatedAt only, no relations/photos) used to enumerate
- * published projects for the sitemap and for `generateStaticParams`.
+ * published detail pages for the sitemap.
  */
 export async function getAllProjectSlugsForSitemap(): Promise<ProjectSlugForSitemap[]> {
-  return await unstable_cache(
-    () =>
-      prisma.project.findMany({
-        where: { published: true },
-        select: { slug: true, updatedAt: true },
-        orderBy: { updatedAt: 'desc' },
-      }),
-    ['project-slugs-for-sitemap'],
-    {
-      revalidate: 3600,
-      tags: ['projects'],
-    }
-  )();
+  return prisma.project.findMany({
+    where: detailPublished,
+    select: { slug: true, updatedAt: true },
+    orderBy: { updatedAt: 'desc' },
+  });
 }

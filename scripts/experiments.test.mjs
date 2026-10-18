@@ -1,39 +1,9 @@
+import { loadTypeScript as load } from './helpers/load-typescript.mjs';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
-import vm from 'node:vm';
 import test from 'node:test';
-import ts from 'typescript';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
-function load(file, mocks = {}) {
-  const exports = {};
-  const source = ts.transpileModule(readFileSync(path.join(root, file), 'utf8'), {
-    compilerOptions: {
-      module: ts.ModuleKind.CommonJS,
-      target: ts.ScriptTarget.ES2022,
-      jsx: ts.JsxEmit.ReactJSX,
-    },
-  }).outputText;
-  vm.runInNewContext(source, {
-    exports,
-    Error,
-    console,
-    process,
-    Set,
-    URL,
-    require: (name) => {
-      if (name in mocks) return mocks[name];
-      if (name.startsWith('@/')) return load(`src/${name.slice(2)}.ts`, mocks);
-      if (name.startsWith('.')) return load(path.join(path.dirname(file), `${name}.ts`), mocks);
-      return require(name);
-    },
-  });
-  return exports;
-}
 const input = {
   slug: 'experiment',
   titleUk: 'Назва',
@@ -225,6 +195,8 @@ test('public data uses localized summary, full description and mixed media galle
   const experiments = [
     {
       ...input,
+      coverAsset: image,
+      coverAssetUk: null,
       photos: [
         { ...photo, id: 'image', asset: image, isProjectCover: true },
         { ...photo, id: 'video', asset: video, isProjectCover: false },
@@ -240,7 +212,7 @@ test('public data uses localized summary, full description and mixed media galle
     const [result] = await getPublishedExperiments(locale);
     assert.equal(
       result.shortDescription,
-      locale === 'uk' ? input.shortDescriptionUk : input.shortDescriptionEn
+      (locale === 'uk' ? input.shortDescriptionUk : input.shortDescriptionEn).trim()
     );
     assert.equal(result.description, locale === 'uk' ? input.descriptionUk : input.descriptionEn);
     assert.equal(result.cover.src, 'image');
@@ -330,12 +302,15 @@ test('experiment card renders the short description instead of the full article 
         Link: ({ href, children }) => React.createElement('a', { href }, children),
       },
       './ProjectArticle/ProjectStack': { ProjectStack: () => null },
+      '../_ui/ImagesGallery': { ImagesGallery: () => null },
+      '../_ui/AppLink': { AppLink: () => null },
       './ExperimentLinkIndicator': { ExperimentLinkIndicator: () => null },
     }
   );
   const markup = renderToStaticMarkup(
     React.createElement(ExperimentCard, {
       experiment: {
+        hasDetailPage: true,
         slug: 'experiment',
         index: '01',
         title: 'Title',
@@ -358,15 +333,24 @@ function loadExperimentPage(experiments) {
         throw new Error('404');
       },
     },
+    'next-intl': {
+      useTranslations: () => (key, values) => (values?.index ? `EXP ${values.index}` : key),
+    },
     'next-intl/server': {
       setRequestLocale: (locale) => locales.push(locale),
       getTranslations: async () => (key, values) => (values?.index ? `EXP ${values.index}` : key),
     },
     '@/i18n/navigation': { Link: 'a' },
     '@/lib/data/experiments': {
-      getPublishedExperiments: async (locale) => {
+      getExperimentDetail: async (slug, locale) => {
         locales.push(locale);
-        return experiments;
+        const index = experiments.findIndex((item) => item.slug === slug);
+        return index < 0
+          ? null
+          : {
+              experiment: experiments[index],
+              next: experiments.length > 1 ? experiments[(index + 1) % experiments.length] : null,
+            };
       },
     },
     '@/lib/seo/build-metadata': { buildPageMetadata: (input) => input },

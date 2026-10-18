@@ -1,4 +1,4 @@
-import type { Photo } from '@/types/projects';
+import type { Photo, CaseBlock } from '@/types/projects';
 
 /**
  * A Playground experiment, localized to a single language.
@@ -8,6 +8,9 @@ import type { Photo } from '@/types/projects';
  * use the same gallery as projects.
  */
 export type ExperimentData = {
+  hasDetailPage?: boolean;
+  updatedAt?: Date;
+  blocks?: CaseBlock[];
   slug: string;
   index: string;
   title: string;

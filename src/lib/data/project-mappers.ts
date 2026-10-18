@@ -1,5 +1,5 @@
 import type { LocaleType } from '@/i18n/routing';
-import { getImageUrl } from '@/lib/imagekit/get-image-url';
+import { coverPhoto, usagePhoto, contentBlocks, type PublicBlock } from './public-media';
 import type { ProjectWithRelations } from '@/lib/data/projects';
 import type { Photo, ProjectData, ProjectDetail } from '@/types/projects';
 import { nullableText } from '@/lib/content/text';
@@ -23,25 +23,12 @@ export function toPhoto(
   photo: DbPhoto,
   locale: LocaleType
 ): Photo<string> {
-  const caption = pick(locale, photo.captionUk, photo.captionEn);
-
-  return {
-    id: photo.id,
-    src: getImageUrl(photo.asset.src),
-    mimeType: photo.asset.mimeType,
-    width: photo.asset.width,
-    height: photo.asset.height,
-    alt: caption ?? pick(locale, project.titleUk, project.titleEn),
-    linkUrl: photo.linkUrl,
-    description: pick(locale, photo.descriptionUk, photo.descriptionEn),
-  };
+  return usagePhoto(photo, locale, pick(locale, project.titleUk, project.titleEn));
 }
 
 export function toProjectData(project: ProjectWithRelations, locale: LocaleType): ProjectData {
-  const images = project.photos.filter((photo) => !photo.asset.mimeType?.startsWith('video/'));
-  const cover = images.find((photo) => photo.isProjectCover) ?? images[0];
-
   return {
+    hasDetailPage: project.published && project.detailPageStatus === 'PUBLISHED',
     slug: project.slug,
     shortLabel: nullableText(project.shortLabel),
     title: pick(locale, project.titleUk, project.titleEn),
@@ -49,53 +36,51 @@ export function toProjectData(project: ProjectWithRelations, locale: LocaleType)
     context: nullableText(pick(locale, project.contextUk, project.contextEn)),
     role: nullableText(pick(locale, project.roleUk, project.roleEn)),
     stack: project.stack,
-    projectType: locale === 'uk' ? project.projectTypeUk : project.projectTypeEn,
+    projectType: nullableText(pick(locale, project.projectTypeUk, project.projectTypeEn)),
     status: project.status,
-    yearLabel: project.yearLabel,
+    yearLabel: nullableText(project.yearLabel),
     featured: project.featured,
     order: project.order,
-    coverPhoto: cover ? toPhoto(project, cover, locale) : null,
-    featuresTitle: pick(locale, project.featuresTitleUk, project.featuresTitleEn),
+    coverPhoto: coverPhoto(project, locale, pick(locale, project.titleUk, project.titleEn)),
+    featuresTitle: nullableText(pick(locale, project.featuresTitleUk, project.featuresTitleEn)),
     features: locale === 'uk' ? project.featuresUk : project.featuresEn,
     externalUrl: project.externalUrl,
-    linkLabel: pick(locale, project.linkLabelUk, project.linkLabelEn),
+    linkLabel: nullableText(pick(locale, project.linkLabelUk, project.linkLabelEn)),
     githubUrl: project.githubUrl,
     storybookUrl: project.storybookUrl,
-    photos: project.photos.map((photo) => toPhoto(project, photo, locale)),
+    photos: project.photos
+      .filter((photo) => !photo.isProjectCover)
+      .map((photo) => toPhoto(project, photo, locale)),
   };
 }
 
-/**
- * Builds the case-study view model.
- *
- * `siblings` is the full published list: the case study's own number and its
- * "Next project" link are positions within the featured sequence, so they can
- * only be derived with the neighbours in hand. Next wraps around to the first
- * project, as the design does.
- */
+/** Numbering and next links follow only the published detail-page sequence. */
 export function toProjectDetail(
-  project: ProjectWithRelations,
-  siblings: ProjectWithRelations[],
+  project: ProjectWithRelations & { contentBlocks?: PublicBlock[] },
+  siblings: Pick<
+    ProjectWithRelations,
+    'slug' | 'titleEn' | 'titleUk' | 'published' | 'detailPageStatus'
+  >[],
   locale: LocaleType
 ): ProjectDetail {
-  const featured = siblings.filter((candidate) => candidate.featured);
-  const position = featured.findIndex((candidate) => candidate.slug === project.slug);
+  const published = siblings.filter(
+    (candidate) => candidate.published && candidate.detailPageStatus === 'PUBLISHED'
+  );
+  const position = published.findIndex((candidate) => candidate.slug === project.slug);
 
   const nextProject =
-    position >= 0 && featured.length > 1 ? featured[(position + 1) % featured.length] : null;
+    position >= 0 && published.length > 1 ? published[(position + 1) % published.length] : null;
 
   return {
     ...toProjectData(project, locale),
     index: pad(position >= 0 ? position + 1 : project.order),
     lead: nullableText(pick(locale, project.leadUk, project.leadEn)),
-    linkNote: pick(locale, project.linkNoteUk, project.linkNoteEn),
-    sections: project.sections.map((section, index) => ({
-      id: section.id,
-      index: pad(index + 1),
-      title: pick(locale, section.titleUk, section.titleEn),
-      body: pick(locale, section.bodyUk, section.bodyEn),
-      body2: pick(locale, section.body2Uk, section.body2En),
-    })),
+    linkNote: nullableText(pick(locale, project.linkNoteUk, project.linkNoteEn)),
+    sections: contentBlocks(
+      project.contentBlocks,
+      locale,
+      pick(locale, project.titleUk, project.titleEn)
+    ),
     next: nextProject
       ? {
           slug: nextProject.slug,

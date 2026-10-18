@@ -7,6 +7,7 @@ import type { ProjectStatus } from '@/generated/prisma/enums';
  * screenshot exists, and the home page renders an empty `ImageFrame` in that case.
  */
 export type ProjectData = {
+  hasDetailPage?: boolean;
   slug: string;
   shortLabel: string | null;
   title: string;
@@ -34,13 +35,7 @@ export type ProjectDetail = ProjectData & {
   index: string;
   lead: string | null;
   linkNote: string | null;
-  sections: {
-    id: string;
-    index: string;
-    title: string;
-    body: string;
-    body2: string | null;
-  }[];
+  sections: CaseBlock[];
   next: { slug: string; title: string } | null;
 };
 
@@ -61,4 +56,12 @@ export type Photo<TText> = {
   linkUrl: string | null;
   /** Short caption shown on hover in the case-study gallery. */
   description: TText | null;
+};
+
+export type CaseBlock = {
+  id: string;
+  index: string;
+  title: string | null;
+  body: string | null;
+  photos: Photo<string>[];
 };

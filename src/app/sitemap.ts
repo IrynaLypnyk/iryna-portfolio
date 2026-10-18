@@ -2,7 +2,8 @@ import { routing, type LocaleType } from '@/i18n/routing';
 import { routes } from '@/constants/routes';
 import { buildLocaleUrl } from '@/lib/seo/config';
 import type { MetadataRoute } from 'next';
-import { getPublishedExperiments } from '@/lib/data/experiments';
+import { getAllProjectSlugsForSitemap } from '@/lib/data/projects';
+import { getAllExperimentSlugsForSitemap } from '@/lib/data/experiments';
 
 export const revalidate = 60;
 
@@ -26,15 +27,21 @@ function buildEntriesForPathname(
 }
 
 /**
- * Experiments have their own localized case studies; the Playground overview
+ * Only published detail pages have localized case-study entries; the Playground overview
  * redirects to the home section and should not be indexed separately.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const experiments = await getPublishedExperiments(routing.defaultLocale);
+  const [experiments, projects] = await Promise.all([
+    getAllExperimentSlugsForSitemap(),
+    getAllProjectSlugsForSitemap(),
+  ]);
   return [
     ...buildEntriesForPathname(''),
+    ...projects.flatMap((project) =>
+      buildEntriesForPathname(routes.project(project.slug), project.updatedAt)
+    ),
     ...experiments.flatMap((experiment) =>
-      buildEntriesForPathname(routes.experiment(experiment.slug))
+      buildEntriesForPathname(routes.experiment(experiment.slug), experiment.updatedAt)
     ),
   ];
 }

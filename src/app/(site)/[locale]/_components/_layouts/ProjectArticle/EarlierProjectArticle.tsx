@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useMemo, useState } from 'react';
+import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useProjectMeta, selectProjectMeta, type ProjectMetaKey } from '@/hooks/useProjectMeta';
@@ -27,23 +27,14 @@ export function EarlierProjectArticle({ project }: Props) {
   const galleryId = `${panelId}-gallery`;
 
   const allMeta = useProjectMeta(project);
-  const galleryPhotos = useMemo(() => {
-    const coverPhoto = project.coverPhoto;
-    const photos = project.photos;
-    if (!coverPhoto) return photos;
-
-    return [
-      coverPhoto,
-      ...photos.filter((photo) => photo.id !== coverPhoto.id && photo.src !== coverPhoto.src),
-    ];
-  }, [project.coverPhoto, project.photos]);
-
   // Add, remove or reorder fields here; move a key between lists to change its group.
   const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack'];
 
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
   const expandedFeaturesMeta = selectProjectMeta(allMeta, ['features']);
-  const expandable = expandedMeta.length > 0 || galleryPhotos.length > 0;
+  const expandable =
+    !project.hasDetailPage &&
+    (expandedMeta.length > 0 || expandedFeaturesMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);
 

@@ -39,7 +39,9 @@ export function RecentProjectArticle({ project, index }: Props) {
   const meta = selectProjectMeta(allMeta, metaFields);
   const featuresMeta = selectProjectMeta(allMeta, ['features']);
   const stackMeta = selectProjectMeta(allMeta, ['stack']);
-  const expandable = featuresMeta.length > 0 || stackMeta.length > 0;
+  const expandable =
+    !project.hasDetailPage &&
+    (featuresMeta.length > 0 || stackMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);
 

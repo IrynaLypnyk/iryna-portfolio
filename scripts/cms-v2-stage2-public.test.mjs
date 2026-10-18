@@ -52,6 +52,8 @@ function detailPage(data = project) {
   const translation = (key) => key;
   translation.has = () => false;
   const mocks = {
+    react: { ...React, cache: (fn) => fn },
+    'next-intl': { useTranslations: () => translation },
     'next/navigation': {
       notFound: () => {
         throw new Error('404');
@@ -60,13 +62,14 @@ function detailPage(data = project) {
     'next-intl/server': { setRequestLocale: () => {}, getTranslations: async () => translation },
     '@/i18n/navigation': { Link: ({ children }) => React.createElement('a', null, children) },
     '@/lib/data/projects': {
-      getPublishedProjects: async () => [data],
+      getPublishedProjectDetail: async () => data,
+      getDetailProjectNeighbours: async () => [data],
       getAllProjectSlugsForSitemap: async () => [],
     },
     '@/lib/imagekit/get-image-url': { getImageUrl: (src) => src },
     '@/lib/seo/config': { buildAlternates: () => ({}) },
   };
-  for (const component of ['ImageFrame', 'MetaList', 'AppLink', 'Label']) {
+  for (const component of ['ImageFrame', 'ImagesGallery', 'MetaList', 'AppLink', 'Label']) {
     mocks[`@/app/(site)/[locale]/_components/_ui/${component}`] = {
       [component]: ({ children, items }) =>
         items
