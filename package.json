@@ -20,7 +20,7 @@
     "db:studio": "dotenv -e .env.local -- prisma studio",
     "db:seed": "dotenv -e .env.local -- prisma db seed",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "prisma generate && storybook build",
     "fluid-font": "node scripts/fluid-font.mjs"
   },
   "dependencies": {
