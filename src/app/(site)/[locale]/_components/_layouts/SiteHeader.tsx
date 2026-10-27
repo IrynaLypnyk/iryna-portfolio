@@ -8,7 +8,7 @@ import { BurgerMenuButton } from '@/app/(site)/[locale]/_components/_ui/BurgerMe
 import { LocaleSwitcher } from '@/app/(site)/[locale]/_components/_ui/LocaleSwitcher';
 import { MobileMenuContainer } from '@/components/MobileMenuContainer';
 import { Link, usePathname } from '@/i18n/navigation';
-import { routes } from '@/constants/routes';
+import { anchors, routes } from '@/constants/routes';
 import { cn } from '@/lib/utils';
 import { LogoIcon } from '@/assets/icons';
 
@@ -16,9 +16,17 @@ export function SiteHeader() {
   const tCommon = useTranslations('Common');
   const tNav = useTranslations('Navigation');
   const pathname = usePathname();
-  const [activeId, setActiveId] = useState('');
+  const [activeSectionId, setActiveId] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const ACTIVATION_POINT = 0.42;
+  const activeId =
+    pathname === routes.home
+      ? activeSectionId
+      : pathname.startsWith('/projects/')
+        ? anchors.projects
+        : pathname === routes.playground || pathname.startsWith(`${routes.playground}/`)
+          ? anchors.playground
+          : '';
   const isHeroActive = pathname === routes.home && activeId === '';
 
   function handleHomeClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -39,6 +47,8 @@ export function SiteHeader() {
   }
 
   useEffect(() => {
+    if (pathname !== routes.home) return;
+
     let frameId = 0;
     let lastScrollY = -1;
 
@@ -74,7 +84,7 @@ export function SiteHeader() {
     frameId = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frameId);
-  }, []);
+  }, [pathname]);
 
   return (
     <>

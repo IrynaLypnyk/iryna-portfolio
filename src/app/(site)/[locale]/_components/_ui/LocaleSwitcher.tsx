@@ -36,7 +36,7 @@ export function LocaleSwitcher({ variant = 'boxed', onLocaleChangeAction }: Prop
       data-component="LocaleSwitcher"
       className={cn(
         'inline-flex items-center font-mono text-xs tracking-widest',
-        isFooter ? 'gap-2.5' : 'border-app-line min-h-8.5 gap-0.5 border p-0.5'
+        isFooter ? 'gap-2.5' : 'border-app-line-gray min-h-8.5 gap-0.5 border p-0.5'
       )}
     >
       {locales.map((candidate, index) => {

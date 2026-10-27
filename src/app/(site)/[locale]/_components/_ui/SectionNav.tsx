@@ -37,7 +37,7 @@ export function SectionNav({ activeId }: { activeId: string }) {
             onClick={(event) => handleClick(event, item.id)}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
-              'text-app-muted border-b border-transparent transition-colors',
+              'text-app-muted border-b-2 border-transparent transition-colors',
               isActive
                 ? 'border-app-accent-bright text-app-ink font-semibold'
                 : 'hover:text-app-ink'

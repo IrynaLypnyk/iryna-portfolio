@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 type Props = {
   as?: ElementType;
-  /** Prefix the label with the design's 44px accent rule (used by the hero). */
+  /** Prefix the label with a blue wave (used by the hero). */
   withRule?: boolean;
   className?: string;
   children: ReactNode;

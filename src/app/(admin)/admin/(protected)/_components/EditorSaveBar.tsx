@@ -68,7 +68,7 @@ export function EditorSaveBar({
             </AdminButton>
             <AdminButton
               type="submit"
-              className="rounded-full bg-neutral-950 text-white hover:bg-neutral-800 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"
+              className="rounded-full bg-red-600 text-white hover:bg-red-700 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:opacity-100"
               disabled={locked || (!dirty && !error)}
             >
               {saving ? 'Saving…' : 'Save changes'}

@@ -1,4 +1,4 @@
-import { Manrope, IBM_Plex_Mono } from 'next/font/google';
+import { Manrope, Geist_Mono } from 'next/font/google';
 
 export const sans = Manrope({
   subsets: ['latin', 'cyrillic-ext'],
@@ -7,9 +7,9 @@ export const sans = Manrope({
   display: 'swap',
 });
 
-export const mono = IBM_Plex_Mono({
+export const mono = Geist_Mono({
   subsets: ['latin', 'cyrillic-ext'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-ibm-plex-mono',
+  variable: '--font-geist-mono',
   display: 'swap',
 });

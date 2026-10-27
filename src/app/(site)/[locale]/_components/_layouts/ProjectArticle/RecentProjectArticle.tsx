@@ -11,12 +11,6 @@ import type { ProjectData } from '@/types/projects';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
-import dynamic from 'next/dynamic';
-const ProjectGallery = dynamic(() =>
-  import('@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectGallery').then(
-    (module) => module.ProjectGallery
-  )
-);
 
 type Props = {
   project: ProjectData;
@@ -35,13 +29,14 @@ export function RecentProjectArticle({ project, index }: Props) {
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
   const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
+  const expandableFields: ProjectMetaKey[] = ['stack', 'features'];
 
   const meta = selectProjectMeta(allMeta, metaFields);
-  const featuresMeta = selectProjectMeta(allMeta, ['features']);
-  const stackMeta = selectProjectMeta(allMeta, ['stack']);
+  const expandedMeta = selectProjectMeta(allMeta, expandableFields);
+
   const expandable =
-    (!project.hasDetailPage || project.preserveOverviewExpansion) &&
-    (featuresMeta.length > 0 || stackMeta.length > 0 || project.photos.length > 0);
+    (project.hasDetailPage || project.preserveOverviewExpansion) &&
+    (expandedMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);
 
@@ -49,7 +44,7 @@ export function RecentProjectArticle({ project, index }: Props) {
     <article
       data-component="RecentProjectArticle"
       className={cn(
-        'border-app-text grid gap-7 overflow-visible border-b pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
+        'border-app-line-gray grid gap-7 overflow-visible border-b pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
       )}
     >
       <div
@@ -84,51 +79,41 @@ export function RecentProjectArticle({ project, index }: Props) {
               {project.context}
             </p>
           )}
-
-          {meta.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
-            </div>
-          )}
+          <div>
+            {meta.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
+              </div>
+            )}
+            <AnimatePresence initial={false}>
+              {expandable && open && (
+                <motion.div
+                  id={detailsId}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  className="-pr-(--page-pad-right) gap-1 overflow-visible pt-1 [grid-area:expandedMeta]"
+                >
+                  {/*{meta.length > 0 && (*/}
+                  {/*  <div className="flex flex-col gap-2">*/}
+                  {/*    <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />*/}
+                  {/*  </div>*/}
+                  {/*)}*/}
+                  {expandedMeta.length > 0 && (
+                    <MetaList
+                      items={expandedMeta}
+                      variant="compact"
+                      labelColor="gray"
+                      labelWidth={120}
+                    />
+                  )}
+                  {links.length > 0 && <ProjectLinks links={links} className="mt-8" />}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-
-        <AnimatePresence initial={false}>
-          {expandable && open && (
-            <motion.div
-              id={detailsId}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="-pr-(--page-pad-right) grid gap-1 overflow-visible pt-1 [grid-area:expandedMeta]"
-            >
-              {stackMeta.length > 0 && (
-                <MetaList items={stackMeta} variant="compact" labelColor="gray" labelWidth={120} />
-              )}
-              {featuresMeta.length > 0 && (
-                <MetaList
-                  items={featuresMeta}
-                  variant="compact"
-                  labelColor="gray"
-                  labelWidth={120}
-                  labelClassName="inline-block padding-t-4"
-                />
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence initial={false}>
-          {expandable && open && (
-            <ProjectGallery
-              gallery={allMeta.gallery}
-              galleryId={galleryId}
-              imageHeightClass="h-40"
-            />
-          )}
-        </AnimatePresence>
-
-        {links.length > 0 && <ProjectLinks open={open} links={links} />}
 
         {expandable && (
           <ShowMoreButton

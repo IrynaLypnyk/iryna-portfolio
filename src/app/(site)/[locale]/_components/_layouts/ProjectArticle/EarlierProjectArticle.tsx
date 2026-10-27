@@ -28,13 +28,12 @@ export function EarlierProjectArticle({ project }: Props) {
 
   const allMeta = useProjectMeta(project);
   // Add, remove or reorder fields here; move a key between lists to change its group.
-  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack'];
+  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack', 'features'];
 
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
-  const expandedFeaturesMeta = selectProjectMeta(allMeta, ['features']);
   const expandable =
     (!project.hasDetailPage || project.preserveOverviewExpansion) &&
-    (expandedMeta.length > 0 || expandedFeaturesMeta.length > 0 || project.photos.length > 0);
+    (expandedMeta.length > 0 || project.photos.length > 0);
 
   const links = getProjectLinks(project, t);
 
@@ -42,7 +41,7 @@ export function EarlierProjectArticle({ project }: Props) {
     <article
       data-component="EarlierProjectArticle"
       className={cn(
-        'border-app-text grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
+        'border-app-line-gray grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
       )}
     >
       <div
@@ -75,28 +74,19 @@ export function EarlierProjectArticle({ project }: Props) {
                 transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="-pr-(--page-pad-right) grid gap-1 overflow-visible py-4"
               >
-                {(expandedMeta.length > 0 || expandedFeaturesMeta.length > 0) && (
-                  <>
-                    <MetaList
-                      items={expandedMeta}
-                      variant="compact"
-                      labelColor="gray"
-                      labelWidth={120}
-                    />
-                    <MetaList
-                      items={expandedFeaturesMeta}
-                      variant="compact"
-                      labelColor="gray"
-                      labelWidth={120}
-                      labelClassName="inline-block padding-t-4"
-                    />
-                  </>
+                {expandedMeta.length > 0 && (
+                  <MetaList
+                    items={expandedMeta}
+                    variant="compact"
+                    labelColor="gray"
+                    labelWidth={120}
+                  />
                 )}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-        {links.length > 0 && <ProjectLinks open={open} links={links} className="mt-6" />}
+        {links.length > 0 && <ProjectLinks links={links} className="mt-2" />}
         <AnimatePresence initial={false}>
           {expandable && open && (
             <ProjectGallery

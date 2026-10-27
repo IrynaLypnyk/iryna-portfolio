@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 const BRANCH_1_RANGE = [0.62, 0.74] as const;
@@ -18,6 +18,7 @@ function ramp(value: number, [start, end]: readonly [number, number]): number {
 }
 
 export function GrowingThread({ className }: { className?: string }) {
+  const gradientId = useId();
   const stemRef = useRef<SVGPathElement>(null);
   const branch1Ref = useRef<SVGPathElement>(null);
   const branch2Ref = useRef<SVGPathElement>(null);
@@ -134,11 +135,25 @@ export function GrowingThread({ className }: { className?: string }) {
         preserveAspectRatio="none"
         className="h-full w-full"
       >
+        <defs>
+          <linearGradient
+            id={gradientId}
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="44"
+            x2="0"
+            y2="772"
+          >
+            <stop offset="0%" stopColor="var(--color-app-violet-light)" />
+            <stop offset="30%" stopColor="var(--color-app-violet)" />
+            <stop offset="100%" stopColor="var(--color-app-accent)" />
+          </linearGradient>
+        </defs>
         <path
           ref={stemRef}
           d="M30 44 L30 250 C30 288 40 296 40 334 L40 560 C40 598 30 606 30 644 L30 772"
           fill="none"
-          stroke="var(--color-app-accent)"
+          stroke={`url(#${gradientId})`}
           strokeWidth="1.1"
           strokeLinecap="round"
         />
@@ -147,7 +162,7 @@ export function GrowingThread({ className }: { className?: string }) {
           ref={branch1Ref}
           d="M30 692 L41 681"
           fill="none"
-          stroke="var(--color-app-accent)"
+          stroke={`url(#${gradientId})`}
           strokeWidth="1"
           strokeLinecap="round"
           opacity="0"
@@ -157,7 +172,7 @@ export function GrowingThread({ className }: { className?: string }) {
           ref={branch2Ref}
           d="M30 726 L20 716"
           fill="none"
-          stroke="var(--color-app-accent)"
+          stroke={`url(#${gradientId})`}
           strokeWidth="1"
           strokeLinecap="round"
           opacity="0"

@@ -13,7 +13,7 @@ export function Playground({ experiments }: Props) {
   const t = useTranslations('Playground');
 
   return (
-    <Section id={anchors.playground}>
+    <Section id={anchors.playground} className="border-t-0">
       <SectionHeader index="02" title={t('title')} subtitle={t('intro')} />
 
       {experiments.length === 0 ? (
