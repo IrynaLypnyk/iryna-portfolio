@@ -103,7 +103,7 @@ export function EarlierProjectArticle({ project }: Props) {
             detailsId={detailsId}
             galleryId={galleryId}
             projectTitle={project.title}
-            className="[grid-area:btn]"
+            className="mt-8 [grid-area:btn] md:mt-0"
           />
         )}
       </div>

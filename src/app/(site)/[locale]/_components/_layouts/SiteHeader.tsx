@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { SectionNav } from '@/app/(site)/[locale]/_components/_ui/SectionNav';
+import { SiteNav } from '@/app/(site)/[locale]/_components/_ui/SiteNav';
 import { useState, useEffect, type MouseEvent } from 'react';
 import { headerNavItems } from '@/constants/navigation';
 import { PageContainer } from '@/app/(site)/[locale]/_components/_ui/PageContainer';
@@ -9,7 +9,7 @@ import { LocaleSwitcher } from '@/app/(site)/[locale]/_components/_ui/LocaleSwit
 import { MobileMenuContainer } from '@/components/MobileMenuContainer';
 import { Link, usePathname } from '@/i18n/navigation';
 import { anchors, routes } from '@/constants/routes';
-import { cn } from '@/lib/utils';
+import { NavItem } from '@/components/NavItem';
 import { LogoIcon } from '@/assets/icons';
 
 export function SiteHeader() {
@@ -104,7 +104,7 @@ export function SiteHeader() {
           </div>
           <nav className="flex items-center gap-[clamp(14px,3vw,34px)]">
             <div className="hidden md:block">
-              <SectionNav activeId={activeId} />
+              <SiteNav activeId={activeId} />
             </div>
             <div className="md:hidden">
               <BurgerMenuButton
@@ -120,35 +120,16 @@ export function SiteHeader() {
       </header>
       <MobileMenuContainer isMenuOpen={isMobileMenuOpen}>
         <div className="mb-auto flex flex-col gap-8 px-10 pb-10">
-          <Link
-            href={routes.home}
-            onClick={handleHomeClick}
-            aria-current={isHeroActive ? 'page' : undefined}
-            className={cn(
-              'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
-              isHeroActive ? 'text-app-accent' : 'text-app-muted'
-            )}
-          >
-            {tNav('home')}
-          </Link>
-          {headerNavItems.map((item) => {
-            const isActive = activeId === item.id;
-
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                aria-current={isActive ? 'true' : undefined}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  'hover:text-app-accent-bright text-[clamp(28px,3.8vw,52px)] leading-none font-semibold tracking-tight transition-colors',
-                  isActive ? 'text-app-accent-bright' : 'text-app-muted'
-                )}
-              >
-                {tNav(item.labelKey)}
-              </Link>
-            );
-          })}
+          <NavItem active={isHeroActive} variant="mobile">
+            <Link href={routes.home} onClick={handleHomeClick}>
+              {tNav('home')}
+            </Link>
+          </NavItem>
+          <SiteNav
+            activeId={activeId}
+            variant="mobile"
+            onNavigateAction={() => setIsMobileMenuOpen(false)}
+          />
           <div className="border-app-line border-t pt-8">
             <LocaleSwitcher onLocaleChangeAction={() => setIsMobileMenuOpen(false)} />
           </div>

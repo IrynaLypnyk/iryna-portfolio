@@ -4,12 +4,19 @@ import { MouseEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { headerNavItems } from '@/constants/navigation';
-import { cn } from '@/lib/utils';
+import { NavItem } from '@/components/NavItem';
 
-export function SectionNav({ activeId }: { activeId: string }) {
+type Props = {
+  activeId: string;
+  variant?: 'inline' | 'mobile';
+  onNavigateAction?: () => void;
+};
+
+export function SiteNav({ activeId, variant = 'inline', onNavigateAction }: Props) {
   const t = useTranslations('Navigation');
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    onNavigateAction?.();
     const section = document.getElementById(id);
 
     // Section exists => we're already on the homepage.
@@ -26,25 +33,22 @@ export function SectionNav({ activeId }: { activeId: string }) {
   };
 
   return (
-    <div className="flex items-center gap-[clamp(14px,3vw,34px)]">
+    <div
+      className={
+        variant === 'mobile'
+          ? 'flex flex-col gap-8'
+          : 'flex items-center gap-[clamp(14px,3vw,34px)]'
+      }
+    >
       {headerNavItems.map((item) => {
         const isActive = activeId === item.id;
 
         return (
-          <Link
-            key={item.id}
-            href={item.href}
-            onClick={(event) => handleClick(event, item.id)}
-            aria-current={isActive ? 'page' : undefined}
-            className={cn(
-              'text-app-muted border-b-2 border-transparent transition-colors',
-              isActive
-                ? 'border-app-accent-bright text-app-ink font-semibold'
-                : 'hover:text-app-ink'
-            )}
-          >
-            {t(item.labelKey)}
-          </Link>
+          <NavItem key={item.id} active={isActive} variant={variant}>
+            <Link href={item.href} onClick={(event) => handleClick(event, item.id)}>
+              {t(item.labelKey)}
+            </Link>
+          </NavItem>
         );
       })}
     </div>

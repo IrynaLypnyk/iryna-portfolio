@@ -122,7 +122,7 @@ export function RecentProjectArticle({ project, index }: Props) {
             detailsId={detailsId}
             galleryId={galleryId}
             projectTitle={project.title}
-            className="sticky [grid-area:btn]"
+            className="mt-6 [grid-area:btn] md:sticky md:mt-0"
           />
         )}
       </div>

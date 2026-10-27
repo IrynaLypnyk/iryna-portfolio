@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { NavItem } from '@/components/NavItem';
 import { routes } from '@/constants/routes';
 import { ADMIN_NAV_LINKS } from '@/app/(admin)/admin/constants';
 import { AdminHeader } from '@/app/(admin)/admin/_components/AdminHeader';
@@ -25,7 +25,6 @@ export function AdminNav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const activeLink = ADMIN_NAV_LINKS.find(({ href }) => isActive(pathname, href));
-  const ActiveLinkIcon = activeLink?.icon;
 
   return (
     <>
@@ -39,23 +38,12 @@ export function AdminNav() {
           <>
             <nav className="hidden items-center gap-10 md:flex">
               {ADMIN_NAV_LINKS.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={cn(
-                    'flex items-center gap-1.5 py-1 text-base font-medium tracking-wide transition-colors',
-                    isActive(pathname, href)
-                      ? 'text-app-text border-app-accent-bright/50 border-b font-semibold'
-                      : 'hover:text-app-accent-bright text-app-muted'
-                  )}
-                  aria-current={isActive(pathname, href) ? 'page' : undefined}
-                >
-                  {label}
-                </Link>
+                <NavItem key={href} active={isActive(pathname, href)}>
+                  <Link href={href}>{label}</Link>
+                </NavItem>
               ))}
             </nav>
-            <span className="text-app-text border-app-accent-bright/50 flex min-w-0 grow items-center justify-center gap-1 truncate border-b text-sm font-semibold uppercase md:hidden">
-              {ActiveLinkIcon ? <ActiveLinkIcon size={16} strokeWidth={1.5} /> : null}
+            <span className="text-app-text border-app-accent-bright flex min-w-0 grow items-center justify-center gap-1 truncate border-b-2 text-sm font-semibold uppercase md:hidden">
               {activeLink?.label ?? 'Admin'}
             </span>
             <div className="md:hidden">
@@ -78,24 +66,22 @@ export function AdminNav() {
 
       {isMobileMenuOpen && (
         <MobileMenuContainer isMenuOpen={isMobileMenuOpen}>
-          <nav className="flex flex-col gap-3 px-4 py-3" aria-label="Admin navigation">
+          <nav className="flex flex-col gap-8 px-10 pb-10" aria-label="Admin navigation">
             {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon }) => {
               const active = isActive(pathname, href);
 
               return (
-                <Link
+                <NavItem
                   key={href}
-                  href={href}
-                  className={cn(
-                    'flex items-center gap-2 rounded-sm px-3 py-2 text-base font-semibold tracking-wide uppercase transition-colors',
-                    active ? 'text-app-accent-bright' : 'hover:bg-app-accent-lightest'
-                  )}
-                  aria-current={active ? 'page' : undefined}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  active={active}
+                  variant="mobile"
+                  className="flex items-center gap-2"
                 >
-                  <Icon size={20} strokeWidth={1.5} />
-                  {label}
-                </Link>
+                  <Link href={href} onClick={() => setIsMobileMenuOpen(false)}>
+                    <Icon size={20} strokeWidth={1.5} className="shrink-0" />
+                    {label}
+                  </Link>
+                </NavItem>
               );
             })}
 

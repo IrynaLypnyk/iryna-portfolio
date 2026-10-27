@@ -13,7 +13,7 @@ export function ProjectGallery({ gallery, galleryId, imageHeightClass }: Props) 
       animate={{ height: 'auto', opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className="border-app-line -pr-(--page-pad-right) overflow-visible border-t pt-7 [grid-area:gallery]"
+      className="-pr-(--page-pad-right) overflow-visible pt-7 [grid-area:gallery]"
     >
       <div className="grid gap-6 pb-4">
         <Label color="gray" variant={'compact'} size={'xs'}>

@@ -42,7 +42,7 @@ export function EditorTabs({ tabs }: { tabs: Tabs }) {
       aria-label="Editor sections"
       aria-orientation={vertical ? 'vertical' : 'horizontal'}
       style={{ top: headerHeight }}
-      className="sticky z-10 flex gap-1 self-start overflow-x-auto border-b border-neutral-200 bg-white py-2 lg:flex-col lg:overflow-visible lg:border-b-0"
+      className="border-app-muted sticky z-10 flex gap-1 self-start overflow-x-auto border-b py-2 lg:flex-col lg:overflow-visible lg:border-b-0"
     >
       {editorTabs.map((tab, index) => (
         <button
@@ -70,7 +70,7 @@ export function EditorTabs({ tabs }: { tabs: Tabs }) {
             tabs.setTab(editorTabs[next]);
             document.getElementById(`${tabs.id}-${editorTabs[next]}-tab`)?.focus();
           }}
-          className={`flex-1 shrink-0 rounded-sm border-b-2 px-3 py-2.5 text-left text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 lg:flex-none lg:border-b-0 lg:border-l-2 ${tabs.tab === tab ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-transparent text-neutral-600 hover:bg-neutral-50'}`}
+          className={`flex-1 shrink-0 border-b-2 px-3 py-2.5 text-left text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 lg:flex-none lg:border-r-2 lg:border-b-0 ${tabs.tab === tab ? 'border-app-accent-bright text-app-accent-bright-text bg-blue-50' : 'border-transparent text-neutral-600 hover:bg-neutral-50'}`}
         >
           {tab}
         </button>

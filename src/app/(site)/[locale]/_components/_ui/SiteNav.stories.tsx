@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { SectionNav } from './SectionNav';
+import { SiteNav } from './SiteNav';
 import { anchors } from '@/constants/routes';
 
 const meta = {
-  title: 'UI/SectionNav',
-  component: SectionNav,
+  title: 'UI/SiteNav',
+  component: SiteNav,
   args: { activeId: anchors.projects },
   argTypes: {
     activeId: { control: 'inline-radio', options: ['', ...Object.values(anchors)] },
   },
-} satisfies Meta<typeof SectionNav>;
+} satisfies Meta<typeof SiteNav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -28,4 +28,8 @@ export const ContactActive: Story = {
 /** Top of the page: no section has crossed the activation point yet. */
 export const NoneActive: Story = {
   args: { activeId: '' },
+};
+
+export const Mobile: Story = {
+  args: { variant: 'mobile' },
 };

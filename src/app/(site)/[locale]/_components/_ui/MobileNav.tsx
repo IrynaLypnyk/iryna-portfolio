@@ -1,8 +1,5 @@
-import { headerNavItems } from '@/constants/navigation';
-import { Link } from '@/i18n/navigation';
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { MobileMenuContainer } from '@/components/MobileMenuContainer';
+import { SiteNav } from './SiteNav';
 
 type Props = {
   isMenuOpen: boolean;
@@ -11,41 +8,11 @@ type Props = {
 };
 
 export function MobileNav({ isMenuOpen, activeId, closeMobileMenu }: Props) {
-  const t = useTranslations('Navigation');
-
   return (
-    <AnimatePresence>
-      {isMenuOpen && (
-        <motion.div
-          data-component="MobileNav"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          className="bg-app-page border-app-line fixed inset-0 top-(--header-height) z-90 flex min-h-[calc(100dvh-var(--header-height))] flex-col overflow-y-auto border-t pt-(--header-height)"
-        >
-          <div className="mb-auto flex flex-col gap-8 px-10 pb-10">
-            {headerNavItems.map((item) => {
-              const isActive = activeId === item.id;
-
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  aria-current={isActive ? 'true' : undefined}
-                  onClick={closeMobileMenu}
-                  className={cn(
-                    'hover:text-app-accent text-[clamp(28px,3.8vw,52px)] leading-none' +
-                      ' font-semibold tracking-tight transition-colors',
-                    isActive ? 'text-app-accent-bright' : 'text-app-muted'
-                  )}
-                >
-                  {t(item.labelKey)}
-                </Link>
-              );
-            })}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <MobileMenuContainer isMenuOpen={isMenuOpen}>
+      <div data-component="MobileNav" className="mb-auto px-10 pb-10">
+        <SiteNav activeId={activeId} variant="mobile" onNavigateAction={closeMobileMenu} />
+      </div>
+    </MobileMenuContainer>
   );
 }
