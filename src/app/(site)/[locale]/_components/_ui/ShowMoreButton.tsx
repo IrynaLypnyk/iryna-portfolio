@@ -8,6 +8,7 @@ type Props = {
   open: boolean;
   setOpenAction: () => void;
   detailsId: string;
+  fullWidthContentId?: string;
   projectTitle: string;
   className?: string;
   btnLabel?: string;
@@ -17,6 +18,7 @@ export function ShowMoreButton({
   open,
   setOpenAction,
   detailsId,
+  fullWidthContentId,
   projectTitle,
   className,
   btnLabel,
@@ -28,7 +30,7 @@ export function ShowMoreButton({
     <button
       type="button"
       aria-expanded={open}
-      aria-controls={detailsId}
+      aria-controls={[detailsId, fullWidthContentId].filter(Boolean).join(' ')}
       aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${projectTitle}`}
       onClick={setOpenAction}
       className={cn('flex cursor-pointer items-center gap-x-2', className)}

@@ -36,7 +36,8 @@ export function ArchivedProjectArticle({ project }: Props) {
       data-component="EarlierProjectArticle"
       label={project.title}
       expandable={expandable}
-      className="border-app-line border-t py-4 [grid-template-areas:'content'_'links'_'expanded'_'btn'] last:border-b md:grid-cols-[auto_minmax(0,1fr)_auto] md:py-6 md:[grid-template-areas:'btn_content_links'_'expanded_expanded_expanded']"
+      className="border-app-line border-t py-4 [grid-template-areas:'content'_'links'_'fullWidthExpanded'_'btn'] last:border-b md:grid-cols-[auto_minmax(0,1fr)_auto] md:py-6 md:[grid-template-areas:'btn_content_links'_'fullWidthExpanded_fullWidthExpanded_fullWidthExpanded']"
+      expandedContentClassName="-pr-(--page-pad-right) grid gap-1 pt-6 pb-4"
       buttonClassName="mt-8 md:mt-0"
       visibleContent={
         <div className="flex flex-col gap-2">
@@ -55,15 +56,13 @@ export function ArchivedProjectArticle({ project }: Props) {
           )}
         </div>
       }
-      expandableContent={
-        <>
-          {expandedMeta.length > 0 && (
-            <div className="-pr-(--page-pad-right) grid gap-1 pt-6 pb-4">
-              <MetaList items={expandedMeta} variant="compact" labelColor="gray" labelWidth={120} />
-            </div>
-          )}
-          <ProjectGallery gallery={allMeta.gallery} imageHeightClass="h-40" />
-        </>
+      expandedContent={
+        expandedMeta.length > 0 && (
+          <MetaList items={expandedMeta} variant="compact" labelColor="gray" labelWidth={120} />
+        )
+      }
+      fullWidthExpandedContent={
+        <ProjectGallery gallery={allMeta.gallery} imageHeightClass="h-40" />
       }
     >
       {links.length > 0 && <ProjectLinks links={links} className="mt-2" />}

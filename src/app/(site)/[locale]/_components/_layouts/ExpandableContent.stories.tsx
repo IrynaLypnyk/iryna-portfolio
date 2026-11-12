@@ -12,17 +12,17 @@ const meta = {
         <p className="text-app-muted">This summary is always visible.</p>
       </div>
     ),
-    expandableContent: (
+    expandedContent: (
       <div className="flex flex-col gap-2">
         <p>Additional details can contain any React content.</p>
         <p className="text-app-muted">Metadata, links, and galleries can be passed here.</p>
       </div>
     ),
-    expandableContentClassName: 'pt-4',
+    expandedContentClassName: 'pt-4',
   },
   argTypes: {
     visibleContent: { control: false },
-    expandableContent: { control: false },
+    expandedContent: { control: false },
   },
 } satisfies Meta<typeof ExpandableContent>;
 

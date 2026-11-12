@@ -41,9 +41,9 @@ export function RecentProjectArticle({ project, index }: Props) {
       expandable={expandable}
       className={cn(
         'border-app-line border-t py-[clamp(28px,5vh,56px)] last:border-b last:pb-[clamp(32px,6vh,64px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)] md:py-[clamp(28px,5vh,56px)]',
-        "[grid-template-areas:'image'_'content'_'expanded'_'btn'] md:[grid-template-areas:'btn_content_image'_'._expanded_expanded']"
+        "[grid-template-areas:'image'_'content'_'btn'] md:[grid-template-areas:'btn_content_image']"
       )}
-      expandableContentClassName="-pr-(--page-pad-right) gap-1 pt-1"
+      expandedContentClassName="-pr-(--page-pad-right) gap-1 pt-1"
       buttonClassName="md:sticky"
       visibleContent={
         <div className="flex flex-col gap-4">
@@ -67,7 +67,7 @@ export function RecentProjectArticle({ project, index }: Props) {
           )}
         </div>
       }
-      expandableContent={
+      expandedContent={
         <>
           {expandedMeta.length > 0 && (
             <MetaList items={expandedMeta} variant="compact" labelColor="gray" labelWidth={120} />
