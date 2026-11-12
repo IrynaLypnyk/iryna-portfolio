@@ -33,24 +33,12 @@ export function ExperimentCaseStudy({
       value: (
         <div className="flex flex-wrap gap-x-5 gap-y-3">
           {experiment.demoUrl && (
-            <AppLink
-              href={experiment.demoUrl}
-              external
-              arrow="upRight"
-              variant="underline"
-              color="blueBright"
-            >
+            <AppLink href={experiment.demoUrl} external arrow="upRight" color="blueBright">
               {t('demoLabel')}
             </AppLink>
           )}
           {experiment.githubUrl && (
-            <AppLink
-              href={experiment.githubUrl}
-              external
-              arrow="upRight"
-              variant="underline"
-              color="blueBright"
-            >
+            <AppLink href={experiment.githubUrl} external arrow="upRight" color="blueBright">
               {t('githubLabel')}
             </AppLink>
           )}
@@ -61,18 +49,25 @@ export function ExperimentCaseStudy({
 
   return (
     <article data-component="ExperimentCaseStudy">
-      <section className="pt-[clamp(48px,9vh,104px)] pb-[clamp(32px,6vh,64px)]">
-        <AppLink href={backHref} internal arrow="left" arrowPosition="before" color="gray" fontMono>
+      <section className="pb-[clamp(32px,6vh,64px)]">
+        <AppLink
+          href={backHref}
+          internal
+          arrow="left"
+          arrowPosition="before"
+          color="blueBright"
+          fontMono
+          className="pt-[clamp(32px,6vh,64px)]"
+        >
           {t('backToExperiments')}
         </AppLink>
-        <div className="grid items-start gap-[clamp(32px,6vw,88px)] pt-[clamp(20px,4vh,44px)] md:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]">
-          <div className="grid min-w-0 gap-6">
-            <div className="text-muted flex items-baseline gap-3 font-mono text-xs tracking-[0.12em]">
-              <span>{t('expLabel', { index: experiment.index })}</span>
-              <span className="text-accent-pale">/</span>
-              <span className="text-ink">{t('title')}</span>
-            </div>
-            <ImageFrame photo={experiment.cover} compact priority />
+        <div className="grid w-full min-w-0 grid-cols-1 items-start gap-[clamp(32px,6vw,88px)] pt-[clamp(20px,4vh,44px)] [grid-template-areas:'image'_'title'] md:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] md:[grid-template-areas:'title_image']">
+          {/*<div className="text-muted flex items-baseline gap-3 font-mono text-xs tracking-[0.12em]">*/}
+          {/*  <span>{t('expLabel', { index: experiment.index })}</span>*/}
+          {/*  <span className="text-accent-pale">/</span>*/}
+          {/*  <span className="text-ink">{t('title')}</span>*/}
+          {/*</div>*/}
+          <div className="flex flex-col gap-6 [grid-area:title]">
             <h1 className="text-[clamp(32px,4vw,56px)] leading-[1.08] font-semibold tracking-[-0.038em] wrap-break-word">
               {experiment.title}
             </h1>
@@ -81,13 +76,16 @@ export function ExperimentCaseStudy({
                 {experiment.shortDescription}
               </p>
             )}
-            {/*{experiment.description && (*/}
-            {/*  <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty whitespace-pre-line">*/}
-            {/*    {experiment.description}*/}
-            {/*  </p>*/}
-            {/*)}*/}
+            {meta.length > 0 && (
+              <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={80} />
+            )}
           </div>
-          {meta.length > 0 && <MetaList variant="panel" labelColor="blue" items={meta} />}
+          <ImageFrame photo={experiment.cover} compact priority className="[grid-area:image]" />
+          {/*{experiment.description && (*/}
+          {/*  <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty whitespace-pre-line">*/}
+          {/*    {experiment.description}*/}
+          {/*  </p>*/}
+          {/*)}*/}
         </div>
       </section>
 
