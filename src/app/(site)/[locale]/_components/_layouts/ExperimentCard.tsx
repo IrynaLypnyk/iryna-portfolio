@@ -32,7 +32,7 @@ export function ExperimentCard({ experiment }: Props) {
       </div>
 
       <div className="grid content-start gap-2">
-        <span className="text-app-ink text-xl leading-none font-medium tracking-tight">
+        <span className="text-app-ink text-xl leading-[1.3] font-medium tracking-tight">
           {experiment.title}
         </span>
         {experiment.shortDescription && (
