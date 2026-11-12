@@ -13,8 +13,8 @@ export function Playground({ experiments }: Props) {
   const t = useTranslations('Playground');
 
   return (
-    <Section id={anchors.playground} className="border-t-0">
-      <SectionHeader index="03" title={t('title')} subtitle={t('intro')} />
+    <Section id={anchors.playground}>
+      <SectionHeader title={t('title')} subtitle={t('intro')} />
 
       {experiments.length === 0 ? (
         <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>

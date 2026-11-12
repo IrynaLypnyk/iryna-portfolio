@@ -38,13 +38,3 @@ export const InitiallyOpen: Story = {
 export const WithoutExpansion: Story = {
   args: { expandable: false },
 };
-
-/** Each instance owns its state and generates a unique controlled panel ID. */
-export const IndependentInstances: Story = {
-  render: (args) => (
-    <div className="grid">
-      <ExpandableContent {...args} />
-      <ExpandableContent {...args} />
-    </div>
-  ),
-};

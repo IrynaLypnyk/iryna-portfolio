@@ -13,7 +13,7 @@ export function Projects({ projects }: Props) {
   const archivedProjects = projects.filter((project) => !project.featured);
 
   return (
-    <Section id={anchors.projects} className="border-none pb-0">
+    <Section id={anchors.projects} className="border-none">
       <RecentProjects projects={recentProjects} isPortfolioEmpty={projects.length === 0} />
       <ArchivedProjects projects={archivedProjects} />
     </Section>

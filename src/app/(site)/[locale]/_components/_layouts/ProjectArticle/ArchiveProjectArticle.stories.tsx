@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { EarlierProjectArticle } from './EarlierProjectArticle';
+import { ArchivedProjectArticle } from './ArchivedProjectArticle';
 import { featuredProject, projectWithoutCover, sparseProject } from '@/storybook/fixtures';
 
 const meta = {
-  title: 'Layouts/EarlierProjectArticle',
-  component: EarlierProjectArticle,
+  title: 'Layouts/ArchivedProjectArticle',
+  component: ArchivedProjectArticle,
   args: { project: featuredProject, index: 1 },
   argTypes: {
     project: { control: false },
     index: { control: { type: 'number', min: 1, max: 20 } },
   },
-} satisfies Meta<typeof EarlierProjectArticle>;
+} satisfies Meta<typeof ArchivedProjectArticle>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -42,8 +42,8 @@ export const GalleryOnly: Story = {
 export const Sequence: Story = {
   render: () => (
     <div>
-      <EarlierProjectArticle project={featuredProject} index={1} />
-      <EarlierProjectArticle project={projectWithoutCover} index={2} />
+      <ArchivedProjectArticle project={featuredProject} index={1} />
+      <ArchivedProjectArticle project={projectWithoutCover} index={2} />
     </div>
   ),
 };

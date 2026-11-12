@@ -14,7 +14,6 @@ export function RecentProjects({ projects, isPortfolioEmpty = false }: Props) {
   return (
     <div data-component="RecentProjects">
       <SectionHeader
-        index="01"
         title={t('recentWork.title')}
         subtitle={t('recentWork.description')}
         className="mb-5 md:mb-7 lg:mb-15"

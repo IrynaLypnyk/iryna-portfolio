@@ -8,25 +8,27 @@ type Props = {
   open: boolean;
   setOpenAction: () => void;
   detailsId: string;
-  galleryId?: string;
   projectTitle: string;
   className?: string;
+  btnLabel?: string;
 };
 
 export function ShowMoreButton({
   open,
   setOpenAction,
   detailsId,
-  galleryId,
   projectTitle,
   className,
+  btnLabel,
 }: Props) {
   const t = useTranslations('Work');
+  const defaultLabel = open ? t('hideDetails') : t('showDetails');
+  const label = btnLabel ? btnLabel : defaultLabel;
   return (
     <button
       type="button"
       aria-expanded={open}
-      aria-controls={[detailsId, galleryId].filter(Boolean).join(' ')}
+      aria-controls={detailsId}
       aria-label={`${open ? t('hideDetails') : t('showDetails')}: ${projectTitle}`}
       onClick={setOpenAction}
       className={cn('flex cursor-pointer items-center gap-x-2', className)}
@@ -34,8 +36,10 @@ export function ShowMoreButton({
       <ActionBox>
         {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
       </ActionBox>
-      <span className="text-app-accent-bright-text font-mono text-sm md:hidden">
-        {open ? t('hideDetails') : t('showDetails')}
+      <span
+        className={cn('text-app-accent-bright-text font-mono text-sm', !btnLabel && 'md:hidden')}
+      >
+        {label}
       </span>
     </button>
   );

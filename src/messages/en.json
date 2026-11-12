@@ -61,8 +61,11 @@
     },
     "moreWork": {
       "title": "Archived Projects",
-      "description": "Earlier work and projects completed during my studies"
+      "description": "Earlier work and projects completed during my studies",
+      "viewArchivedProjects": "View archived projects",
+      "hideArchivedProjects": "Hide archived projects"
     },
+
     "empty": "Projects are being added. Check back shortly."
   },
   "Playground": {

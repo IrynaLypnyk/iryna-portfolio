@@ -12,8 +12,6 @@ type Props = {
   expandableContent: ReactNode;
   /** Static siblings positioned in the outer grid, such as a cover or links. */
   children?: ReactNode;
-  /** Expanded content spanning the outer grid, such as a gallery. */
-  expandableFooter?: ReactNode;
   /** Describes the content in the toggle's accessible label. */
   label: string;
   expandable?: boolean;
@@ -30,7 +28,6 @@ export function ExpandableContent({
   visibleContent,
   expandableContent,
   children,
-  expandableFooter,
   label,
   expandable = true,
   defaultOpen = false,
@@ -41,52 +38,31 @@ export function ExpandableContent({
 }: Props) {
   const [open, setOpen] = useState(defaultOpen);
   const detailsId = useId();
-  const footerId = `${detailsId}-footer`;
 
   return (
     <Component
       data-component={dataComponent}
       className={cn(
-        'group border-app-line relative grid items-start gap-x-[clamp(20px,3.5vw,48px)] border-t py-4 last:border-b md:py-6',
-        "[grid-template-areas:'content'_'footer'_'btn'] md:grid-cols-[auto_minmax(0,1fr)] md:[grid-template-areas:'btn_content'_'footer_footer']",
+        'group relative grid items-start gap-x-[clamp(20px,3.5vw,48px)]',
+        "[grid-template-areas:'content'_'expanded'_'btn'] md:grid-cols-[auto_minmax(0,1fr)] md:[grid-template-areas:'btn_content'_'btn_expanded']",
         className
       )}
     >
-      <div className={cn('min-w-0 [grid-area:content]', contentClassName)}>
-        {visibleContent}
-        {expandable && (
-          <div id={detailsId}>
-            <AnimatePresence initial={false}>
-              {open && (
-                <motion.div
-                  key="expanded-content"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="overflow-hidden"
-                >
-                  <div className={expandableContentClassName}>{expandableContent}</div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
-      </div>
+      <div className={cn('min-w-0 [grid-area:content]', contentClassName)}>{visibleContent}</div>
       {children}
-      {expandable && expandableFooter && (
-        <div id={footerId} className="min-w-0 [grid-area:footer]">
+      {expandable && (
+        <div id={detailsId} className="min-w-0 [grid-area:expanded]">
           <AnimatePresence initial={false}>
             {open && (
               <motion.div
-                key="expanded-footer"
+                key="expanded-content"
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="overflow-hidden"
               >
-                {expandableFooter}
+                <div className={expandableContentClassName}>{expandableContent}</div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -97,7 +73,6 @@ export function ExpandableContent({
           open={open}
           setOpenAction={() => setOpen((current) => !current)}
           detailsId={detailsId}
-          galleryId={expandableFooter ? footerId : undefined}
           projectTitle={label}
           className={cn('mt-6 [grid-area:btn] md:mt-0', buttonClassName)}
         />

@@ -40,8 +40,8 @@ export function RecentProjectArticle({ project, index }: Props) {
       label={project.title}
       expandable={expandable}
       className={cn(
-        'py-[clamp(28px,5vh,56px)] last:pb-[clamp(32px,6vh,64px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)] md:py-[clamp(28px,5vh,56px)]',
-        "[grid-template-areas:'image'_'content'_'btn'] md:[grid-template-areas:'btn_content_image']"
+        'border-app-line border-t py-[clamp(28px,5vh,56px)] last:border-b last:pb-[clamp(32px,6vh,64px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)] md:py-[clamp(28px,5vh,56px)]',
+        "[grid-template-areas:'image'_'content'_'expanded'_'btn'] md:[grid-template-areas:'btn_content_image'_'._expanded_expanded']"
       )}
       expandableContentClassName="-pr-(--page-pad-right) gap-1 pt-1"
       buttonClassName="md:sticky"
