@@ -12,7 +12,7 @@ export function ProjectFeatures({ features }: Props) {
       {features.map((feature, index) => (
         <li
           key={feature}
-          className="text-app-muted border-app-line-gray flex items-baseline gap-4 border-t py-1 text-base tracking-wide last:border-b last:pb-2"
+          className="text-app-muted border-app-line-blue flex items-baseline gap-4 border-t py-1 text-base tracking-wide last:border-b last:pb-2"
         >
           <span
             aria-hidden="true"

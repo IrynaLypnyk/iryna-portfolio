@@ -32,7 +32,7 @@ export function Contact() {
       id={anchors.contact}
       // className="pt-[clamp(88px,16vh,196px)] pb-[clamp(64px,10vh,120px)]"
     >
-      <SectionHeader index="04" title={t('title')} className="mb-[clamp(40px,7vh,84px)]" />
+      <SectionHeader title={t('title')} className="mb-[clamp(40px,7vh,84px)]" />
 
       <div
         data-reveal-stagger

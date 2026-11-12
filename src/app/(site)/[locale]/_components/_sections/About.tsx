@@ -23,7 +23,7 @@ export function About() {
 
   return (
     <Section id={anchors.about}>
-      <SectionHeader index="03" title={t('title')} />
+      <SectionHeader title={t('title')} />
       <div
         data-reveal-stagger
         className="grid items-start gap-[clamp(32px,6vw,88px)] md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]"

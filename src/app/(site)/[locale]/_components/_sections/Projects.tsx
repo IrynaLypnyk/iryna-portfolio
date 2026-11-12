@@ -38,6 +38,7 @@ export function Projects({ projects }: Props) {
       {moreWork.length > 0 && (
         <div>
           <SectionHeader
+            index="02"
             title={t('moreWork.title')}
             subtitle={t('moreWork.description')}
             titleTag="h3"

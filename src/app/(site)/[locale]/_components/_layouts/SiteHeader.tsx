@@ -88,7 +88,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="border-app-line bg-app-page/70 sticky top-0 z-10 border-b backdrop-blur-sm">
+      <header className="border-app-line-blue bg-app-page/70 sticky top-0 z-10 border-b backdrop-blur-sm">
         <PageContainer className="flex min-h-(--header-height) items-center justify-between gap-1 md:gap-6">
           <div className="flex items-center gap-3">
             <Link href={routes.home} onClick={handleHomeClick} className="flex items-center gap-2">

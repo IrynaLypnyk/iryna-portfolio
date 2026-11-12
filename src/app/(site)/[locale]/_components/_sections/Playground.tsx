@@ -14,7 +14,7 @@ export function Playground({ experiments }: Props) {
 
   return (
     <Section id={anchors.playground} className="border-t-0">
-      <SectionHeader index="02" title={t('title')} subtitle={t('intro')} />
+      <SectionHeader index="03" title={t('title')} subtitle={t('intro')} />
 
       {experiments.length === 0 ? (
         <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>

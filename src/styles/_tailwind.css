@@ -79,8 +79,8 @@
   --color-app-violet: var(--violet);
   --color-app-violet-light: var(--violet-light);
 
-  --color-app-line: var(--color-app-violet-light);
-  --color-app-line-gray: var(--gray-line);
+  --color-app-line: var(--gray-line);
+  --color-app-line-blue: var(--color-app-violet-light);
   --color-app-line-soft: var(--gray-line-light);
 
   /* ---- Animations ---- */

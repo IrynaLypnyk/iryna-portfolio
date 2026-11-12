@@ -41,7 +41,7 @@ export function EarlierProjectArticle({ project }: Props) {
     <article
       data-component="EarlierProjectArticle"
       className={cn(
-        'border-app-line-gray grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
+        'border-app-line grid gap-7 overflow-visible border-b pb-4 first:border-t last:border-b md:pb-6'
       )}
     >
       <div
