@@ -1,14 +1,12 @@
 'use client';
 
-import { useId, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useProjectMeta, selectProjectMeta, type ProjectMetaKey } from '@/hooks/useProjectMeta';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { cn } from '@/lib/utils';
 import type { ProjectData } from '@/types/projects';
-import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
+import { ExpandableContent } from '@/app/(site)/[locale]/_components/_layouts/ExpandableContent';
 import { getProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/utils';
 import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectLinks';
 
@@ -20,11 +18,6 @@ type Props = {
 
 export function RecentProjectArticle({ project, index }: Props) {
   const t = useTranslations('Work');
-  const [open, setOpen] = useState(false);
-  const panelId = useId();
-  const detailsId = `${panelId}-details`;
-  const galleryId = `${panelId}-gallery`;
-
   const allMeta = useProjectMeta(project);
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
@@ -41,30 +34,19 @@ export function RecentProjectArticle({ project, index }: Props) {
   const links = getProjectLinks(project, t);
 
   return (
-    <article
+    <ExpandableContent
+      as="article"
       data-component="RecentProjectArticle"
+      label={project.title}
+      expandable={expandable}
       className={cn(
-        'border-app-line grid gap-7 overflow-visible border-b pb-[clamp(28px,5vh,56px)] first:border-t last:border-b last:pb-[clamp(32px,6vh,64px)]'
+        'py-[clamp(28px,5vh,56px)] last:pb-[clamp(32px,6vh,64px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)] md:py-[clamp(28px,5vh,56px)]',
+        "[grid-template-areas:'image'_'content'_'btn'] md:[grid-template-areas:'btn_content_image']"
       )}
-    >
-      <div
-        className={cn(
-          'group relative grid items-start gap-x-[clamp(20px,3.5vw,48px)] pt-[clamp(28px,5vh,56px)] md:grid-cols-[auto_minmax(0,1fr)_minmax(160px,220px)]',
-          // Keep areas defined while AnimatePresence runs exit animations to avoid implicit columns.
-          "[grid-template-areas:'image'_'textContent'_'expandedMeta'_'links'_'gallery'_'btn'] md:[grid-template-areas:'btn_textContent_image'_'._expandedMeta_expandedMeta'_'._links_links'_'gallery_gallery_gallery']"
-        )}
-      >
-        <ImageFrame
-          photo={project.coverPhoto}
-          placeholder={
-            project.shortLabel ? t('coverPlaceholder', { title: project.shortLabel }) : null
-          }
-          priority={index === 1}
-          sizes="(min-width: 768px) 20vw, 40vw"
-          className="aspect-4/3 [grid-area:image]"
-        />
-
-        <div className="flex flex-col gap-4 [grid-area:textContent]">
+      expandableContentClassName="-pr-(--page-pad-right) gap-1 pt-1"
+      buttonClassName="md:sticky"
+      visibleContent={
+        <div className="flex flex-col gap-4">
           <h3
             className={cn(
               'mt-6 text-[clamp(1.375rem,calc(0.9583rem+1.3333vw),2.125rem)] leading-none font-medium tracking-tight text-pretty transition-colors md:mt-0',
@@ -73,59 +55,36 @@ export function RecentProjectArticle({ project, index }: Props) {
           >
             {project.title}
           </h3>
-
           {project.context && (
             <p className="text-app-muted text-base leading-normal tracking-wide whitespace-pre-line">
               {project.context}
             </p>
           )}
-          <div>
-            {meta.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
-              </div>
-            )}
-            <AnimatePresence initial={false}>
-              {expandable && open && (
-                <motion.div
-                  id={detailsId}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="-pr-(--page-pad-right) gap-1 overflow-visible pt-1 [grid-area:expandedMeta]"
-                >
-                  {/*{meta.length > 0 && (*/}
-                  {/*  <div className="flex flex-col gap-2">*/}
-                  {/*    <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />*/}
-                  {/*  </div>*/}
-                  {/*)}*/}
-                  {expandedMeta.length > 0 && (
-                    <MetaList
-                      items={expandedMeta}
-                      variant="compact"
-                      labelColor="gray"
-                      labelWidth={120}
-                    />
-                  )}
-                  {links.length > 0 && <ProjectLinks links={links} className="mt-8" />}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          {meta.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
+            </div>
+          )}
         </div>
-
-        {expandable && (
-          <ShowMoreButton
-            open={open}
-            setOpenAction={() => setOpen((current) => !current)}
-            detailsId={detailsId}
-            galleryId={galleryId}
-            projectTitle={project.title}
-            className="mt-6 [grid-area:btn] md:sticky md:mt-0"
-          />
-        )}
-      </div>
-    </article>
+      }
+      expandableContent={
+        <>
+          {expandedMeta.length > 0 && (
+            <MetaList items={expandedMeta} variant="compact" labelColor="gray" labelWidth={120} />
+          )}
+          {links.length > 0 && <ProjectLinks links={links} className="mt-8" />}
+        </>
+      }
+    >
+      <ImageFrame
+        photo={project.coverPhoto}
+        placeholder={
+          project.shortLabel ? t('coverPlaceholder', { title: project.shortLabel }) : null
+        }
+        priority={index === 1}
+        sizes="(min-width: 768px) 20vw, 40vw"
+        className="aspect-4/3 [grid-area:image]"
+      />
+    </ExpandableContent>
   );
 }
