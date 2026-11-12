@@ -81,11 +81,11 @@ export function ExperimentCaseStudy({
                 {experiment.shortDescription}
               </p>
             )}
-            {experiment.description && (
-              <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty whitespace-pre-line">
-                {experiment.description}
-              </p>
-            )}
+            {/*{experiment.description && (*/}
+            {/*  <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty whitespace-pre-line">*/}
+            {/*    {experiment.description}*/}
+            {/*  </p>*/}
+            {/*)}*/}
           </div>
           {meta.length > 0 && <MetaList variant="panel" labelColor="blue" items={meta} />}
         </div>
