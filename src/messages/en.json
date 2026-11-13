@@ -30,10 +30,11 @@
     "cta": "View my projects",
     "labelExperience": "Experience",
     "labelExpanding": "Expanding",
+    "labelExploring": "Exploring",
     "labelLocation": "Location",
     "metaExperience": "7+ years in production",
     "metaExpanding": "full-stack development",
-    "metaStatus": "Open to opportunities"
+    "metaExploring": "AI-powered product features"
   },
   "Work": {
     "title": "Work",
@@ -96,11 +97,11 @@
     "labelCurrently": "Building",
     "labelLearning": "Exploring",
     "labelOutside": "Contributing",
-    "currently": "building full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
-    "learning": "AI-assisted development and practical ways to bring AI into real products",
+    "currently": "full-stack projects for freelance clients with Next.js, React 19, TypeScript, PostgreSQL & Prisma",
+    "learning": "AI-assisted development and AI-powered product features",
     "outside": {
-      "p1": "to an open-source project ",
-      "p2": "Women Coding Community"
+      "p1": "to",
+      "p2": "Women Coding Community open-source platform"
     }
   },
   "Contact": {

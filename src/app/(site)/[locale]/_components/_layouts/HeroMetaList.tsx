@@ -2,7 +2,14 @@ import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/M
 import { useTranslations } from 'next-intl';
 
 // Reorder these keys to change the hero metadata order on all screen sizes.
-const HERO_META_ORDER = ['role', 'experience', 'expanding', 'stack', 'location'] as const;
+const HERO_META_ORDER = [
+  'role',
+  'experience',
+  'expanding',
+  'exploring',
+  'stack',
+  'location',
+] as const;
 
 export function HeroMetaList() {
   const t = useTranslations('Hero');
@@ -14,6 +21,7 @@ export function HeroMetaList() {
     stack: { label: tWork('labelStack'), value: tCommon('stack') },
     experience: { label: t('labelExperience'), value: t('metaExperience') },
     expanding: { label: t('labelExpanding'), value: t('metaExpanding') },
+    exploring: { label: t('labelExploring'), value: t('metaExploring') },
     location: { label: t('labelLocation'), value: t('location') },
   };
 

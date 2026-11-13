@@ -2,7 +2,7 @@
   "Subtitle": "{role} із понад 7 роками досвіду розробки production-вебзастосунків, зараз розвиваюся у напрямі full-stack product development.",
   "Common": {
     "name": "Ірина Липник",
-    "role": "Frontend Engineer",
+    "role": "Frontend-інженер",
     "stack": "React · TypeScript · Next.js · Prisma",
     "switchLanguage": "Перемкнути мову",
     "close": "Закрити",
@@ -26,19 +26,20 @@
       "part3": "Продумані інтерфейси."
     },
     "body": "{role} із понад 7 роками досвіду розробки production-вебзастосунків, зараз розвиваюся у напрямі full-stack product development.",
-    "location": "Тонбридж, UK · Київ, Україна",
+    "location": "Тонбридж, Велика Британія · Київ, Україна",
     "cta": "Переглянути проєкти",
     "labelExperience": "Досвід",
-    "labelExpanding": "Розвиваюсь",
+    "labelExpanding": "Розвиваюся",
+    "labelExploring": "Досліджую",
     "labelLocation": "Локація",
     "metaExperience": "7+ років production",
-    "metaExpanding": "full-stack розробка",
-    "metaStatus": "Відкрита до нових можливостей"
+    "metaExpanding": "у full-stack розробці",
+    "metaExploring": "AI-функції в продуктах"
   },
   "Work": {
     "title": "Проєкти",
     "labelRole": "МОЯ РОЛЬ",
-    "labelStack": "ТЕХНОЛОГІЇ",
+    "labelStack": "СТЕК",
     "labelStatus": "СТАТУС",
     "labelYear": "РІК",
     "labelLinks": "ПОСИЛАННЯ",
@@ -85,19 +86,19 @@
   "About": {
     "title": "Про мене",
     "photoCaption": "Тонбридж, UK",
-    "p1": "Мені подобається перетворювати ідеї на робочі продукти, продумувати UX-деталі, будувати чисту архітектуру та покращувати продуктивність.",
+    "p1": "Мені подобається перетворювати ідеї на робочі продукти, продумувати UX-деталі, будувати чисту архітектуру та покращувати швидкодію.",
     "p2": {
       "p2-1": "Більша частина мого професійного досвіду пов’язана з ",
       "p2-2": "Helsi",
-      "p2-3": ", де я працювала сім років і поступово виросла від створення інтерфейсів на HTML, CSS і jQuery до розробки ключового функціоналу для пацієнтської та лікарської частин платформи на React, TypeScript i Redux."
+      "p2-3": ", найбільшою цифровою медичною платформою України, де я працювала сім років і поступово виросла від створення інтерфейсів на HTML, CSS і jQuery до розробки ключового функціоналу для пацієнтської та лікарської частин платформи на React, TypeScript i Redux."
     },
-    "p3": "Мені комфортно працювати самостійно й водночас співпрацювати з product, design і backend командами — від перших ідей до реалізації та запуску.",
+    "p3": "Мені комфортно працювати самостійно й водночас співпрацювати з продуктовою командою, дизайнерами та бекенд-розробниками командами — від перших ідей до реалізації та запуску.",
     "labelCurrently": "Працюю",
     "labelLearning": "Досліджую",
     "labelOutside": "ДОЛУЧАЮСЬ",
-    "currently": "full-stack freelance-проєкт на Next.js, React 19, TypeScript, PostgreSQL і Prisma",
-    "learning": "AI-assisted development і практичні способи інтеграції AI в реальні продукти",
-    "outside": { "p1": "до open-source проєкту ", "p2": "Women Coding Community" }
+    "currently": "над full-stack проєктами для фриланс-клієнтів: Next.js, React 19, TypeScript, PostgreSQL і Prisma",
+    "learning": "розробку з допомогою AI та продуктові функції на основі AI",
+    "outside": { "p1": "до open-source платформи", "p2": "Women Coding Community" }
   },
   "Contact": {
     "title": "Контакти",
