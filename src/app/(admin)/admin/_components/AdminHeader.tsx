@@ -8,7 +8,7 @@ export function AdminHeader({
   nav,
   rightContent,
   logoHref = routes.home,
-  containerClass = 'mx-auto flex max-w-[1600px] items-center justify-between gap-4 py-3',
+  containerClass = 'mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6',
   headerClass = 'border-app-line bg-app-page/70 sticky top-0 z-20 border-b backdrop-blur-sm',
 }: {
   title: ReactNode;
