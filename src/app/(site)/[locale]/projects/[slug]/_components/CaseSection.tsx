@@ -10,7 +10,7 @@ export function CaseSection({ section }: Props) {
   return (
     <div
       data-component="CaseSection"
-      className="border-line grid items-start gap-[clamp(24px,5vw,64px)] border-t pt-5.5 md:grid-cols-[minmax(0,0.3fr)_minmax(0,0.7fr)]"
+      className="border-app-line grid items-start gap-[clamp(24px,5vw,64px)] border-t pt-5.5 md:grid-cols-[minmax(0,0.3fr)_minmax(0,0.7fr)]"
     >
       <div className="flex items-baseline gap-3">
         <span className="text-accent-soft font-mono text-xs">{section.index}</span>
@@ -29,7 +29,7 @@ export function CaseSection({ section }: Props) {
             .map((part, index) => (
               <p
                 key={index}
-                className="text-ink-soft text-[17px] leading-[1.72] text-pretty whitespace-pre-line"
+                className="text-app-ink text-[17px] leading-[1.72] text-pretty whitespace-pre-line"
               >
                 {part}
               </p>

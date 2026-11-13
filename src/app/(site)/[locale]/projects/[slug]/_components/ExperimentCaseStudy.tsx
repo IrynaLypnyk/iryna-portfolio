@@ -105,7 +105,7 @@ export function ExperimentCaseStudy({
       )}
 
       <section className="pt-[clamp(56px,10vh,120px)] pb-[clamp(72px,12vh,140px)]">
-        <div className="border-line flex flex-wrap items-center justify-between gap-6 border-t pt-6.5">
+        <div className="border-app-line flex flex-wrap items-center justify-between gap-6 border-t pt-6.5">
           <AppLink href={backHref} internal arrow="left" arrowPosition="before" color="gray">
             {t('backToExperiments')}
           </AppLink>
