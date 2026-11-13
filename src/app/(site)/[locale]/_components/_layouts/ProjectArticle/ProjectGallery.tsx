@@ -2,9 +2,9 @@ import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { ProjectGalleryMeta } from '@/hooks/useProjectMeta';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 
-type Props = ProjectGalleryMeta & { imageHeightClass?: string };
+type Props = ProjectGalleryMeta;
 
-export function ProjectGallery({ gallery, imageHeightClass }: Props) {
+export function ProjectGallery({ gallery }: Props) {
   return (
     <div className="-pr-(--page-pad-right) pt-7">
       <div className="grid gap-6 pb-4">
@@ -12,7 +12,7 @@ export function ProjectGallery({ gallery, imageHeightClass }: Props) {
           {gallery?.label}
         </Label>
         <div key="gallery" className="grid gap-3">
-          {gallery && <ImagesGallery photos={gallery.value} imageHeightClass={imageHeightClass} />}
+          {gallery && <ImagesGallery photos={gallery.value} />}
         </div>
       </div>
     </div>

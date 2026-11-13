@@ -61,9 +61,7 @@ export function ArchivedProjectArticle({ project }: Props) {
           <MetaList items={expandedMeta} variant="compact" labelColor="gray" labelWidth={120} />
         )
       }
-      fullWidthExpandedContent={
-        <ProjectGallery gallery={allMeta.gallery} imageHeightClass="h-40" />
-      }
+      fullWidthExpandedContent={<ProjectGallery gallery={allMeta.gallery} />}
     >
       {links.length > 0 && <ProjectLinks links={links} className="mt-2" />}
     </ExpandableContent>

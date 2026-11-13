@@ -83,7 +83,7 @@ export function ExperimentCard({ experiment }: Props) {
         {experiment.description && (
           <p className="text-app-muted whitespace-pre-line">{experiment.description}</p>
         )}
-        <ImagesGallery photos={experiment.photos} imageHeightClass="h-40" />
+        <ImagesGallery photos={experiment.photos} />
         {(experiment.demoUrl || experiment.githubUrl) && (
           <div className="flex flex-wrap gap-4">
             {experiment.demoUrl && (
