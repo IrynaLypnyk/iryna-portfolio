@@ -1,9 +1,8 @@
 import { CaseStudyLayout } from './CaseStudyLayout';
-import { ProjectFeatures } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectFeatures';
 import { useTranslations } from 'next-intl';
 import type { ProjectDetail } from '@/types/projects';
 import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
-import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
+import { type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { anchors, routes } from '@/constants/routes';
 export function ProjectCaseStudy({ detail }: { detail: ProjectDetail }) {
@@ -14,13 +13,14 @@ export function ProjectCaseStudy({ detail }: { detail: ProjectDetail }) {
   const meta: MetaItem[] = [];
   if (detail.role) meta.push({ label: t('labelRole'), value: detail.role });
 
+  if (detail.projectType) {
+    meta.push({ label: tMetadata('labelType'), value: detail.projectType });
+  }
+
   if (detail.stack.length) {
     meta.push({ label: t('labelStack'), value: <ProjectStack items={detail.stack} /> });
   }
 
-  if (detail.projectType) {
-    meta.push({ label: tMetadata('labelType'), value: detail.projectType });
-  }
   if (detail.status && tMetadata.has(`statuses.${detail.status}`)) {
     meta.push({ label: tMetadata('labelStatus'), value: tMetadata(`statuses.${detail.status}`) });
   }
@@ -72,24 +72,6 @@ export function ProjectCaseStudy({ detail }: { detail: ProjectDetail }) {
         detail.next ? { href: routes.project(detail.next.slug), title: detail.next.title } : null
       }
       nextLabel={tProject('next')}
-    >
-      {detail.features.some((feature) => feature.trim()) && (
-        <section data-component="CaseStudyFeatures" className="pt-6">
-          <MetaList
-            variant="compact"
-            labelColor="gray"
-            labelWidth={120}
-            items={[
-              {
-                label: detail.featuresTitle?.trim() || t('labelFeatures'),
-                value: (
-                  <ProjectFeatures features={detail.features.filter((feature) => feature.trim())} />
-                ),
-              },
-            ]}
-          />
-        </section>
-      )}
-    </CaseStudyLayout>
+    ></CaseStudyLayout>
   );
 }

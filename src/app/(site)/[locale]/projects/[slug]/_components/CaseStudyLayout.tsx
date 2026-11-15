@@ -3,10 +3,8 @@ import type { CaseBlock, Photo } from '@/types/projects';
 import { cn } from '@/lib/utils';
 import { Link } from '@/i18n/navigation';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
-import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { CaseSection } from './CaseSection';
 
 type Props = {
@@ -34,8 +32,6 @@ export function CaseStudyLayout({
   cover,
   meta,
   sections,
-  photos,
-  galleryLabel,
   backHref,
   backLabel,
   next,
@@ -89,19 +85,19 @@ export function CaseStudyLayout({
       {children}
 
       {sections.length > 0 && (
-        <section className="grid gap-[clamp(40px,7vh,80px)] pt-[clamp(56px,10vh,128px)]">
+        <section className="grid gap-[clamp(40px,7vh,80px)]">
           {sections.map((block) => (
             <CaseSection key={block.id} section={block} />
           ))}
         </section>
       )}
 
-      {photos.length > 0 && (
-        <section className="grid min-w-0 gap-6 pt-[clamp(56px,10vh,120px)]">
-          <Label color="blue">{galleryLabel}</Label>
-          <ImagesGallery photos={photos} />
-        </section>
-      )}
+      {/*{photos.length > 0 && (*/}
+      {/*  <section className="grid min-w-0 gap-6 pt-[clamp(56px,10vh,120px)]">*/}
+      {/*    <Label color="blue">{galleryLabel}</Label>*/}
+      {/*    <ImagesGallery photos={photos} />*/}
+      {/*  </section>*/}
+      {/*)}*/}
 
       <section className="pt-[clamp(56px,10vh,120px)] pb-[clamp(72px,12vh,140px)]">
         <div className="border-app-line flex flex-wrap items-center justify-between gap-6 border-t pt-6.5">

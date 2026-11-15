@@ -21,10 +21,10 @@ export function RecentProjectArticle({ project, index }: Props) {
   const allMeta = useProjectMeta(project);
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
-  const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
-  const expandableFields: ProjectMetaKey[] = ['stack', 'features'];
+  // const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
+  const expandableFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack'];
 
-  const meta = selectProjectMeta(allMeta, metaFields);
+  // const meta = selectProjectMeta(allMeta, metaFields);
   const expandedMeta = selectProjectMeta(allMeta, expandableFields);
 
   const expandable =
@@ -60,11 +60,11 @@ export function RecentProjectArticle({ project, index }: Props) {
               {project.context}
             </p>
           )}
-          {meta.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />
-            </div>
-          )}
+          {/*{meta.length > 0 && (*/}
+          {/*  <div className="flex flex-col gap-2">*/}
+          {/*    <MetaList items={meta} variant="compact" labelColor="gray" labelWidth={120} />*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </div>
       }
       expandedContent={
