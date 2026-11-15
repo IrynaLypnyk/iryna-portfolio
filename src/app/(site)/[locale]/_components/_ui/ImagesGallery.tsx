@@ -51,8 +51,7 @@ export function ImagesGallery({ photos }: Props) {
           setLightboxIndex(index);
         }}
         columns={(containerWidth) => {
-          const columns =
-            containerWidth < 480 ? 1 : containerWidth < 768 ? 2 : containerWidth < 1024 ? 3 : 4;
+          const columns = containerWidth < 480 ? 1 : containerWidth < 768 ? 2 : 3;
           return Math.min(columns, photos.length);
         }}
         spacing={16}
