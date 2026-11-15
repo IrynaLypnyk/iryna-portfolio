@@ -31,7 +31,7 @@ export function ImageFrame({
     return (
       <div
         data-component="CaseCover"
-        className="border-app-line bg-shell max-w-full overflow-hidden border"
+        className={cn('border-app-line bg-shell max-w-full overflow-hidden border', className)}
         style={{ width }}
       >
         <Image

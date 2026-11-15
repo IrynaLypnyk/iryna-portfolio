@@ -1,13 +1,9 @@
+import { CaseStudyLayout } from './CaseStudyLayout';
 import { useTranslations } from 'next-intl';
 import type { ExperimentData } from '@/types/experiments';
-import { Link } from '@/i18n/navigation';
-import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
-import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
-import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
+import { type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
-import { CaseSection } from './CaseSection';
 import { anchors, routes } from '@/constants/routes';
 export function ExperimentCaseStudy({
   detail,
@@ -48,77 +44,19 @@ export function ExperimentCaseStudy({
   }
 
   return (
-    <article data-component="ExperimentCaseStudy">
-      <section className="pb-[clamp(32px,6vh,64px)]">
-        <AppLink
-          href={backHref}
-          internal
-          arrow="left"
-          arrowPosition="before"
-          color="blueBright"
-          fontMono
-          className="pt-[clamp(32px,6vh,64px)]"
-        >
-          {t('backToExperiments')}
-        </AppLink>
-        <div className="grid w-full min-w-0 grid-cols-1 items-start gap-[clamp(32px,6vw,88px)] pt-[clamp(20px,4vh,44px)] [grid-template-areas:'image'_'title'] md:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] md:[grid-template-areas:'title_image']">
-          {/*<div className="text-muted flex items-baseline gap-3 font-mono text-xs tracking-[0.12em]">*/}
-          {/*  <span>{t('expLabel', { index: experiment.index })}</span>*/}
-          {/*  <span className="text-accent-pale">/</span>*/}
-          {/*  <span className="text-ink">{t('title')}</span>*/}
-          {/*</div>*/}
-          <div className="flex flex-col gap-6 [grid-area:title]">
-            <h1 className="text-[clamp(32px,4vw,56px)] leading-[1.08] font-semibold tracking-[-0.038em] wrap-break-word">
-              {experiment.title}
-            </h1>
-            {experiment.shortDescription && (
-              <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty">
-                {experiment.shortDescription}
-              </p>
-            )}
-            {meta.length > 0 && (
-              <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={80} />
-            )}
-          </div>
-          <ImageFrame photo={experiment.cover} compact priority className="[grid-area:image]" />
-          {/*{experiment.description && (*/}
-          {/*  <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty whitespace-pre-line">*/}
-          {/*    {experiment.description}*/}
-          {/*  </p>*/}
-          {/*)}*/}
-        </div>
-      </section>
-
-      {!!experiment.blocks?.length && (
-        <section className="grid gap-[clamp(40px,7vh,80px)] pt-[clamp(56px,10vh,128px)]">
-          {experiment.blocks.map((block) => (
-            <CaseSection key={block.id} section={block} />
-          ))}
-        </section>
-      )}
-
-      {experiment.photos.length > 0 && (
-        <section className="grid min-w-0 gap-6 pt-[clamp(56px,10vh,120px)]">
-          <Label color="blue">{t('gallery')}</Label>
-          <ImagesGallery photos={experiment.photos} />
-        </section>
-      )}
-
-      <section className="pt-[clamp(56px,10vh,120px)] pb-[clamp(72px,12vh,140px)]">
-        <div className="border-app-line flex flex-wrap items-center justify-between gap-6 border-t pt-6.5">
-          <AppLink href={backHref} internal arrow="left" arrowPosition="before" color="gray">
-            {t('backToExperiments')}
-          </AppLink>
-          {next && (
-            <Link
-              href={routes.experiment(next.slug)}
-              className="text-ink hover:text-accent min-h-11 text-right text-[clamp(18px,2vw,26px)] tracking-[-0.02em] transition-colors"
-            >
-              {t('nextExperiment')}: {next.title} →
-            </Link>
-          )}
-        </div>
-      </section>
-    </article>
+    <CaseStudyLayout
+      componentName="ExperimentCaseStudy"
+      title={experiment.title}
+      description={experiment.shortDescription}
+      cover={experiment.cover}
+      meta={meta}
+      sections={experiment.blocks ?? []}
+      photos={experiment.photos}
+      galleryLabel={t('gallery')}
+      backHref={backHref}
+      backLabel={t('backToExperiments')}
+      next={next ? { href: routes.experiment(next.slug), title: next.title } : null}
+      nextLabel={t('nextExperiment')}
+    />
   );
 }

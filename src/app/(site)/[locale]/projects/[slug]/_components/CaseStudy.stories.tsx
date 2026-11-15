@@ -49,8 +49,8 @@ function Fixture({
       : 'Preserving the existing editorial composition',
     context: 'Overview text',
     lead: uk
-      ? 'Двоколонковий вступ із метаданими та компактним зображенням.'
-      : 'The introduction keeps the existing two-column composition, metadata panel and restrained blue accents.',
+      ? 'Двоколонковий вступ із компактними метаданими та обкладинкою праворуч.'
+      : 'The introduction keeps the existing two-column composition, compact metadata below the description and a cover on the right.',
     role: uk ? 'Розробка інтерфейсу' : 'Frontend development',
     stack: ['Next.js', 'TypeScript'],
     projectType: 'Portfolio',
@@ -141,7 +141,14 @@ const exercise: Story['play'] = async ({ canvasElement }) => {
   await expect(parseFloat(getComputedStyle(heading).fontSize)).toBeLessThanOrEqual(56);
   const cover = canvasElement.querySelector('[data-component="CaseCover"]') as HTMLElement;
   await expect(cover.getBoundingClientRect().width).toBeLessThanOrEqual(360);
-  await expect(cover.parentElement).toBe(heading.parentElement);
+  await expect(cover.parentElement).toBe(heading.parentElement?.parentElement);
+  const coverRect = cover.getBoundingClientRect();
+  const headingRect = heading.getBoundingClientRect();
+  if (window.innerWidth >= 768) {
+    await expect(coverRect.left).toBeGreaterThan(headingRect.right);
+  } else {
+    await expect(coverRect.bottom).toBeLessThanOrEqual(headingRect.top);
+  }
   await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
   await expect(canvasElement.querySelectorAll('[data-component="CaseSection"]')).toHaveLength(3);
   await userEvent.click(
