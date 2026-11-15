@@ -1,15 +1,17 @@
-import { Manrope, Geist_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 
-export const sans = Manrope({
-  subsets: ['latin', 'cyrillic-ext'],
-  weight: ['400', '500', '600', '700'],
+export const sans = localFont({
+  src: './assets/fonts/manrope/Manrope-Variable.ttf',
+  weight: '400 700',
+  style: 'normal',
   variable: '--font-manrope',
   display: 'swap',
 });
 
-export const mono = Geist_Mono({
-  subsets: ['latin', 'cyrillic-ext'],
-  weight: ['400', '500', '600', '700'],
+export const mono = localFont({
+  src: './assets/fonts/geist-mono/GeistMono-Variable.ttf',
+  weight: '400 700',
+  style: 'normal',
   variable: '--font-geist-mono',
   display: 'swap',
 });

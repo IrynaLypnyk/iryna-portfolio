@@ -5,7 +5,7 @@
     /* Defaults for CSS tooling and pages without next/font classes.
        Unlayered next/font classes take precedence over these fallbacks. */
     --font-manrope: 'Manrope', Arial, sans-serif;
-    --font-mono: 'Geist Mono', 'Courier New', monospace;
+    --font-geist-mono: 'Geist Mono', 'Courier New', monospace;
   }
 }
 
@@ -47,7 +47,7 @@
 /* Resolve next/font variables where the utility is used. */
 @theme inline {
   --font-sans: var(--font-manrope);
-  --font-mono: var(--font-mono);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme {
