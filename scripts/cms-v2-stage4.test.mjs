@@ -123,7 +123,7 @@ test('block fields are optional and use textareas preserving multiple paragraphs
   assert.ok(html.includes('Add block'));
 });
 
-test('cover selector shows independent thumbnails and image-only uploads without a reuse picker', () => {
+test('cover selector shows independent thumbnails and image-only uploads with a picker for existing images', () => {
   const uploads = [];
   const { CoverSelector } = load(directory + 'CoverSelector.tsx', {
     '../projects/[id]/photo-manager/PhotoUploader': {
@@ -158,7 +158,8 @@ test('cover selector shows independent thumbnails and image-only uploads without
   );
   assert.equal(uploads.length, 2);
   assert.ok(uploads.every((props) => props.imagesOnly && !props.multiple));
-  assert.ok(!html.includes('Reuse an image from this form'));
+  assert.ok(html.includes('Choose an existing image for Default cover'));
+  assert.ok(!html.includes('video/webm'));
   assert.ok(!html.includes('Use as default'));
   assert.ok(html.includes('<img'));
   assert.ok(!html.includes('isProjectCover'));
@@ -177,4 +178,21 @@ test('detail publication control has three choices and explains the private tran
   assert.ok(html.includes('value="DRAFT" selected=""'));
   assert.ok(html.includes('stay private'));
   assert.ok(!html.includes('required=""'));
+});
+
+test('separate cover draft persists selections and tracks the shared cover toggle', () => {
+  const separate = {
+    additionalMedia: [],
+    contentBlocks: [],
+    useSameCover: false,
+    coverAsset: asset('home'),
+    detailCoverAsset: asset('detail'),
+    detailCoverAssetUk: asset('detail-uk'),
+  };
+  const shared = { ...separate, useSameCover: true };
+  assert.notEqual(mediaSnapshot(shared), mediaSnapshot(separate));
+  assert.equal(ownerMediaInput(shared).detailCoverAssetId, 'detail');
+  assert.equal(ownerMediaInput(separate).coverAssetId, 'home');
+  assert.equal(ownerMediaInput(separate).detailCoverAssetUkId, 'detail-uk');
+  assert.equal(ownerMediaInput(separate).useSameCover, false);
 });

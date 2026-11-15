@@ -44,6 +44,9 @@ const project: ProjectWithSections = {
   published: true,
   featured: false,
   detailPageStatus: 'NONE',
+  useSameCover: true,
+  detailCoverAssetId: null,
+  detailCoverAssetUkId: null,
   coverAssetId: 'existing-cover',
   coverAssetUkId: 'existing-uk',
   createdAt: now,
@@ -79,6 +82,9 @@ const experiment: DbExperiment = {
   order: 0,
   published: true,
   detailPageStatus: 'NONE',
+  useSameCover: true,
+  detailCoverAssetId: null,
+  detailCoverAssetUkId: null,
   coverAssetId: 'existing-cover',
   coverAssetUkId: 'existing-uk',
   createdAt: now,
@@ -405,4 +411,58 @@ export const NewProject: Story = {
     await expect(canvas.getByText('Unsaved changes', { exact: true })).toBeInTheDocument();
     canvasElement.dataset.contentFormTest = 'create-passed';
   },
+};
+
+const separateCovers: Story['play'] = async ({ canvasElement, args }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole('tab', { name: 'Media' }));
+  const shared = canvas.getByRole('checkbox', {
+    name: 'Use the same cover on the case study page',
+  });
+  await expect(shared).toBeChecked();
+  await expect(canvas.queryByRole('region', { name: 'Case study cover' })).not.toBeInTheDocument();
+  await userEvent.click(shared);
+  const detail = within(canvas.getByRole('region', { name: 'Case study cover' }));
+  await userEvent.selectOptions(
+    detail.getByLabelText('Choose an existing image for case study Default cover'),
+    'existing-cover'
+  );
+  await userEvent.upload(
+    detail.getByLabelText('Replace case study Default cover'),
+    new File(['fixture'], 'detail.png', { type: 'image/png' })
+  );
+  await waitFor(() => expect(canvas.getByRole('button', { name: 'Save changes' })).toBeEnabled());
+  await userEvent.upload(
+    detail.getByLabelText('Upload case study Ukrainian cover'),
+    new File(['fixture'], 'detail-uk.png', { type: 'image/png' })
+  );
+  const save = async () => {
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'Save changes' })).toBeEnabled());
+    await userEvent.click(canvas.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(canvas.getByRole('status')).toHaveTextContent('All changes saved'));
+  };
+  await save();
+  await expect(submissions.at(-1)?.coverAssetId).toBe('existing-cover');
+  await expect(submissions.at(-1)?.coverAssetUkId).toBe('existing-uk');
+  await expect(submissions.at(-1)?.useSameCover).toBe(false);
+  await expect(submissions.at(-1)?.detailCoverAssetId).toBe('detail.png');
+  await expect(submissions.at(-1)?.detailCoverAssetUkId).toBe('detail-uk.png');
+  await userEvent.click(shared);
+  await save();
+  await expect(submissions.at(-1)?.useSameCover).toBe(true);
+  await expect(submissions.at(-1)?.detailCoverAssetId).toBe('detail.png');
+  await userEvent.click(shared);
+  await expect(
+    within(canvas.getByRole('region', { name: 'Case study cover' })).getByLabelText(
+      'Choose an existing image for case study Default cover'
+    )
+  ).toHaveValue('detail.png');
+  await save();
+  await expect(submissions.at(-1)?.useSameCover).toBe(false);
+  canvasElement.dataset.coverTest = `${args.ownerType}-passed`;
+};
+export const SeparateProjectCovers: Story = { play: separateCovers };
+export const SeparateExperimentCovers: Story = {
+  args: { ownerType: 'experiments' },
+  play: separateCovers,
 };

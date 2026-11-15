@@ -32,7 +32,7 @@ const migrationRoot = path.join(root, 'prisma/migrations');
 const migrations = readdirSync(migrationRoot)
   .filter((name) => /^\d/.test(name))
   .sort();
-assert.equal(migrations.length, 11);
+assert.equal(migrations.length, 12);
 
 async function publicSnapshot(client) {
   const result = {};
@@ -841,3 +841,60 @@ test('Stage 4: new owners can save text blocks in their first main form transact
       assert.equal(again.contentBlocks[0].bodyEn, block.bodyEn);
     }
   }));
+
+for (const type of ['projects', 'experiments']) {
+  test(`${type}: separate case study covers save, survive shared mode, validate assets and preserve home covers`, () =>
+    withDatabase(async (db) => {
+      const save = type === 'projects' ? saveProject : saveExperiment;
+      const key = type === 'projects' ? 'project' : 'experiment';
+      const owner = (await save(db, type === 'projects' ? minimal() : experimentInput()))[key];
+      assert.equal(owner.useSameCover, true);
+      assert.equal(owner.detailCoverAssetId, null);
+      const home = await upload(db, owner, type);
+      const detail = await upload(db, owner, type);
+      const uk = await upload(db, owner, type, 'image/webp');
+      const video = await upload(db, owner, type, 'video/mp4');
+      const foreign = (await save(db, type === 'projects' ? minimal() : experimentInput()))[key];
+      const foreignAsset = await upload(db, foreign, type);
+      const selected = (
+        await save(
+          db,
+          {
+            coverAssetId: home.id,
+            useSameCover: false,
+            detailCoverAssetId: detail.id,
+            detailCoverAssetUkId: uk.id,
+          },
+          owner.id
+        )
+      )[key];
+      assert.equal(selected.coverAssetId, home.id);
+      assert.equal(selected.detailCoverAssetId, detail.id);
+      assert.equal(selected.detailCoverAssetUkId, uk.id);
+      assert.equal(selected.useSameCover, false);
+      for (const patch of [
+        { detailCoverAssetId: video.id },
+        { detailCoverAssetUkId: video.id },
+        { detailCoverAssetId: foreignAsset.id },
+        { detailCoverAssetId: null },
+        { useSameCover: 'false' },
+      ])
+        await assert.rejects(save(db, patch, owner.id), ContentSaveError);
+      const shared = (await save(db, { useSameCover: true }, owner.id))[key];
+      assert.equal(shared.detailCoverAssetId, detail.id);
+      assert.equal(shared.coverAssetId, home.id);
+      const separate = (await save(db, { useSameCover: false }, owner.id))[key];
+      assert.equal(separate.detailCoverAssetUkId, uk.id);
+      const legacyPatch = (await save(db, { titleEn: 'Edited title' }, owner.id))[key];
+      assert.equal(legacyPatch.useSameCover, false);
+      assert.equal(legacyPatch.detailCoverAssetId, detail.id);
+      const reused = (await save(db, { detailCoverAssetId: home.id }, owner.id))[key];
+      assert.equal(reused.detailCoverAssetId, home.id);
+      const removed = (
+        await save(db, { detailCoverAssetId: null, detailCoverAssetUkId: null }, owner.id)
+      )[key];
+      assert.equal(removed.coverAssetId, home.id);
+      assert.equal(await db.photo.count(), 0);
+      assert.equal(await db.mediaAsset.count({ where: unusedMediaAssetWhere(home.id) }), 0);
+    }));
+}

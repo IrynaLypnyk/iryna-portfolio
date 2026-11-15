@@ -48,6 +48,9 @@ export const contentFields = {
   detailPageStatus: z.enum(DetailPageStatus).optional(),
   contentBlocks: z.array(contentBlockInputSchema).optional(),
   additionalMedia: z.array(photoInputSchema).optional(),
+  useSameCover: z.boolean().optional(),
+  detailCoverAssetId: identifier.nullable().optional(),
+  detailCoverAssetUkId: identifier.nullable().optional(),
   coverAssetId: identifier.nullable().optional(),
   coverAssetUkId: identifier.nullable().optional(),
 };
@@ -57,6 +60,9 @@ export type ContentBlockInput = z.output<typeof contentBlockInputSchema>;
 export type ContentInput = {
   contentBlocks?: ContentBlockInput[];
   additionalMedia?: PhotoInput[];
+  useSameCover?: boolean;
+  detailCoverAssetId?: string | null;
+  detailCoverAssetUkId?: string | null;
   coverAssetId?: string | null;
   coverAssetUkId?: string | null;
 };

@@ -10,6 +10,8 @@ const projectInclude = {
   },
   coverAsset: true,
   coverAssetUk: true,
+  detailCoverAsset: true,
+  detailCoverAssetUk: true,
 } satisfies Prisma.ProjectInclude;
 
 export async function getPublishedProjectDetail(slug: string) {

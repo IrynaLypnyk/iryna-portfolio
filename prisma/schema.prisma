@@ -100,6 +100,12 @@ model Project {
   coverAssetUkId String?
   coverAssetUk   MediaAsset? @relation("ProjectCoverUk", fields: [coverAssetUkId], references: [id], onDelete: Restrict)
 
+  useSameCover         Boolean     @default(true)
+  detailCoverAssetId   String?
+  detailCoverAsset     MediaAsset? @relation("ProjectDetailCover", fields: [detailCoverAssetId], references: [id], onDelete: Restrict)
+  detailCoverAssetUkId String?
+  detailCoverAssetUk   MediaAsset? @relation("ProjectDetailCoverUk", fields: [detailCoverAssetUkId], references: [id], onDelete: Restrict)
+
   photos        Photo[]
   sections      ProjectSection[]
   contentBlocks ContentBlock[]
@@ -111,6 +117,8 @@ model Project {
   @@index([published])
   @@index([coverAssetId])
   @@index([coverAssetUkId])
+  @@index([detailCoverAssetId])
+  @@index([detailCoverAssetUkId])
 }
 
 /// One numbered block of a case study ("01 Context", "02 My role", …).
@@ -182,6 +190,11 @@ model MediaAsset {
   experimentCovers   Experiment[] @relation("ExperimentCover")
   experimentCoversUk Experiment[] @relation("ExperimentCoverUk")
 
+  projectDetailCovers      Project[]    @relation("ProjectDetailCover")
+  projectDetailCoversUk    Project[]    @relation("ProjectDetailCoverUk")
+  experimentDetailCovers   Experiment[] @relation("ExperimentDetailCover")
+  experimentDetailCoversUk Experiment[] @relation("ExperimentDetailCoverUk")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -220,6 +233,12 @@ model Experiment {
   coverAssetUkId String?
   coverAssetUk   MediaAsset? @relation("ExperimentCoverUk", fields: [coverAssetUkId], references: [id], onDelete: Restrict)
 
+  useSameCover         Boolean     @default(true)
+  detailCoverAssetId   String?
+  detailCoverAsset     MediaAsset? @relation("ExperimentDetailCover", fields: [detailCoverAssetId], references: [id], onDelete: Restrict)
+  detailCoverAssetUkId String?
+  detailCoverAssetUk   MediaAsset? @relation("ExperimentDetailCoverUk", fields: [detailCoverAssetUkId], references: [id], onDelete: Restrict)
+
   contentBlocks ContentBlock[]
 
   createdAt DateTime @default(now())
@@ -228,6 +247,8 @@ model Experiment {
   @@index([published, order])
   @@index([coverAssetId])
   @@index([coverAssetUkId])
+  @@index([detailCoverAssetId])
+  @@index([detailCoverAssetUkId])
 }
 
 model Photo {

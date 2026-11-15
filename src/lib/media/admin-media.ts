@@ -33,10 +33,16 @@ function draft(photo: Photo): MediaDraft {
 export function adminMediaDraft(owner: {
   photos: Photo[];
   contentBlocks: Block[];
+  useSameCover?: boolean;
+  detailCoverAsset?: Photo['asset'] | null;
+  detailCoverAssetUk?: Photo['asset'] | null;
   coverAsset?: Photo['asset'] | null;
   coverAssetUk?: Photo['asset'] | null;
 }): OwnerMediaDraft {
   return {
+    useSameCover: owner.useSameCover ?? true,
+    detailCoverAsset: owner.detailCoverAsset ? preview(owner.detailCoverAsset) : null,
+    detailCoverAssetUk: owner.detailCoverAssetUk ? preview(owner.detailCoverAssetUk) : null,
     ...(owner.coverAsset !== undefined
       ? { coverAsset: owner.coverAsset ? preview(owner.coverAsset) : null }
       : {}),

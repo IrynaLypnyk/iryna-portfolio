@@ -57,6 +57,8 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
       ...project.photos.flatMap((photo) => [photo.assetId, photo.assetUkId]),
       project.coverAssetId,
       project.coverAssetUkId,
+      project.detailCoverAssetId,
+      project.detailCoverAssetUkId,
     ]);
     return NextResponse.json({ message: 'Видалено', cleanup });
   } catch (error) {

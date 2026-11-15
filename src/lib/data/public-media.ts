@@ -44,6 +44,29 @@ export function assetPhoto(asset: MediaAsset, title: string): Photo<string> {
     linkUrl: null,
   };
 }
+export function detailCoverPhoto(
+  owner: {
+    useSameCover?: boolean;
+    coverAsset?: MediaAsset | null;
+    coverAssetUk?: MediaAsset | null;
+    detailCoverAsset?: MediaAsset | null;
+    detailCoverAssetUk?: MediaAsset | null;
+  },
+  locale: LocaleType,
+  title: string
+) {
+  return coverPhoto(
+    owner.useSameCover !== false
+      ? owner
+      : {
+          coverAsset: owner.detailCoverAsset,
+          coverAssetUk: owner.detailCoverAssetUk,
+        },
+    locale,
+    title
+  );
+}
+
 export function coverPhoto(
   owner: { coverAsset?: MediaAsset | null; coverAssetUk?: MediaAsset | null },
   locale: LocaleType,

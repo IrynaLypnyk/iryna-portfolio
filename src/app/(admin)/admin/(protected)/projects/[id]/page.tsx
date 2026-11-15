@@ -19,6 +19,8 @@ export default async function EditProjectPage({ params }: Props) {
     include: {
       coverAsset: true,
       coverAssetUk: true,
+      detailCoverAsset: true,
+      detailCoverAssetUk: true,
       contentBlocks: {
         orderBy: [{ order: 'asc' }, { id: 'asc' }],
         include: {
@@ -49,6 +51,8 @@ export default async function EditProjectPage({ params }: Props) {
     contentBlocks: _blocks,
     coverAsset: _cover,
     coverAssetUk: _coverUk,
+    detailCoverAsset: _detailCover,
+    detailCoverAssetUk: _detailCoverUk,
     ...projectFields
   } = project;
 

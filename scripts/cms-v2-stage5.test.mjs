@@ -226,3 +226,68 @@ test('legacy Experiment hides only its original cover usage, not another usage o
   );
   assert.equal(visibleAdditionalUsage({ ...usage('new-copy'), assetId: 'shared' }), true);
 });
+
+test('case study cover selection is independent of home cards and localizes its own variants', () => {
+  const p = {
+    ...row,
+    useSameCover: false,
+    detailCoverAsset: image('detail'),
+    detailCoverAssetUk: image('detail-uk'),
+  };
+  for (const locale of ['en', 'uk']) {
+    assert.equal(
+      toProjectData(p, locale).coverPhoto.src,
+      locale === 'uk' ? '/cover-uk.png' : '/cover.png'
+    );
+    assert.equal(
+      toProjectDetail(p, [p], locale).coverPhoto.src,
+      locale === 'uk' ? '/detail-uk.png' : '/detail.png'
+    );
+    assert.equal(
+      toProjectDetail({ ...p, useSameCover: true }, [p], locale).coverPhoto.src,
+      toProjectData(p, locale).coverPhoto.src
+    );
+  }
+  assert.equal(
+    toProjectDetail({ ...p, detailCoverAssetUk: null }, [p], 'uk').coverPhoto.src,
+    '/detail.png'
+  );
+  assert.equal(
+    toProjectDetail({ ...p, detailCoverAsset: null, detailCoverAssetUk: null }, [p], 'uk')
+      .coverPhoto,
+    null
+  );
+});
+
+test('experiment detail cover uses a separate image while the card keeps its original cover', async () => {
+  const p = {
+    ...row,
+    stack: null,
+    useSameCover: false,
+    detailCoverAsset: image('detail'),
+    detailCoverAssetUk: image('detail-uk'),
+  };
+  const { toExperimentData, getExperimentDetail } = load('src/lib/data/experiments.ts', {
+    ...mediaMocks,
+    '@/lib/prisma': {
+      prisma: { experiment: { findFirst: async () => p, findMany: async () => [p] } },
+    },
+    'next/cache': { unstable_cache: (fn) => fn },
+  });
+  for (const locale of ['en', 'uk']) {
+    assert.equal(
+      toExperimentData(p, locale, 0).cover.src,
+      locale === 'uk' ? '/cover-uk.png' : '/cover.png'
+    );
+    assert.equal(
+      (await getExperimentDetail(p.slug, locale)).experiment.cover.src,
+      locale === 'uk' ? '/detail-uk.png' : '/detail.png'
+    );
+    p.useSameCover = true;
+    assert.equal(
+      (await getExperimentDetail(p.slug, locale)).experiment.cover.src,
+      toExperimentData(p, locale, 0).cover.src
+    );
+    p.useSameCover = false;
+  }
+});

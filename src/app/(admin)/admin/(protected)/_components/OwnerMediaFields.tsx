@@ -27,7 +27,26 @@ export function OwnerMediaFields({
   return (
     <div className="min-w-0 space-y-8">
       {view === 'media' && (
-        <CoverSelector {...shared} media={media} onChangeAction={onChangeAction} />
+        <>
+          <CoverSelector {...shared} media={media} onChangeAction={onChangeAction} />
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 text-sm text-neutral-800">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 shrink-0"
+                checked={media.useSameCover ?? true}
+                disabled={disabled}
+                onChange={(event) =>
+                  onChangeAction((current) => ({ ...current, useSameCover: event.target.checked }))
+                }
+              />
+              Use the same cover on the case study page
+            </label>
+            {media.useSameCover === false && (
+              <CoverSelector {...shared} detail media={media} onChangeAction={onChangeAction} />
+            )}
+          </div>
+        </>
       )}
       {view === 'content' && (
         <ContentBlocksEditor

@@ -9,6 +9,7 @@ import {
   publicPhotos,
   publicBlocks,
   coverPhoto,
+  detailCoverPhoto,
   usagePhoto,
   contentBlocks,
 } from './public-media';
@@ -16,6 +17,8 @@ const include = {
   photos: publicPhotos,
   coverAsset: true,
   coverAssetUk: true,
+  detailCoverAsset: true,
+  detailCoverAssetUk: true,
 } satisfies Prisma.ExperimentInclude;
 type Experiment = Prisma.ExperimentGetPayload<{ include: typeof include }>;
 export function toExperimentData(
@@ -72,6 +75,7 @@ export async function getExperimentDetail(slug: string, locale: LocaleType) {
   return {
     experiment: {
       ...experiment,
+      cover: detailCoverPhoto(row, locale, experiment.title),
       blocks: contentBlocks(row.contentBlocks, locale, experiment.title),
     },
     next: next ? { slug: next.slug, title: locale === 'uk' ? next.titleUk : next.titleEn } : null,

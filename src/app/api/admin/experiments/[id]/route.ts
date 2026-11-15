@@ -50,6 +50,8 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
       ...experiment.photos.flatMap((photo) => [photo.assetId, photo.assetUkId]),
       experiment.coverAssetId,
       experiment.coverAssetUkId,
+      experiment.detailCoverAssetId,
+      experiment.detailCoverAssetUkId,
     ];
     revalidateTag('experiments', 'max');
     const cleanup = await cleanupMediaAssets(assetIds);

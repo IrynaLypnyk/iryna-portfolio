@@ -1,6 +1,12 @@
 import { legacyProjectIds, visibleAdditionalUsage } from './legacy-public-compatibility';
 import type { LocaleType } from '@/i18n/routing';
-import { coverPhoto, usagePhoto, contentBlocks, type PublicBlock } from './public-media';
+import {
+  coverPhoto,
+  detailCoverPhoto,
+  usagePhoto,
+  contentBlocks,
+  type PublicBlock,
+} from './public-media';
 import type { ProjectWithRelations } from '@/lib/data/projects';
 import type { Photo, ProjectData, ProjectDetail } from '@/types/projects';
 import { nullableText } from '@/lib/content/text';
@@ -75,6 +81,7 @@ export function toProjectDetail(
 
   return {
     ...toProjectData(project, locale),
+    coverPhoto: detailCoverPhoto(project, locale, pick(locale, project.titleUk, project.titleEn)),
     index: pad(position >= 0 ? position + 1 : project.order),
     lead: nullableText(pick(locale, project.leadUk, project.leadEn)),
     linkNote: nullableText(pick(locale, project.linkNoteUk, project.linkNoteEn)),

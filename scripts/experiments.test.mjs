@@ -383,6 +383,9 @@ const publicExperiment = {
   title: 'First experiment',
   shortDescription: 'Summary',
   description: 'Paragraph one\n\nParagraph two',
+  blocks: [
+    { id: 'intro', index: '01', title: null, body: 'Paragraph one\n\nParagraph two', photos: [] },
+  ],
   stack: null,
   demoUrl: null,
   githubUrl: null,

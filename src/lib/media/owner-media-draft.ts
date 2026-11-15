@@ -17,6 +17,9 @@ export type BlockMediaDraft = {
 export type OwnerMediaDraft = {
   additionalMedia: MediaDraft[];
   contentBlocks: BlockMediaDraft[];
+  useSameCover?: boolean;
+  detailCoverAsset?: MediaAssetPreview | null;
+  detailCoverAssetUk?: MediaAssetPreview | null;
   coverAsset?: MediaAssetPreview | null;
   coverAssetUk?: MediaAssetPreview | null;
 };
@@ -40,6 +43,13 @@ export type SavedOwnerMedia = {
 
 export function ownerMediaInput(media: OwnerMediaDraft) {
   return {
+    useSameCover: media.useSameCover ?? true,
+    ...(media.detailCoverAsset !== undefined
+      ? { detailCoverAssetId: media.detailCoverAsset?.id ?? null }
+      : {}),
+    ...(media.detailCoverAssetUk !== undefined
+      ? { detailCoverAssetUkId: media.detailCoverAssetUk?.id ?? null }
+      : {}),
     ...(media.coverAsset !== undefined ? { coverAssetId: media.coverAsset?.id ?? null } : {}),
     ...(media.coverAssetUk !== undefined ? { coverAssetUkId: media.coverAssetUk?.id ?? null } : {}),
     additionalMedia: mediaInput(media.additionalMedia),

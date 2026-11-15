@@ -23,6 +23,8 @@ type Owner = {
   previousSlug?: string;
   coverAssetId: string | null;
   coverAssetUkId: string | null;
+  detailCoverAssetId: string | null;
+  detailCoverAssetUkId: string | null;
 };
 
 const mediaInclude = { asset: true, assetUk: true } as const;
@@ -30,6 +32,8 @@ const mediaOrder = [{ orderInProject: 'asc' }, { id: 'asc' }] as const;
 const ownerInclude = {
   coverAsset: true,
   coverAssetUk: true,
+  detailCoverAsset: true,
+  detailCoverAssetUk: true,
   photos: { include: mediaInclude, orderBy: [...mediaOrder] },
   contentBlocks: {
     orderBy: [{ order: 'asc' }, { id: 'asc' }],
@@ -97,6 +101,8 @@ export async function saveOwnerContent(
     [
       owner.coverAssetId,
       owner.coverAssetUkId,
+      owner.detailCoverAssetId,
+      owner.detailCoverAssetUkId,
       ...photos.flatMap((photo) => [photo.assetId, photo.assetUkId]),
     ].filter((id): id is string => id !== null)
   );
@@ -127,14 +133,24 @@ export async function saveOwnerContent(
         });
         const foreignProject = await tx.project.findFirst({
           where: {
-            OR: [{ coverAssetId: id }, { coverAssetUkId: id }],
+            OR: [
+              { coverAssetId: id },
+              { coverAssetUkId: id },
+              { detailCoverAssetId: id },
+              { detailCoverAssetUkId: id },
+            ],
             ...(owner.type === 'project' ? { id: { not: owner.id } } : {}),
           },
           select: { id: true },
         });
         const foreignExperiment = await tx.experiment.findFirst({
           where: {
-            OR: [{ coverAssetId: id }, { coverAssetUkId: id }],
+            OR: [
+              { coverAssetId: id },
+              { coverAssetUkId: id },
+              { detailCoverAssetId: id },
+              { detailCoverAssetUkId: id },
+            ],
             ...(owner.type === 'experiment' ? { id: { not: owner.id } } : {}),
           },
           select: { id: true },
@@ -165,21 +181,25 @@ export async function saveOwnerContent(
     return found;
   }
 
-  if (input.coverAssetId !== undefined || input.coverAssetUkId !== undefined) {
-    const defaultId = input.coverAssetId === undefined ? owner.coverAssetId : input.coverAssetId;
+  for (const [defaultField, ukrainianField] of [
+    ['coverAssetId', 'coverAssetUkId'],
+    ['detailCoverAssetId', 'detailCoverAssetUkId'],
+  ] as const) {
+    if (input[defaultField] === undefined && input[ukrainianField] === undefined) continue;
+    const defaultId = input[defaultField] === undefined ? owner[defaultField] : input[defaultField];
     const ukrainianId =
-      input.coverAssetUkId === undefined ? owner.coverAssetUkId : input.coverAssetUkId;
+      input[ukrainianField] === undefined ? owner[ukrainianField] : input[ukrainianField];
     if (ukrainianId && !defaultId) {
-      throw new ContentSaveError('A Ukrainian cover requires a default cover.', 'coverAssetUkId');
+      throw new ContentSaveError('A Ukrainian cover requires a default cover.', ukrainianField);
     }
-    if (defaultId) await asset(defaultId, 'coverAssetId', true);
-    if (ukrainianId) await asset(ukrainianId, 'coverAssetUkId', true);
-    const data = { coverAssetId: defaultId, coverAssetUkId: ukrainianId };
+    if (defaultId) await asset(defaultId, defaultField, true);
+    if (ukrainianId) await asset(ukrainianId, ukrainianField, true);
+    const data = { [defaultField]: defaultId, [ukrainianField]: ukrainianId };
     if (owner.type === 'project') await tx.project.update({ where: { id: owner.id }, data });
     else await tx.experiment.update({ where: { id: owner.id }, data });
-    if (owner.coverAssetId && owner.coverAssetId !== defaultId) cleanup.add(owner.coverAssetId);
-    if (owner.coverAssetUkId && owner.coverAssetUkId !== ukrainianId)
-      cleanup.add(owner.coverAssetUkId);
+    if (owner[defaultField] && owner[defaultField] !== defaultId) cleanup.add(owner[defaultField]);
+    if (owner[ukrainianField] && owner[ukrainianField] !== ukrainianId)
+      cleanup.add(owner[ukrainianField]);
   }
 
   const keptBlocks = new Set(
@@ -296,8 +316,16 @@ async function saveLegacySections(
 export async function saveProject(db: PrismaClient, body: unknown, id?: string) {
   const parsed = validationResult((id ? projectPatchSchema : projectCreateSchema).safeParse(body));
   if (parsed.error !== undefined) throw new ContentSaveError(parsed.error, parsed.field);
-  const { contentBlocks, additionalMedia, coverAssetId, coverAssetUkId, sections, ...fields } =
-    parsed.data;
+  const {
+    contentBlocks,
+    additionalMedia,
+    coverAssetId,
+    coverAssetUkId,
+    detailCoverAssetId,
+    detailCoverAssetUkId,
+    sections,
+    ...fields
+  } = parsed.data;
   return db.$transaction(
     async (tx) => {
       const existing = id ? await tx.project.findUniqueOrThrow({ where: { id } }) : null;
@@ -319,7 +347,14 @@ export async function saveProject(db: PrismaClient, body: unknown, id?: string) 
           type: 'project',
           previousSlug: existing?.slug,
         },
-        { contentBlocks, additionalMedia, coverAssetId, coverAssetUkId }
+        {
+          contentBlocks,
+          additionalMedia,
+          coverAssetId,
+          coverAssetUkId,
+          detailCoverAssetId,
+          detailCoverAssetUkId,
+        }
       );
       await saveLegacySections(tx, owner.id, sections);
       const project = await tx.project.findUniqueOrThrow({
@@ -340,7 +375,15 @@ export async function saveExperiment(db: PrismaClient, body: unknown, id?: strin
     (id ? experimentPatchSchema : experimentCreateSchema).safeParse(body)
   );
   if (parsed.error !== undefined) throw new ContentSaveError(parsed.error, parsed.field);
-  const { contentBlocks, additionalMedia, coverAssetId, coverAssetUkId, ...fields } = parsed.data;
+  const {
+    contentBlocks,
+    additionalMedia,
+    coverAssetId,
+    coverAssetUkId,
+    detailCoverAssetId,
+    detailCoverAssetUkId,
+    ...fields
+  } = parsed.data;
   return db.$transaction(
     async (tx) => {
       const existing = id ? await tx.experiment.findUniqueOrThrow({ where: { id } }) : null;
@@ -364,7 +407,14 @@ export async function saveExperiment(db: PrismaClient, body: unknown, id?: strin
           type: 'experiment',
           previousSlug: existing?.slug,
         },
-        { contentBlocks, additionalMedia, coverAssetId, coverAssetUkId }
+        {
+          contentBlocks,
+          additionalMedia,
+          coverAssetId,
+          coverAssetUkId,
+          detailCoverAssetId,
+          detailCoverAssetUkId,
+        }
       );
       const experiment = await tx.experiment.findUniqueOrThrow({
         where: { id: owner.id },

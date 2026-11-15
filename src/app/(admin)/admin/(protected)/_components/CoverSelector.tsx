@@ -7,9 +7,11 @@ import { AdminPhotoLightbox } from '../projects/[id]/photo-manager/AdminPhotoLig
 import { AdminMediaPreview } from './AdminMediaPreview';
 
 import type { MediaAssetPreview } from '@/lib/media/media-draft';
+import { IMAGE_MIME_TYPES } from '@/lib/media/image-policy';
 import type { OwnerMediaDraft } from '@/lib/media/owner-media-draft';
 
 export function CoverSelector({
+  detail = false,
   ownerId,
   ownerType,
   media,
@@ -17,6 +19,7 @@ export function CoverSelector({
   onUploadingChangeAction,
   disabled,
 }: {
+  detail?: boolean;
   ownerId?: string;
   ownerType: 'projects' | 'experiments';
   media: OwnerMediaDraft;
@@ -39,17 +42,46 @@ export function CoverSelector({
         : [],
     [preview]
   );
+  const defaultField = detail ? 'detailCoverAsset' : 'coverAsset';
+  const ukrainianField = detail ? 'detailCoverAssetUk' : 'coverAssetUk';
+  const title = detail ? 'Case study cover' : 'Cover';
+  const candidates = [
+    ...new Map(
+      [
+        { asset: media.coverAsset, label: 'Home page cover' },
+        { asset: media.coverAssetUk, label: 'Home page cover (UK)' },
+        { asset: media.detailCoverAsset, label: 'Case study cover' },
+        { asset: media.detailCoverAssetUk, label: 'Case study cover (UK)' },
+        ...[
+          ...media.additionalMedia,
+          ...media.contentBlocks.flatMap((block) => block.photos),
+        ].flatMap((photo) => [
+          { asset: photo.asset, label: photo.captionEn || photo.captionUk || 'Gallery image' },
+          {
+            asset: photo.assetUk,
+            label: photo.captionUk || photo.captionEn || 'Gallery image (UK)',
+          },
+        ]),
+      ]
+        .filter(
+          (item): item is { asset: MediaAssetPreview; label: string } =>
+            !!item.asset?.mimeType && IMAGE_MIME_TYPES.includes(item.asset.mimeType)
+        )
+        .map((item) => [item.asset.id, item])
+    ).values(),
+  ];
   function select(asset: MediaAssetPreview, ukrainian: boolean) {
     onChangeAction((current) =>
-      ukrainian
-        ? current.coverAsset
-          ? { ...current, coverAssetUk: asset }
-          : current
-        : { ...current, coverAsset: asset }
+      ukrainian && !current[defaultField]
+        ? current
+        : {
+            ...current,
+            [ukrainian ? ukrainianField : defaultField]: asset,
+          }
     );
   }
   function variant(asset: MediaAssetPreview | null | undefined, ukrainian: boolean) {
-    const label = ukrainian ? 'Ukrainian cover' : 'Default cover';
+    const label = `${detail ? 'case study ' : ''}${ukrainian ? 'Ukrainian cover' : 'Default cover'}`;
     return (
       <div className="space-y-3">
         <h3 className="text-sm font-medium">{label} (optional)</h3>
@@ -64,6 +96,27 @@ export function CoverSelector({
             />
           </button>
         )}
+        {candidates.length > 0 && (
+          <label className="block text-sm text-neutral-600">
+            Choose an existing image for {label}
+            <select
+              className="mt-1 block w-full rounded-sm border border-neutral-300 bg-white p-2 text-neutral-900"
+              value={asset?.id ?? ''}
+              disabled={disabled || (ukrainian && !media[defaultField])}
+              onChange={(event) => {
+                const chosen = candidates.find((item) => item.asset.id === event.target.value);
+                if (chosen) select(chosen.asset, ukrainian);
+              }}
+            >
+              <option value="">Select image</option>
+              {candidates.map(({ asset, label }, index) => (
+                <option key={asset.id} value={asset.id}>
+                  {index + 1}. {label} ({asset.width} × {asset.height})
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         {ownerId && (
           <PhotoUploader
             projectId={ownerId}
@@ -71,7 +124,7 @@ export function CoverSelector({
             multiple={false}
             imagesOnly
             label={`${asset ? 'Replace' : 'Upload'} ${label}`}
-            disabled={disabled || (ukrainian && !media.coverAsset)}
+            disabled={disabled || (ukrainian && !media[defaultField])}
             onUploadingChangeAction={onUploadingChangeAction}
             onAssetUploadedAction={(asset) => select(asset, ukrainian)}
           />
@@ -84,8 +137,8 @@ export function CoverSelector({
             onClickAction={() =>
               onChangeAction((current) =>
                 ukrainian
-                  ? { ...current, coverAssetUk: null }
-                  : { ...current, coverAsset: null, coverAssetUk: null }
+                  ? { ...current, [ukrainianField]: null }
+                  : { ...current, [defaultField]: null, [ukrainianField]: null }
               )
             }
           >
@@ -97,17 +150,14 @@ export function CoverSelector({
   }
   return (
     <section
-      aria-label="Cover"
+      aria-label={title}
       className="space-y-4 rounded-sm border border-neutral-200 bg-white p-5"
     >
       <div>
-        <h2 className="text-base font-semibold text-neutral-900">Cover</h2>
+        <h2 className="text-base font-semibold text-neutral-900">{title}</h2>
         <p className="mt-1 text-sm text-neutral-600">
-          An image independent of blocks and Additional Media. The Ukrainian variant needs a default
-          cover.
-        </p>
-        <p className="mt-1 text-sm text-neutral-600">
-          Current public covers remain unchanged until the new CMS pages are enabled.
+          {detail ? 'Shown at the top of the case study page.' : 'Shown on the home page card.'}{' '}
+          Choose an existing image or upload a new one. The Ukrainian variant needs a default cover.
         </p>
         {!ownerId && (
           <p className="mt-2 text-sm text-neutral-600">
@@ -116,8 +166,8 @@ export function CoverSelector({
         )}
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
-        {variant(media.coverAsset, false)}
-        {variant(media.coverAssetUk, true)}
+        {variant(media[defaultField], false)}
+        {variant(media[ukrainianField], true)}
       </div>
       <AdminPhotoLightbox
         photos={previews}
