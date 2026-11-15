@@ -5,6 +5,7 @@ import { AdminButton } from '../../_components/AdminButton';
 import { PhotoUploader } from '../projects/[id]/photo-manager/PhotoUploader';
 import { AdminPhotoLightbox } from '../projects/[id]/photo-manager/AdminPhotoLightbox';
 import { AdminMediaPreview } from './AdminMediaPreview';
+import { CoverImagePicker, type CoverCandidate } from './CoverImagePicker';
 
 import type { MediaAssetPreview } from '@/lib/media/media-draft';
 import { IMAGE_MIME_TYPES } from '@/lib/media/image-policy';
@@ -28,6 +29,7 @@ export function CoverSelector({
   disabled: boolean;
 }) {
   const [preview, setPreview] = useState<MediaAssetPreview | null>(null);
+  const [previousCovers, setPreviousCovers] = useState<CoverCandidate[]>([]);
   const previews = useMemo(
     () =>
       preview
@@ -48,6 +50,7 @@ export function CoverSelector({
   const candidates = [
     ...new Map(
       [
+        ...previousCovers,
         { asset: media.coverAsset, label: 'Home page cover' },
         { asset: media.coverAssetUk, label: 'Home page cover (UK)' },
         { asset: media.detailCoverAsset, label: 'Case study cover' },
@@ -71,6 +74,17 @@ export function CoverSelector({
     ).values(),
   ];
   function select(asset: MediaAssetPreview, ukrainian: boolean) {
+    if (disabled || (ukrainian && !media[defaultField])) return;
+    // Keep replaced covers selectable in this draft, even before a save or
+    // when the library cannot be loaded. Never add a cover to the public gallery.
+    setPreviousCovers(
+      candidates.map((item) => ({
+        ...item,
+        label: item.label.startsWith('Previously used: ')
+          ? item.label
+          : `Previously used: ${item.label}`,
+      }))
+    );
     onChangeAction((current) =>
       ukrainian && !current[defaultField]
         ? current
@@ -96,27 +110,17 @@ export function CoverSelector({
             />
           </button>
         )}
-        {candidates.length > 0 && (
-          <label className="block text-sm text-neutral-600">
-            Choose an existing image for {label}
-            <select
-              className="mt-1 block w-full rounded-sm border border-neutral-300 bg-white p-2 text-neutral-900"
-              value={asset?.id ?? ''}
-              disabled={disabled || (ukrainian && !media[defaultField])}
-              onChange={(event) => {
-                const chosen = candidates.find((item) => item.asset.id === event.target.value);
-                if (chosen) select(chosen.asset, ukrainian);
-              }}
-            >
-              <option value="">Select image</option>
-              {candidates.map(({ asset, label }, index) => (
-                <option key={asset.id} value={asset.id}>
-                  {index + 1}. {label} ({asset.width} × {asset.height})
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
+        <div>
+          <CoverImagePicker
+            label={label}
+            selectedId={asset?.id}
+            candidates={candidates}
+            ownerId={ownerId}
+            ownerType={ownerType}
+            disabled={disabled || (ukrainian && !media[defaultField])}
+            onSelectAction={(chosen) => select(chosen, ukrainian)}
+          />
+        </div>
         {ownerId && (
           <PhotoUploader
             projectId={ownerId}

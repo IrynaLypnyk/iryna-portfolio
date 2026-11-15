@@ -157,6 +157,11 @@ const meta = {
     submissions = [];
     sequence = 0;
     msw.use(
+      http.get('/api/admin/media/cover-images', () =>
+        HttpResponse.json({
+          images: [{ ...initial.coverAsset, id: 'previous-cover', label: 'previous-cover.png' }],
+        })
+      ),
       http.get('/api/admin/:owner/:id/photos/upload-auth', () =>
         HttpResponse.json({
           token: 'test-token',
@@ -423,9 +428,13 @@ const separateCovers: Story['play'] = async ({ canvasElement, args }) => {
   await expect(canvas.queryByRole('region', { name: 'Case study cover' })).not.toBeInTheDocument();
   await userEvent.click(shared);
   const detail = within(canvas.getByRole('region', { name: 'Case study cover' }));
-  await userEvent.selectOptions(
-    detail.getByLabelText('Choose an existing image for case study Default cover'),
-    'existing-cover'
+  await userEvent.click(
+    detail.getByRole('button', { name: 'Choose an existing image for case study Default cover' })
+  );
+  await userEvent.click(
+    within(canvasElement.ownerDocument.body).getByRole('button', {
+      name: /Select image .*Home page cover \(\d/,
+    })
   );
   await userEvent.upload(
     detail.getByLabelText('Replace case study Default cover'),
@@ -456,7 +465,7 @@ const separateCovers: Story['play'] = async ({ canvasElement, args }) => {
     within(canvas.getByRole('region', { name: 'Case study cover' })).getByLabelText(
       'Choose an existing image for case study Default cover'
     )
-  ).toHaveValue('detail.png');
+  ).toHaveTextContent('Change image');
   await save();
   await expect(submissions.at(-1)?.useSameCover).toBe(false);
   canvasElement.dataset.coverTest = `${args.ownerType}-passed`;
@@ -465,4 +474,52 @@ export const SeparateProjectCovers: Story = { play: separateCovers };
 export const SeparateExperimentCovers: Story = {
   args: { ownerType: 'experiments' },
   play: separateCovers,
+};
+
+export const CoverReselection: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Media' }));
+    const covers = within(canvas.getByRole('region', { name: 'Cover' }));
+    const openPicker = () =>
+      userEvent.click(
+        covers.getByRole('button', { name: 'Choose an existing image for Default cover' })
+      );
+    await openPicker();
+    const dialog = () =>
+      within(body.getByRole('dialog', { name: 'Choose an image for Default cover' }));
+    // A retired cover comes from the library, even though it has no current usage.
+    await userEvent.click(
+      await dialog().findByRole('button', { name: /Select image .*previous-cover.png/ })
+    );
+    await openPicker();
+    // Replacing a cover must not remove the original option from the draft.
+    await userEvent.click(
+      dialog().getByRole('button', {
+        name: /Select image \d+: Previously used: Home page cover \(\d/,
+      })
+    );
+    await expect(
+      covers.getByRole('button', { name: 'Choose an existing image for Default cover' })
+    ).toHaveFocus();
+    await openPicker();
+    await expect(
+      dialog().getByRole('button', { name: /Select image \d+: Home page cover \(\d/ })
+    ).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.getByRole('status')).toHaveTextContent('All changes saved');
+    // Save a different choice: only the cover changes, never the public gallery.
+    await openPicker();
+    await userEvent.click(
+      await dialog().findByRole('button', {
+        name: /Select image \d+: Previously used: Home page cover \(\d/,
+      })
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(canvas.getByRole('status')).toHaveTextContent('All changes saved'));
+    await expect(submissions.at(-1)?.coverAssetId).toBe('previous-cover');
+    await expect(submissions.at(-1)?.additionalMedia).toHaveLength(0);
+    canvasElement.dataset.coverReselectionTest = 'passed';
+  },
 };
