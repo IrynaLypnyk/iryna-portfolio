@@ -4,7 +4,11 @@ const config: StorybookConfig = {
   stories: ['../src/storybook/**/*.stories.@(ts|tsx)', '../src/app/**/*.stories.@(ts|tsx)'],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
   framework: '@storybook/nextjs',
-  staticDirs: ['../public'],
+  staticDirs: [
+    '../public',
+    // next/font/local URLs keep the source path in Storybook's font loader.
+    { from: '../src/assets/fonts', to: '/src/assets/fonts' },
+  ],
   webpackFinal: async (config) => {
     // Handle SVG files via @svgr/webpack — mirrors next.config.ts
     const fileLoaderRule = config.module?.rules?.find((rule) => {

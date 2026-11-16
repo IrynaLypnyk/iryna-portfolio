@@ -54,7 +54,7 @@ export function About() {
           <p className="leading-relaxed text-pretty">{t('p3')}</p>
 
           <MetaList
-            variant="compact"
+            variant="roomy"
             labelColor="blue"
             labelWidth={110}
             className="border-app-line border-t pt-6.5"

@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { MoveDown, MoveLeft, ArrowUpRight, ArrowRight } from 'lucide-react';
+import { MoveDown, MoveLeft, ArrowUpRight, ArrowRight, ArrowDownRight } from 'lucide-react';
+
+export type ArrowType = 'right' | 'left' | 'down' | 'upRight' | 'downRight' | 'none';
 
 export type AppLinkProps = {
   href: string;
   /** Trailing glyph. `none` for plain links. */
-  arrow?: 'right' | 'left' | 'down' | 'upRight' | 'none';
+  arrow?: ArrowType;
   arrowPosition?: 'before' | 'after';
   /** `plain` is the accent-coloured case-study CTA, with no rule under it. */
   variant?: 'underline' | 'plain';
@@ -19,10 +21,11 @@ export type AppLinkProps = {
   children: ReactNode;
 };
 
-const ARROWS = {
+export const ARROWS = {
   right: <ArrowRight strokeWidth={1.5} className="h-4 w-4" />,
   left: <MoveLeft strokeWidth={1.5} className="h-4 w-4" />,
   down: <MoveDown strokeWidth={1.5} className="h-4 w-4" />,
+  downRight: <ArrowDownRight strokeWidth={1.5} className="h-4 w-4" />,
   upRight: <ArrowUpRight strokeWidth={1.5} className="h-4 w-4" />,
   none: null,
 } as const;

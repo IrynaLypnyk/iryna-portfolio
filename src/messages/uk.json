@@ -63,8 +63,8 @@
     "moreWork": {
       "title": "Архівні проєкти",
       "description": "Попередні роботи та навчальні проєкти",
-      "viewArchivedProjects": "Подивитись aрхівні проєкти",
-      "hideArchivedProjects": "Сховати aрхівні проєкти"
+      "viewArchivedProjects": "Показати aрхівні проєкти",
+      "hideArchivedProjects": "Згорнути aрхівні проєкти"
     },
     "empty": "Проєкти додаються. Завітайте трохи пізніше."
   },

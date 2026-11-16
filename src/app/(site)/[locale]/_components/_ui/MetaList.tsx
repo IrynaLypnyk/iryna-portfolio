@@ -106,11 +106,7 @@ export function MetaList({
           }}
         >
           <dt>
-            <Label
-              color={labelColor}
-              variant={isRoomy ? 'roomy' : 'compact'}
-              size={isRoomy ? 'sm' : 'xs'}
-            >
+            <Label color={labelColor} variant={isRoomy ? 'roomy' : 'compact'} size={'xs'}>
               {item.label}
             </Label>
           </dt>

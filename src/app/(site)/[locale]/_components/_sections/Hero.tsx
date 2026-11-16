@@ -34,8 +34,8 @@ export function Hero() {
           <AppLink
             href={`#${anchors.projects}`}
             fontMono={true}
-            arrow="right"
-            arrowPosition="before"
+            arrow="downRight"
+            arrowPosition="after"
             color="blueBright"
           >
             {t('cta')}

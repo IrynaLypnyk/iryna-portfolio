@@ -28,6 +28,10 @@ export const Panel: Story = {
   args: { variant: 'panel', labelColor: 'blue' },
 };
 
+export const ResponsivePanel: Story = {
+  args: { variant: 'responsive-panel', labelColor: 'blue' },
+};
+
 export const WithCustomLabelWidth: Story = {
   args: { variant: 'roomy', labelWidth: 150 },
 };

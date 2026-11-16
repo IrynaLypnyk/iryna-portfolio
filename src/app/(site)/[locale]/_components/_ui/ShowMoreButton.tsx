@@ -14,6 +14,9 @@ type Props = {
   btnLabel?: string;
 };
 
+const STROKE_WIDTH = 2;
+const ICON_SIZE = 16;
+
 export function ShowMoreButton({
   open,
   setOpenAction,
@@ -36,7 +39,11 @@ export function ShowMoreButton({
       className={cn('flex cursor-pointer items-center gap-x-2', className)}
     >
       <ActionBox>
-        {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
+        {open ? (
+          <Minus size={ICON_SIZE} strokeWidth={STROKE_WIDTH} />
+        ) : (
+          <Plus size={ICON_SIZE} strokeWidth={STROKE_WIDTH} />
+        )}
       </ActionBox>
       <span
         className={cn('text-app-accent-bright-text font-mono text-sm', !btnLabel && 'md:hidden')}

@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
-import { CaseSection } from './CaseSection';
+import { CaseSection } from '../_sections/CaseSection';
 
 type Props = {
   componentName: string;
@@ -75,7 +75,7 @@ export function CaseStudyLayout({
               </p>
             )}
             {meta.length > 0 && (
-              <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={120} />
+              <MetaList variant="roomy" labelColor="gray" items={meta} labelWidth={120} />
             )}
           </div>
           <ImageFrame photo={cover} compact priority className="[grid-area:image]" />

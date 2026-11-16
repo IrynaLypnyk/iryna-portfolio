@@ -5,10 +5,9 @@ import { featuredProject, projectWithoutCover, sparseProject } from '@/storybook
 const meta = {
   title: 'Layouts/RecentProjectArticle',
   component: RecentProjectArticle,
-  args: { project: featuredProject, index: 1 },
+  args: { project: featuredProject },
   argTypes: {
     project: { control: false },
-    index: { control: { type: 'number', min: 1, max: 20 } },
   },
 } satisfies Meta<typeof RecentProjectArticle>;
 
@@ -20,12 +19,12 @@ export const Default: Story = {};
 
 /** The meta list only renders the rows that exist, so no empty `<dt>` appears. */
 export const WithoutCover: Story = {
-  args: { project: projectWithoutCover, index: 2 },
+  args: { project: projectWithoutCover },
 };
 
 /** Missing optional metadata is omitted automatically. */
 export const MinimalMeta: Story = {
-  args: { project: sparseProject, index: 3 },
+  args: { project: sparseProject },
 };
 
 /** Only features are available in the expanded group. */
@@ -42,8 +41,8 @@ export const GalleryOnly: Story = {
 export const Sequence: Story = {
   render: () => (
     <div>
-      <RecentProjectArticle project={featuredProject} index={1} />
-      <RecentProjectArticle project={projectWithoutCover} index={2} />
+      <RecentProjectArticle project={featuredProject} />
+      <RecentProjectArticle project={projectWithoutCover} />
     </div>
   ),
 };

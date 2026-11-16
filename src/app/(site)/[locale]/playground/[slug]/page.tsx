@@ -1,4 +1,4 @@
-import { ExperimentCaseStudy } from '@/app/(site)/[locale]/projects/[slug]/_components/ExperimentCaseStudy';
+import { ExperimentCaseStudy } from '@/app/(site)/[locale]/_components/_layouts/ExperimentCaseStudy';
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';

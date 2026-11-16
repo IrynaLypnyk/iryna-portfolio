@@ -12,11 +12,9 @@ import { ProjectLinks } from '@/app/(site)/[locale]/_components/_layouts/Project
 
 type Props = {
   project: ProjectData;
-  /** 1-based position; the first cover is loaded with priority. */
-  index: number;
 };
 
-export function RecentProjectArticle({ project, index }: Props) {
+export function RecentProjectArticle({ project }: Props) {
   const t = useTranslations('Work');
   const allMeta = useProjectMeta(project);
 
@@ -81,7 +79,6 @@ export function RecentProjectArticle({ project, index }: Props) {
         placeholder={
           project.shortLabel ? t('coverPlaceholder', { title: project.shortLabel }) : null
         }
-        priority={index === 1}
         sizes="(min-width: 768px) 20vw, 40vw"
         className="aspect-4/3 [grid-area:image]"
       />

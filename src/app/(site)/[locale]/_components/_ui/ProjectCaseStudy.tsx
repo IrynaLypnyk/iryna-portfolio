@@ -1,4 +1,4 @@
-import { CaseStudyLayout } from './CaseStudyLayout';
+import { CaseStudyLayout } from '../_layouts/CaseStudyLayout';
 import { useTranslations } from 'next-intl';
 import type { ProjectDetail } from '@/types/projects';
 import { ProjectStack } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ProjectStack';

@@ -21,8 +21,8 @@ export function RecentProjects({ projects, isPortfolioEmpty = false }: Props) {
 
       {isPortfolioEmpty && <p className="text-app-muted pb-16 text-[17px]">{t('empty')}</p>}
       <div>
-        {projects.map((project, position) => (
-          <RecentProjectArticle key={project.slug} project={project} index={position + 1} />
+        {projects.map((project) => (
+          <RecentProjectArticle key={project.slug} project={project} />
         ))}
       </div>
     </div>

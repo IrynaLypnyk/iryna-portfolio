@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { AppLink } from './AppLink';
+import { AppLink, ARROWS, ArrowType } from './AppLink';
 
 const meta = {
   title: 'UI/AppLink',
@@ -78,18 +78,13 @@ export const PlainMonoArrowBefore: Story = {
 export const AllArrowOptions: Story = {
   render: (args) => (
     <div className="flex flex-col items-start gap-5">
-      <AppLink {...args} arrow="none">
-        No glyph
-      </AppLink>
-      <AppLink {...args} arrow="right">
-        Right
-      </AppLink>
-      <AppLink {...args} arrow="down">
-        Down
-      </AppLink>
-      <AppLink {...args} arrow="upRight">
-        External
-      </AppLink>
+      {(Object.keys(ARROWS) as ArrowType[]).map((arrow) =>
+        arrow === 'none' ? null : (
+          <AppLink key={arrow} {...args} arrow={arrow}>
+            {arrow === 'upRight' ? 'upRight (External)' : arrow}
+          </AppLink>
+        )
+      )}
     </div>
   ),
 };
