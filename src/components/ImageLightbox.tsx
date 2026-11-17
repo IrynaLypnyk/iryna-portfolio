@@ -1,9 +1,8 @@
 'use client';
 
 import { Photo } from '@/types/projects';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import Lightbox, { type Slide } from 'yet-another-react-lightbox';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
@@ -16,7 +15,6 @@ import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 type ImageCaption = {
   title?: string;
   subtitle?: string;
-  photosCount?: number;
 };
 
 export type GalleryImage = {
@@ -87,6 +85,20 @@ export const ImageLightbox = ({
 
   const plugins = showThumbnails ? [Video, Thumbnails] : [Video];
   const currentCaption = photos[currentIndex]?.caption;
+  const hasCaption =
+    showCaptions && activeIndex !== null && !!(currentCaption?.title || currentCaption?.subtitle);
+  const captionRef = useRef<HTMLDivElement>(null);
+  const [captionHeight, setCaptionHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const node = captionRef.current;
+    if (!hasCaption || !node) return;
+    const measure = () => setCaptionHeight(node.getBoundingClientRect().height);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasCaption]);
 
   return (
     <>
@@ -97,6 +109,10 @@ export const ImageLightbox = ({
         index={activeIndex ?? 0}
         slides={slides}
         plugins={plugins}
+        carousel={{ finite: true }}
+        // The controller subtracts its padding when measuring images/videos.
+        // CSS padding on an individual slide does not update that calculation.
+        styles={{ container: { paddingTop: Math.max(64, hasCaption ? captionHeight : 0) } }}
         on={{ view: ({ index }) => setCurrentIndex(index) }}
         thumbnails={
           showThumbnails
@@ -114,13 +130,15 @@ export const ImageLightbox = ({
             : undefined
         }
         render={{
+          buttonPrev: slides.length <= 1 ? () => null : undefined,
+          buttonNext: slides.length <= 1 ? () => null : undefined,
           iconPrev: () => (
-            <ActionBox colorMode="onDark">
+            <ActionBox colorMode="onDark" className="bg-(--yarl__color_backdrop)">
               <ArrowLeft width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
           iconNext: () => (
-            <ActionBox colorMode="onDark">
+            <ActionBox colorMode="onDark" className="bg-(--yarl__color_backdrop)">
               <ArrowRight width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
@@ -131,41 +149,26 @@ export const ImageLightbox = ({
           ),
         }}
       />
-      {/*
-       * Rendered as our own portal rather than through the library's
-       * `render.controls` slot: that slot reads from the library's own props
-       * context, which doesn't reliably re-render on every `on.view` tick, so
-       * the caption could appear frozen. Owning the DOM node ourselves means
-       * it always reflects `currentIndex` directly — fading out, then back in
-       * on every slide change, without ever traveling with the swipe.
-       */}
-      {showCaptions &&
-        activeIndex !== null &&
-        currentCaption &&
-        (currentCaption.title || currentCaption.subtitle) &&
+      {/* Keep the caption outside the swipe track and reserve its measured
+          height inside the controller. Update text and counter together. */}
+      {hasCaption &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="pointer-events-none fixed inset-x-0 top-0 z-10000 bg-none px-4 py-3">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-                className="max-w-80"
-              >
-                <p className="text-app-on-dark">
-                  {currentCaption.title}
-                  <span className="text-app-on-dark ml-3 normal-case">
-                    {currentIndex + 1}&nbsp;/&nbsp;{currentCaption.photosCount ?? photos.length}
-                  </span>
-                </p>
-                {currentCaption.subtitle && (
-                  <p className="text-app-on-dark mt-0.5">{currentCaption.subtitle}</p>
-                )}
-              </motion.div>
-            </AnimatePresence>
+          <div
+            ref={captionRef}
+            className="bg-app-accent pointer-events-none fixed top-0 right-18 left-0 z-10000 px-4 py-3"
+          >
+            <div className="max-w-2xl">
+              <p className="text-app-on-dark">
+                {currentCaption?.title}
+                <span className="text-app-on-dark ml-3 normal-case">
+                  {currentIndex + 1}&nbsp;/&nbsp;{photos.length}
+                </span>
+              </p>
+              {currentCaption?.subtitle && (
+                <p className="text-app-on-dark mt-0.5">{currentCaption.subtitle}</p>
+              )}
+            </div>
           </div>,
           document.body
         )}

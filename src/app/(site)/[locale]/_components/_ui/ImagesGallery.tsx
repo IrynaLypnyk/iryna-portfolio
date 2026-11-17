@@ -33,7 +33,6 @@ export function ImagesGallery({ photos }: Props) {
         caption: {
           title: photo.alt,
           subtitle: photo.description ?? undefined,
-          photosCount: photos.length,
         },
       })),
     [photos]

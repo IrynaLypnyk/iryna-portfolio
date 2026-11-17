@@ -6,10 +6,6 @@
   background: var(--yarl__color_backdrop);
 }
 
-.yarl__slide {
-  padding-top: 70px !important;
-}
-
 .yarl__slide_captions_container,
 .yarl__slide_title_container {
   background: unset !important;
@@ -30,4 +26,5 @@
 
 .yarl__button {
   filter: none !important;
+  background: var(--yarl__color_backdrop);
 }
