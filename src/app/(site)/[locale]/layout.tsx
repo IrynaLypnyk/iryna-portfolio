@@ -150,7 +150,11 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages} locale={locale}>
           <SiteHeader />
           <GrowingThread className="hidden md:block" />
-          <PageContainer as="main" id={anchors.top} className="flex-1">
+          <PageContainer
+            as="main"
+            id={anchors.top}
+            className="flex-1 has-[[data-component=NotFoundContent]]:flex"
+          >
             {children}
           </PageContainer>
           <SiteFooter />

@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
   },
   // Експериментальні функції для продуктивності
   experimental: {
+    globalNotFound: true,
     scrollRestoration: true,
     instantInsights: {
       validationLevel: 'warning',
