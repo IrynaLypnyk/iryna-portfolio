@@ -1,0 +1,20 @@
+/* Transparent sample media lets the surrounding page's theme paint the preview.
+   These styles are loaded only in Storybook, including portalled lightboxes. */
+img[src*='pattern-photo.png'] {
+  background-color: var(--color-app-page);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--color-app-accent-lightest) 0 18px,
+    transparent 18px 36px
+  );
+}
+
+img[src*='pattern-grid.png'],
+video[src*='pattern-video.webm'] {
+  --storybook-grid-line: color-mix(in srgb, var(--color-app-accent) 18%, transparent);
+  background-color: var(--color-app-page);
+  background-image:
+    linear-gradient(var(--storybook-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--storybook-grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

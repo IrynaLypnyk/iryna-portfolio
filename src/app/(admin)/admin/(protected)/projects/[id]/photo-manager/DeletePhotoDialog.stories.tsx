@@ -5,9 +5,9 @@ import type { EditablePhoto } from './types';
 
 const photo: EditablePhoto = {
   id: 'photo-1',
-  imageUrl: '/storybook/logo.png',
-  width: 1600,
-  height: 1067,
+  imageUrl: '/storybook/pattern-photo.png',
+  width: 1280,
+  height: 720,
   orderInProject: 1,
   isProjectCover: false,
   captionUk: null,

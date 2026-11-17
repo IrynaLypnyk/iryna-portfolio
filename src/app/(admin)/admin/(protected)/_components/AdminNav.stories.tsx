@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { userEvent, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { routes } from '@/constants/routes';
@@ -23,10 +23,8 @@ type Story = StoryObj<typeof AdminNav>;
 export const ProjectsActive: Story = {};
 
 export const MobileClosed: Story = {
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
   parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
     nextjs: {
       appDirectory: true,
       navigation: {
@@ -34,14 +32,11 @@ export const MobileClosed: Story = {
       },
     },
   },
-  render: () => <AdminNav />,
 };
 
 export const MobileMenuOpen: Story = {
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
   parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
     nextjs: {
       appDirectory: true,
       navigation: {
@@ -49,25 +44,8 @@ export const MobileMenuOpen: Story = {
       },
     },
   },
-  render: () => <AdminNavWithOpenMobileMenu />,
+  play: async ({ canvasElement }) => {
+    const menu = within(canvasElement).queryByRole('button', { name: 'Open menu' });
+    if (menu) await userEvent.click(menu);
+  },
 };
-
-function AdminNavWithOpenMobileMenu() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const menuButton = wrapperRef.current?.querySelector<HTMLButtonElement>(
-      '[aria-controls="admin-mobile-menu"]'
-    );
-
-    if (menuButton?.getAttribute('aria-expanded') === 'false') {
-      menuButton.click();
-    }
-  }, []);
-
-  return (
-    <div ref={wrapperRef}>
-      <AdminNav />
-    </div>
-  );
-}

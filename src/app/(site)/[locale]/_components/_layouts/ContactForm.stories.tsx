@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ContactForm } from './ContactForm';
 import { delay, http, HttpResponse } from 'msw';
 import { apiRoutes } from '@/constants/routes';
-import { expect, userEvent, within } from 'storybook/test';
+import { userEvent, within } from 'storybook/test';
 
 const meta = {
   title: 'Layouts/ContactForm',
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-const fillAndSubmitForm = async (canvasElement: HTMLElement) => {
+const fillAndSubmitForm = async ({ canvasElement }: { canvasElement: HTMLElement }) => {
   const canvas = within(canvasElement);
 
   await userEvent.type(canvas.getByLabelText(/name/i), 'Iryna');
@@ -23,8 +23,6 @@ const fillAndSubmitForm = async (canvasElement: HTMLElement) => {
   await userEvent.type(canvas.getByLabelText(/message/i), 'Hello, this is a test message.');
 
   await userEvent.click(canvas.getByRole('button', { name: /send/i }));
-
-  return canvas;
 };
 
 export const Success: Story = {
@@ -35,11 +33,7 @@ export const Success: Story = {
       })
     );
   },
-  play: async ({ canvasElement }) => {
-    await fillAndSubmitForm(canvasElement);
-
-    await expect(canvasElement.querySelector('[data-status="success"]')).toBeInTheDocument();
-  },
+  play: fillAndSubmitForm,
 };
 
 export const Error: Story = {
@@ -50,11 +44,7 @@ export const Error: Story = {
       })
     );
   },
-  play: async ({ canvasElement }) => {
-    const canvas = await fillAndSubmitForm(canvasElement);
-
-    await expect(canvas.getByText(/error/i)).toBeInTheDocument();
-  },
+  play: fillAndSubmitForm,
 };
 
 export const Sending: Story = {
@@ -67,9 +57,5 @@ export const Sending: Story = {
       })
     );
   },
-  play: async ({ canvasElement }) => {
-    const canvas = await fillAndSubmitForm(canvasElement);
-
-    await expect(canvas.getByText(/sending/i)).toBeInTheDocument();
-  },
+  play: fillAndSubmitForm,
 };

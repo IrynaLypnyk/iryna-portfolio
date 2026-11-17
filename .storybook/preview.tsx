@@ -5,6 +5,7 @@ import en from '../src/messages/en.json';
 import uk from '../src/messages/uk.json';
 import { sans, mono } from '@/fonts';
 import '../src/styles/index.css';
+import '../src/storybook/media-patterns.css';
 
 // Match the app's root scope, including dialogs rendered in document.body.
 document.documentElement.classList.add(sans.variable, mono.variable);

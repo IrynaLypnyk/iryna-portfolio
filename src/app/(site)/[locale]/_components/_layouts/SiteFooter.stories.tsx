@@ -16,5 +16,5 @@ export const Default: Story = {};
 
 /** The two-column top row collapses to one below `sm`. */
 export const Mobile: Story = {
-  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
 };

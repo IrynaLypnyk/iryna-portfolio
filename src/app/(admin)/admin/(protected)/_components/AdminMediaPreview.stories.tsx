@@ -6,7 +6,7 @@ const meta: Meta<typeof AdminMediaPreview> = {
   title: 'Admin/AdminMediaPreview',
   component: AdminMediaPreview,
   args: {
-    src: '/storybook/logo.png',
+    src: '/storybook/pattern-photo.png',
     alt: '',
     className: 'h-24 w-32',
     sizes: '128px',

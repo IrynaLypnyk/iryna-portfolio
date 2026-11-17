@@ -3,8 +3,8 @@ import type { Photo } from '@/types/projects';
 
 const caseStudyImage: Photo<string> = {
   id: 'first-image',
-  src: '/storybook/case-study-screen.svg',
-  mimeType: 'image/svg+xml',
+  src: '/storybook/pattern-photo.png',
+  mimeType: 'image/png',
   width: 1200,
   height: 800,
   alt: 'First gallery image',
@@ -18,9 +18,10 @@ export const lightboxPhotos: GalleryImage[] = [
     photo: {
       ...caseStudyImage,
       id: 'second-image',
-      src: '/storybook/logo.png',
-      width: 160,
-      height: 90,
+      src: '/storybook/pattern-grid.png',
+      mimeType: 'image/png',
+      width: 1280,
+      height: 720,
       alt: 'Second gallery image',
     },
     caption: {

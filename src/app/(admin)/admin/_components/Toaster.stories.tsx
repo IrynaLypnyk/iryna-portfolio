@@ -52,10 +52,6 @@ function ToastPreview({ kind, ...props }: StoryArgs) {
 const meta = {
   title: 'Admin/Toaster',
   component: Toaster,
-  // parameters: {
-  //   // Fixed-position toasts stay inside their own preview in the Docs page.
-  //   docs: { story: { inline: false, iframeHeight: 320 } },
-  // },
   args: { kind: 'default', duration: 5000, closeButton: true },
   argTypes: {
     kind: {
