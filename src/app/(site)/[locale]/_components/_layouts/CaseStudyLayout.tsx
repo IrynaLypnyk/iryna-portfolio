@@ -78,7 +78,7 @@ export function CaseStudyLayout({
               <MetaList variant="roomy" labelColor="gray" items={meta} labelWidth={120} />
             )}
           </div>
-          <ImageFrame photo={cover} compact priority className="[grid-area:image]" />
+          <ImageFrame photo={cover} priority className="w-full [grid-area:image]" />
         </div>
       </section>
 
