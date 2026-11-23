@@ -20,7 +20,14 @@ export function RecentProjectArticle({ project }: Props) {
 
   // Add, remove or reorder fields here; move a key between lists to change its group.
   // const metaFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year'];
-  const expandableFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack'];
+  const expandableFields: ProjectMetaKey[] = [
+    'type',
+    'role',
+    'status',
+    'year',
+    'stack',
+    'features',
+  ];
 
   // const meta = selectProjectMeta(allMeta, metaFields);
   const expandedMeta = selectProjectMeta(allMeta, expandableFields);
