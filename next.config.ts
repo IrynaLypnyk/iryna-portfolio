@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
   // Експериментальні функції для продуктивності
   experimental: {
     globalNotFound: true,
+    // Inline the (small, Tailwind) CSS into <head> instead of render-blocking <link> requests —
+    // improves FCP/LCP for first-time visitors. Production builds only.
+    inlineCss: true,
     scrollRestoration: true,
     instantInsights: {
       validationLevel: 'warning',
