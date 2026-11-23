@@ -6,12 +6,10 @@ const meta = {
   component: ProjectStack,
   args: {
     items: ['React', 'TypeScript', 'Next.js'],
-    separator: 'dot',
     size: 'lg',
     color: 'gray',
   },
   argTypes: {
-    separator: { control: 'inline-radio', options: ['dot', 'comma'] },
     size: { control: 'inline-radio', options: ['sm', 'lg'] },
     color: { control: 'inline-radio', options: ['blue', 'gray'] },
   },
@@ -26,31 +24,39 @@ export const SmallBlue: Story = {
   args: { size: 'sm', color: 'blue' },
 };
 
-export const CommaSeparator: Story = {
-  args: { separator: 'comma' },
-};
-
 export const AllVariants: Story = {
   render: (args) => (
     <div className="grid gap-6">
       {(['sm', 'lg'] as const).map((size) =>
-        (['blue', 'gray'] as const).map((color) =>
-          (['dot', 'comma'] as const).map((separator) => (
-            <div key={`${size}-${color}-${separator}`} className="grid gap-2">
-              <span className="text-app-muted text-xs">
-                {size} / {color} / {separator}
-              </span>
-              <ProjectStack {...args} size={size} color={color} separator={separator} />
-            </div>
-          ))
-        )
+        (['blue', 'gray'] as const).map((color) => (
+          <div key={`${size}-${color}`} className="grid gap-2">
+            <span className="text-app-muted text-xs">
+              {size} / {color}
+            </span>
+            <ProjectStack {...args} size={size} color={color} />
+          </div>
+        ))
       )}
     </div>
   ),
 };
 
 export const Wrapping: Story = {
-  args: { items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Prisma', 'PostgreSQL'] },
+  args: {
+    items: [
+      'Next.js',
+      'React',
+      'TypeScript',
+      'Tailwind CSS',
+      'Prisma',
+      'PostgreSQL',
+      'ImageKit',
+      'next-intl',
+      'Google OAuth',
+      'Storybook',
+      'Vercel',
+    ],
+  },
   render: (args) => (
     <div className="max-w-64">
       <ProjectStack {...args} />
