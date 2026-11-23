@@ -75,7 +75,7 @@ export function CaseStudyLayout({
               </p>
             )}
             {meta.length > 0 && (
-              <MetaList variant="roomy" labelColor="gray" items={meta} labelWidth={120} />
+              <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={120} />
             )}
           </div>
           <ImageFrame photo={cover} priority className="w-full [grid-area:image]" />

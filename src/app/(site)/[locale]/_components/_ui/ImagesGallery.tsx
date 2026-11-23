@@ -2,13 +2,19 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ImageLightbox, type GalleryImage } from '@/components/ImageLightbox';
+import type { GalleryImage } from '@/components/ImageLightbox';
+import dynamic from 'next/dynamic';
 import type { Photo } from '@/types/projects';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
 import { TextLink } from '@/app/(site)/[locale]/_components/_ui/TextLink';
 import { ColumnsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/columns.css';
+
+const ImageLightbox = dynamic(
+  () => import('@/components/ImageLightbox').then((module) => module.ImageLightbox),
+  { ssr: false }
+);
 
 type Props = {
   photos: Photo<string>[];
@@ -21,6 +27,7 @@ type Props = {
 export function ImagesGallery({ photos }: Props) {
   const t = useTranslations('Work');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxRequested, setLightboxRequested] = useState(false);
 
   // Memoized so this array keeps a stable reference across re-renders that
   // don't touch `photos` — the lightbox resets its own current slide back to
@@ -47,6 +54,7 @@ export function ImagesGallery({ photos }: Props) {
       <ColumnsPhotoAlbum
         photos={photos}
         onClick={({ index }) => {
+          setLightboxRequested(true);
           setLightboxIndex(index);
         }}
         columns={(containerWidth) => (containerWidth < 480 ? 1 : containerWidth < 768 ? 2 : 3)}
@@ -110,11 +118,14 @@ export function ImagesGallery({ photos }: Props) {
         }}
       />
 
-      <ImageLightbox
-        photos={slides}
-        activeIndex={lightboxIndex}
-        onCloseAction={() => setLightboxIndex(null)}
-      />
+      {/* Load on first use, then keep mounted so closing transitions still run. */}
+      {lightboxRequested && (
+        <ImageLightbox
+          photos={slides}
+          activeIndex={lightboxIndex}
+          onCloseAction={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   );
 }
