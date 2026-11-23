@@ -30,7 +30,7 @@ export function HomeReveal({ children }: { children: ReactNode }) {
           observer.unobserve(entry.target);
         }
       },
-      { rootMargin: '0px 0px -24px 0px', threshold: 0 }
+      { rootMargin: '0px 0px -8% 0px', threshold: 0 }
     );
 
     function clearAnimations() {
@@ -57,14 +57,20 @@ export function HomeReveal({ children }: { children: ReactNode }) {
         const stagger = parent?.hasAttribute('data-reveal-stagger')
           ? Array.from(parent.children).indexOf(element)
           : 0;
+        const isMask = element.dataset.revealVariant === 'mask';
         const animation = element.animate(
-          [
-            { opacity: 0, transform: 'translateY(18px)' },
-            { opacity: 1, transform: 'translateY(0)' },
-          ],
+          isMask
+            ? [
+                { clipPath: 'inset(100% 0 0 0)', transform: 'scale(1.04)' },
+                { clipPath: 'inset(0 0 0 0)', transform: 'scale(1)' },
+              ]
+            : [
+                { opacity: 0, transform: 'translateY(32px)' },
+                { opacity: 1, transform: 'translateY(0)' },
+              ],
           {
-            duration: 600,
-            delay: Math.min(stagger * 65, 260),
+            duration: isMask ? 1100 : 800,
+            delay: Math.min(stagger * 90, 360),
             easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
             fill: 'both',
           }

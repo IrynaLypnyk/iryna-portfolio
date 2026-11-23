@@ -1,7 +1,11 @@
-/* Keep hero text visible from first paint; its entrance never waits for hydration. */
+/*
+ * Hero entrance on first paint — pure CSS, never waits for hydration.
+ * Headline, statement and intro (LCP candidates) only move: they stay fully opaque, so LCP isn't delayed.
+ * The CTA and the meta column are not LCP candidates, so they also fade in.
+ */
 @keyframes hero-enter {
   from {
-    transform: translateY(18px);
+    transform: translateY(28px);
   }
 
   to {
@@ -9,25 +13,37 @@
   }
 }
 
+@keyframes hero-enter-fade {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  .home-reveal .hero-grid [data-reveal-stagger] > *,
-  .home-reveal .hero-grid [data-reveal] {
-    animation: hero-enter 780ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  .home-reveal .hero-grid [data-reveal-stagger] > * {
+    animation: hero-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
 
   .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(2) {
-    animation-delay: 85ms;
+    animation-delay: 90ms;
   }
 
   .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(3) {
-    animation-delay: 170ms;
+    animation-delay: 180ms;
   }
 
-  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(4) {
-    animation-delay: 255ms;
+  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(n + 4) {
+    animation-name: hero-enter-fade;
+    animation-delay: 300ms;
   }
 
-  .home-reveal .hero-grid [data-reveal-stagger] > :nth-child(n + 5) {
-    animation-delay: 340ms;
+  .home-reveal .hero-grid [data-reveal] {
+    animation: hero-enter-fade 1000ms cubic-bezier(0.22, 1, 0.36, 1) 360ms backwards;
   }
 }

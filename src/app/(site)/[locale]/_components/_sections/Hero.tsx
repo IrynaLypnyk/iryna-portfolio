@@ -14,7 +14,7 @@ export function Hero() {
       id={anchors.hero}
       className="relative grid min-h-[88vh] content-center border-t-0 border-b py-[clamp(48px,9vh,112px)]"
     >
-      <div className="grid items-start gap-x-[clamp(32px,6vw,84px)] gap-y-[6vh] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
+      <div className="hero-grid grid items-start gap-x-[clamp(32px,6vw,84px)] gap-y-[6vh] md:grid-cols-[minmax(0,1.55fr)_minmax(0,0.72fr)]">
         <div data-reveal-stagger className="grid gap-[clamp(24px,3.4vh,40px)]">
           <h1 className="text-app-ink text-[clamp(2.875rem,calc(1.1389rem+6vw),6rem)] leading-none font-medium tracking-tight">
             {t('name')}
