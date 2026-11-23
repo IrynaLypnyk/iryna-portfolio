@@ -1,5 +1,6 @@
 import type { CaseBlock } from '@/types/projects';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
+import { CaseBody } from '../_ui/CaseBody';
 type Props = { section: CaseBlock };
 
 /**
@@ -21,21 +22,7 @@ export function CaseSection({ section }: Props) {
         )}
       </div>
 
-      {section.body && (
-        <div className="grid max-w-200 gap-3.5">
-          {section.body
-            .split(/\n\s*\n/)
-            .filter((part) => part.trim())
-            .map((part, index) => (
-              <p
-                key={index}
-                className="text-app-text text-base leading-normal text-pretty whitespace-pre-line"
-              >
-                {part}
-              </p>
-            ))}
-        </div>
-      )}
+      {section.body && <CaseBody body={section.body} />}
       {section.photos.length > 0 && (
         <div className="min-w-0 md:col-span-2">
           <ImagesGallery photos={section.photos} />

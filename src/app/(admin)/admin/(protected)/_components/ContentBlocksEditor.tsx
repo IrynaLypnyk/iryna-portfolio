@@ -4,7 +4,8 @@ import { useState, type Dispatch, type SetStateAction } from 'react';
 import { ArrowUp, ArrowDown, Plus, Trash2 } from 'lucide-react';
 import { AdminButton } from '../../_components/AdminButton';
 import { AdminInput } from './AdminInput';
-import { AdminTextarea } from './AdminTextarea';
+import dynamic from 'next/dynamic';
+
 import { AdminDeleteDialog } from './AdminDeleteDialog';
 import { MediaEditor, type MediaEditorProps } from './MediaEditor';
 import {
@@ -12,6 +13,11 @@ import {
   moveContentBlock,
   type BlockMediaDraft,
 } from '@/lib/media/owner-media-draft';
+
+const AdminRichText = dynamic(
+  () => import('./AdminRichText').then((module) => module.AdminRichText),
+  { ssr: false }
+);
 
 type Props = Pick<
   MediaEditorProps,
@@ -35,7 +41,8 @@ export function ContentBlocksEditor({ blocks, onChangeAction, ...shared }: Props
         <div>
           <h2 className="text-base font-semibold text-neutral-900">Content blocks</h2>
           <p className="mt-1 text-sm text-neutral-600">
-            Titles, text and media are optional. Use blank lines between paragraphs.
+            Titles, text and media are optional. Format body text with bold, bulleted or numbered
+            lists.
           </p>
         </div>
         <AdminButton
@@ -115,53 +122,54 @@ export function ContentBlocksEditor({ blocks, onChangeAction, ...shared }: Props
               </AdminButton>
             </div>
           </div>
-          <div id={`block-${block.key}`} hidden={!expanded.has(block.key)} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {(['titleEn', 'titleUk', 'bodyEn', 'bodyUk'] as const).map((field) => {
-                const label = `${field.startsWith('title') ? 'Title' : 'Body'} (${field.endsWith('En') ? 'EN' : 'UK'}, optional)`;
-                return (
-                  <label key={field} className="space-y-1">
-                    <span className="block text-xs font-semibold tracking-wider text-neutral-600 uppercase">
-                      {label}
-                    </span>
-                    {field.startsWith('body') ? (
-                      <AdminTextarea
-                        rows={5}
-                        value={block[field] ?? ''}
-                        disabled={shared.disabled}
-                        aria-label={`Block ${index + 1} ${label}`}
-                        onChange={(event) => update(block.key, field, event.target.value)}
-                      />
-                    ) : (
-                      <AdminInput
-                        value={block[field] ?? ''}
-                        disabled={shared.disabled}
-                        aria-label={`Block ${index + 1} ${label}`}
-                        onChange={(event) => update(block.key, field, event.target.value)}
-                      />
-                    )}
-                  </label>
-                );
-              })}
-            </div>
-            <MediaEditor
-              {...shared}
-              context="block"
-              items={block.photos}
-              onChangeAction={(update) =>
-                onChangeAction((current) =>
-                  current.map((item) =>
-                    item.key !== block.key
-                      ? item
-                      : {
-                          ...item,
-                          photos: typeof update === 'function' ? update(item.photos) : update,
-                        }
+          {expanded.has(block.key) && (
+            <div id={`block-${block.key}`} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {(['titleEn', 'titleUk', 'bodyEn', 'bodyUk'] as const).map((field) => {
+                  const label = `${field.startsWith('title') ? 'Title' : 'Body'} (${field.endsWith('En') ? 'EN' : 'UK'}, optional)`;
+                  return (
+                    <div key={field} className="space-y-1">
+                      <span className="block text-xs font-semibold tracking-wider text-neutral-600 uppercase">
+                        {label}
+                      </span>
+                      {field.startsWith('body') ? (
+                        <AdminRichText
+                          value={block[field] ?? ''}
+                          disabled={shared.disabled}
+                          label={`Block ${index + 1} ${label}`}
+                          onChangeAction={(value) => update(block.key, field, value)}
+                        />
+                      ) : (
+                        <AdminInput
+                          value={block[field] ?? ''}
+                          disabled={shared.disabled}
+                          aria-label={`Block ${index + 1} ${label}`}
+                          onChange={(event) => update(block.key, field, event.target.value)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <MediaEditor
+                {...shared}
+                context="block"
+                items={block.photos}
+                onChangeAction={(update) =>
+                  onChangeAction((current) =>
+                    current.map((item) =>
+                      item.key !== block.key
+                        ? item
+                        : {
+                            ...item,
+                            photos: typeof update === 'function' ? update(item.photos) : update,
+                          }
+                    )
                   )
-                )
-              }
-            />
-          </div>
+                }
+              />
+            </div>
+          )}
         </div>
       ))}
       {removing && (
