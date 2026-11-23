@@ -133,18 +133,12 @@ export const ImageLightbox = ({
           buttonPrev: slides.length <= 1 ? () => null : undefined,
           buttonNext: slides.length <= 1 ? () => null : undefined,
           iconPrev: () => (
-            <ActionBox
-              colorMode="onDark"
-              className="hidden bg-(--yarl__color_backdrop) md:inline-block"
-            >
+            <ActionBox colorMode="onDark" className="hidden bg-(--yarl__color_backdrop) md:flex">
               <ArrowLeft width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
           iconNext: () => (
-            <ActionBox
-              colorMode="onDark"
-              className="hidden bg-(--yarl__color_backdrop) md:inline-block"
-            >
+            <ActionBox colorMode="onDark" className="hidden bg-(--yarl__color_backdrop) md:flex">
               <ArrowRight width={90} strokeWidth={1.5} />
             </ActionBox>
           ),
