@@ -9,7 +9,7 @@ export function Label({
   className,
 }: {
   children: ReactNode;
-  color?: 'blue' | 'gray';
+  color?: 'blue' | 'gray' | 'black';
   variant?: 'roomy' | 'compact';
   size?: 'xs' | 'sm';
   className?: string;
@@ -20,7 +20,11 @@ export function Label({
       data-component="Label"
       className={cn(
         'font-mono whitespace-nowrap uppercase',
-        color === 'gray' ? 'text-app-muted' : 'text-app-accent-bright-text',
+        color === 'gray'
+          ? 'text-app-muted'
+          : color === 'black'
+            ? 'text-app-text'
+            : 'text-app-accent-bright-text',
         isRoomy ? 'tracking-widest' : 'tracking-wide',
         size === 'xs' ? 'text-xs' : 'text-sm',
         className

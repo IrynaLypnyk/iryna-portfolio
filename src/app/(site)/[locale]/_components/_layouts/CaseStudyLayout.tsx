@@ -70,12 +70,18 @@ export function CaseStudyLayout({
               </p>
             )}
             {description && (
-              <p className="text-muted max-w-165 text-[clamp(17px,1.5vw,19px)] leading-[1.68] text-pretty">
+              <p className="text-app-text max-w-165 text-base leading-normal tracking-wide text-pretty">
                 {description}
               </p>
             )}
             {meta.length > 0 && (
-              <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={120} />
+              <MetaList
+                variant="compact"
+                labelColor="black"
+                textColor="black"
+                items={meta}
+                labelWidth={120}
+              />
             )}
           </div>
           <ImageFrame photo={cover} priority className="aspect-4/3 w-full [grid-area:image]" />
@@ -107,7 +113,7 @@ export function CaseStudyLayout({
           {next && (
             <Link
               href={next.href}
-              className="text-ink hover:text-accent min-h-11 text-right text-[clamp(18px,2vw,26px)] tracking-[-0.02em] transition-colors"
+              className="text-app-text hover:text-accent min-h-11 text-right text-[clamp(18px,2vw,26px)] tracking-[-0.02em] transition-colors"
             >
               {nextLabel}: {next.title} →
             </Link>

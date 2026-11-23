@@ -21,7 +21,7 @@ type Props = {
   variant?: 'compact' | 'roomy' | 'panel' | 'responsive-panel';
   className?: string;
   labelClassName?: string;
-  labelColor?: 'blue' | 'gray';
+  labelColor?: 'blue' | 'gray' | 'black';
   textColor?: 'gray' | 'black';
 };
 

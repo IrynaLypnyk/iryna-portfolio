@@ -22,14 +22,14 @@ export function CaseSection({ section }: Props) {
       </div>
 
       {section.body && (
-        <div className="grid max-w-170 gap-3.5">
+        <div className="grid max-w-200 gap-3.5">
           {section.body
             .split(/\n\s*\n/)
             .filter((part) => part.trim())
             .map((part, index) => (
               <p
                 key={index}
-                className="text-app-ink text-[17px] leading-[1.72] text-pretty whitespace-pre-line"
+                className="text-app-text text-base leading-normal text-pretty whitespace-pre-line"
               >
                 {part}
               </p>
