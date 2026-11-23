@@ -110,7 +110,14 @@ export function MetaList({
               {item.label}
             </Label>
           </dt>
-          <dd className={cn('text-app-muted m-0 ml-2 text-base tracking-wide')}>{item.value}</dd>
+          <dd
+            className={cn(
+              'm-0 ml-2 text-base tracking-wide',
+              textColor === 'gray' ? 'text-app-muted' : 'text-app-text'
+            )}
+          >
+            {item.value}
+          </dd>
         </div>
       ))}
     </dl>
