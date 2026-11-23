@@ -131,7 +131,8 @@
     "back": "Back to projects list",
     "next": "Next",
     "mainVisual": "Case study — main visual",
-    "detailVisual": "Detail / interface"
+    "detailVisual": "Detail / interface",
+    "loading": "Loading project…"
   },
   "Footer": {
     "supportUkraine": "Stand with Ukraine",

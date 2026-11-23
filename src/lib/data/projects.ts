@@ -14,26 +14,38 @@ const projectInclude = {
   detailCoverAssetUk: true,
 } satisfies Prisma.ProjectInclude;
 
+// Detail pages are cached and invalidated by the admin API via `projects` / `project-${slug}` tags,
+// so navigating to a case study doesn't wait for fresh database round-trips on every request.
 export async function getPublishedProjectDetail(slug: string) {
-  return prisma.project.findFirst({
-    where: { slug, ...detailPublished },
-    include: { ...projectInclude, contentBlocks: publicBlocks },
-  });
+  return unstable_cache(
+    () =>
+      prisma.project.findFirst({
+        where: { slug, ...detailPublished },
+        include: { ...projectInclude, contentBlocks: publicBlocks },
+      }),
+    ['published-project-detail', slug, 'media-mime-v2', 'legacy-gallery-compat-v4'],
+    { revalidate: 60, tags: ['projects', `project-${slug}`] }
+  )();
 }
 
 export async function getDetailProjectNeighbours() {
-  return prisma.project.findMany({
-    where: detailPublished,
-    orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
-    select: {
-      slug: true,
-      titleEn: true,
-      titleUk: true,
-      featured: true,
-      published: true,
-      detailPageStatus: true,
-    },
-  });
+  return unstable_cache(
+    () =>
+      prisma.project.findMany({
+        where: detailPublished,
+        orderBy: [{ featured: 'desc' }, { order: 'asc' }, { id: 'asc' }],
+        select: {
+          slug: true,
+          titleEn: true,
+          titleUk: true,
+          featured: true,
+          published: true,
+          detailPageStatus: true,
+        },
+      }),
+    ['detail-project-neighbours'],
+    { revalidate: 60, tags: ['projects'] }
+  )();
 }
 
 export type ProjectWithRelations = Prisma.ProjectGetPayload<{

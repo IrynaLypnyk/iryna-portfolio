@@ -127,7 +127,8 @@
     "back": "Назад до списку проєктів",
     "next": "Далі",
     "mainVisual": "Case study — головне зображення",
-    "detailVisual": "Деталь / інтерфейс"
+    "detailVisual": "Деталь / інтерфейс",
+    "loading": "Завантаження проєкту…"
   },
   "Footer": {
     "supportUkraine": "Підтримуйте Україну",

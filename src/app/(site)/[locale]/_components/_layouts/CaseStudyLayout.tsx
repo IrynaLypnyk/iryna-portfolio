@@ -78,7 +78,7 @@ export function CaseStudyLayout({
               <MetaList variant="compact" labelColor="gray" items={meta} labelWidth={120} />
             )}
           </div>
-          <ImageFrame photo={cover} priority className="w-full [grid-area:image]" />
+          <ImageFrame photo={cover} priority className="aspect-4/3 w-full [grid-area:image]" />
         </div>
       </section>
 

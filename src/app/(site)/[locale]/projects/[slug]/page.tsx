@@ -1,4 +1,4 @@
-import { ProjectCaseStudy } from '@/app/(site)/[locale]/_components/_ui/ProjectCaseStudy';
+import { ProjectCaseStudy } from '@/app/(site)/[locale]/_components/_layouts/ProjectCaseStudy';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
