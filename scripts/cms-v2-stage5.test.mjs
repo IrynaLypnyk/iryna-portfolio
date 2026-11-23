@@ -167,7 +167,7 @@ test('compact covers fit natural dimensions and never crop or stretch small imag
 
 test('numbered sections keep the editorial columns with paragraphs and media beneath', () => {
   const { CaseSection } = load(
-    'src/app/(site)/[locale]/projects/[slug]/_components/CaseSection.tsx',
+    'src/app/(site)/[locale]/_components/_sections/CaseSection.tsx',
     {
       '@/app/(site)/[locale]/_components/_ui/ImagesGallery': {
         ImagesGallery: ({ photos }) =>

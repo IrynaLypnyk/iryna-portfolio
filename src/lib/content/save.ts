@@ -366,7 +366,8 @@ export async function saveProject(db: PrismaClient, body: unknown, id?: string) 
       });
       return { project, previousSlug: existing?.slug, cleanupCandidateAssetIds };
     },
-    { isolationLevel: 'Serializable' }
+    // Content saves can include many ordered media writes over a remote connection.
+    { isolationLevel: 'Serializable', maxWait: 5_000, timeout: 15_000 }
   );
 }
 
@@ -422,6 +423,7 @@ export async function saveExperiment(db: PrismaClient, body: unknown, id?: strin
       });
       return { experiment, previousSlug: existing?.slug, cleanupCandidateAssetIds };
     },
-    { isolationLevel: 'Serializable' }
+    // Content saves can include many ordered media writes over a remote connection.
+    { isolationLevel: 'Serializable', maxWait: 5_000, timeout: 15_000 }
   );
 }
