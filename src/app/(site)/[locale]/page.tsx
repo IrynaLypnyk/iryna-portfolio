@@ -14,7 +14,9 @@ import { getPublishedExperiments } from '@/lib/data/experiments';
 import { HashScroll } from '@/app/(site)/[locale]/_components/_ui/HashScroll';
 import { HomeReveal } from '@/app/(site)/[locale]/_components/_ui/HomeReveal';
 
-export const dynamic = 'force-dynamic';
+// Prerendered per locale and served from the CDN. Data comes from unstable_cache (tags `projects` /
+// `experiments`), which the admin API revalidates on save; the time-based fallback refreshes in background.
+export const revalidate = 60;
 
 type Props = {
   params: Promise<{ locale: LocaleType }>;
