@@ -1,5 +1,4 @@
 'use client';
-import { motion } from 'framer-motion';
 import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
 import { cn } from '@/lib/utils';
 
@@ -8,8 +7,9 @@ type Props = {
   toggleMobileMenuAction: () => void;
 };
 
+// Colour fades slowly; the X morph uses a slightly overshooting curve (close to the previous spring).
 const lineClassName =
-  'bg-app-accent-bright group-hover:bg-app-accent-lightest absolute h-0.5 transition-colors duration-500';
+  'bg-app-accent-bright group-hover:bg-app-accent-lightest absolute h-0.5 [transition:background-color_500ms,translate_300ms_cubic-bezier(0.34,1.3,0.64,1),rotate_300ms_cubic-bezier(0.34,1.3,0.64,1),width_300ms_cubic-bezier(0.34,1.3,0.64,1)] motion-reduce:transition-none';
 
 export function BurgerMenuButton({ isMenuOpen, toggleMobileMenuAction }: Props) {
   return (
@@ -25,52 +25,24 @@ export function BurgerMenuButton({ isMenuOpen, toggleMobileMenuAction }: Props) 
       >
         <div className="flex items-center justify-center" aria-hidden="true">
           <div className="relative h-2 w-5">
-            <motion.span
+            <span
               className={cn(
                 lineClassName,
-                'absolute top-0 right-0 h-0.5',
-                isMenuOpen && 'bg-app-accent-lightest'
+                'top-0 right-0',
+                isMenuOpen
+                  ? 'bg-app-accent-lightest w-[22px] translate-x-px translate-y-[3px] rotate-45'
+                  : 'w-5'
               )}
-              variants={{
-                closed: {
-                  x: 0,
-                  y: 0,
-                  rotate: 0,
-                  width: 20,
-                },
-                open: {
-                  x: 1,
-                  y: 3,
-                  rotate: 45,
-                  width: 22,
-                },
-              }}
-              animate={isMenuOpen ? 'open' : 'closed'}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
 
-            <motion.span
+            <span
               className={cn(
                 lineClassName,
-                'right-0 bottom-0 h-0.5',
-                isMenuOpen && 'bg-app-accent-lightest'
+                'right-0 bottom-0',
+                isMenuOpen
+                  ? 'bg-app-accent-lightest w-[22px] translate-x-px -translate-y-[3px] -rotate-45'
+                  : 'w-5'
               )}
-              variants={{
-                closed: {
-                  x: 0,
-                  y: 0,
-                  rotate: 0,
-                  width: 20,
-                },
-                open: {
-                  x: 1,
-                  y: -3,
-                  rotate: -45,
-                  width: 22,
-                },
-              }}
-              animate={isMenuOpen ? 'open' : 'closed'}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           </div>
         </div>

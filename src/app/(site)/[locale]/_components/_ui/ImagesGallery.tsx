@@ -69,7 +69,9 @@ export function ImagesGallery({ photos }: Props) {
                   index: index + 1,
                   count: photos.length,
                 })}
-                className="relative block w-full cursor-zoom-in"
+                // Border is drawn as an overlay so it doesn't change the size the
+                // photo album measured; matches ImageFrame's border.
+                className="after:border-app-line relative block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:border"
               >
                 {photo.mimeType?.startsWith('video/') ? (
                   <>

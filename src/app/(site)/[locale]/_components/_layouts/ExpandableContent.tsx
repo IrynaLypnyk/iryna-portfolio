@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState, type ReactNode } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Collapse } from '@/app/(site)/[locale]/_components/_ui/Collapse';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
 import { cn } from '@/lib/utils';
 
@@ -56,40 +56,18 @@ export function ExpandableContent({
         {visibleContent}
         {expandable && (
           <div id={detailsId}>
-            <AnimatePresence initial={false}>
-              {open && (
-                <motion.div
-                  key="expanded-content"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="overflow-hidden"
-                >
-                  <div className={expandedContentClassName}>{expandedContent}</div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <Collapse open={open} duration={250}>
+              <div className={expandedContentClassName}>{expandedContent}</div>
+            </Collapse>
           </div>
         )}
       </div>
       {children}
       {expandable && fullWidthExpandedContent && (
         <div id={fullWidthContentId} className="min-w-0 [grid-area:fullWidthExpanded]">
-          <AnimatePresence initial={false}>
-            {open && (
-              <motion.div
-                key="full-width-expanded-content"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="overflow-hidden"
-              >
-                {fullWidthExpandedContent}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <Collapse open={open} duration={300}>
+            {fullWidthExpandedContent}
+          </Collapse>
         </div>
       )}
       {expandable && (

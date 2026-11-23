@@ -6,7 +6,7 @@ import type { ProjectData } from '@/types/projects';
 import { SectionHeader } from '@/app/(site)/[locale]/_components/_ui/SectionHeader';
 import { ArchivedProjectArticle } from '@/app/(site)/[locale]/_components/_layouts/ProjectArticle/ArchivedProjectArticle';
 import { ShowMoreButton } from '@/app/(site)/[locale]/_components/_ui/ShowMoreButton';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Collapse } from '@/app/(site)/[locale]/_components/_ui/Collapse';
 
 type Props = {
   projects: ProjectData[];
@@ -36,28 +36,11 @@ export function ArchivedProjects({ projects }: Props) {
         className="pt-3 pb-4 md:pt-6 md:pb-8"
       />
       <div id={detailsId}>
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.div
-              key="expanded-content"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="overflow-hidden"
-            >
-              <div>
-                {projects.map((project, position) => (
-                  <ArchivedProjectArticle
-                    key={project.slug}
-                    project={project}
-                    index={position + 1}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <Collapse open={open} duration={250}>
+          {projects.map((project, position) => (
+            <ArchivedProjectArticle key={project.slug} project={project} index={position + 1} />
+          ))}
+        </Collapse>
       </div>
     </div>
   );
