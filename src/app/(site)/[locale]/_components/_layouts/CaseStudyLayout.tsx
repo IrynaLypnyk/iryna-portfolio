@@ -6,6 +6,8 @@ import { ImageFrame } from '@/app/(site)/[locale]/_components/_ui/ImageFrame';
 import { MetaList, type MetaItem } from '@/app/(site)/[locale]/_components/_ui/MetaList';
 import { AppLink } from '@/app/(site)/[locale]/_components/_ui/AppLink';
 import { CaseSection } from '../_sections/CaseSection';
+import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
+import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 
 type Props = {
   componentName: string;
@@ -37,6 +39,8 @@ export function CaseStudyLayout({
   next,
   nextLabel,
   children,
+  photos,
+  galleryLabel,
 }: Props) {
   return (
     <article data-component={componentName}>
@@ -98,12 +102,12 @@ export function CaseStudyLayout({
         </section>
       )}
 
-      {/*{photos.length > 0 && (*/}
-      {/*  <section className="grid min-w-0 gap-6 pt-[clamp(56px,10vh,120px)]">*/}
-      {/*    <Label color="blue">{galleryLabel}</Label>*/}
-      {/*    <ImagesGallery photos={photos} />*/}
-      {/*  </section>*/}
-      {/*)}*/}
+      {photos.length > 0 && (
+        <section className="grid min-w-0 gap-6 pt-[clamp(56px,10vh,120px)]">
+          <Label color="blue">{galleryLabel}</Label>
+          <ImagesGallery photos={photos} />
+        </section>
+      )}
 
       <section className="pt-[clamp(56px,10vh,120px)] pb-[clamp(72px,12vh,140px)]">
         <div className="border-app-line flex flex-wrap items-center justify-between gap-6 border-t pt-6.5">
