@@ -21,7 +21,7 @@ export function ArchivedProjectArticle({ project }: Props) {
   const t = useTranslations('Work');
   const allMeta = useProjectMeta(project);
   // Add, remove or reorder fields here; move a key between lists to change its group.
-  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'features'];
+  const expandedFields: ProjectMetaKey[] = ['type', 'role', 'status', 'year', 'stack', 'features'];
 
   const expandedMeta = selectProjectMeta(allMeta, expandedFields);
   const expandable =
