@@ -31,7 +31,7 @@ export function ImageFrame({
     return (
       <div
         data-component="CaseCover"
-        className={cn('border-app-line bg-shell max-w-full overflow-hidden border', className)}
+        className={cn('border-app-line max-w-full overflow-hidden border', className)}
         style={{ width }}
       >
         <Image
@@ -50,9 +50,10 @@ export function ImageFrame({
     <div
       data-component="ImageFrame"
       className={cn(
-        'border-app-line bg-shell relative aspect-16/10 overflow-hidden border',
+        'border-app-line relative aspect-16/10 overflow-hidden border',
         className,
-        !photo && 'project-placeholder'
+        // The grey shell is only for projects without a cover yet — real photos load onto the page background.
+        !photo && 'bg-shell project-placeholder'
       )}
     >
       {photo?.mimeType?.startsWith('video/') ? (
