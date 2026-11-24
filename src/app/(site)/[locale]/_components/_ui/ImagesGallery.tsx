@@ -57,7 +57,10 @@ export function ImagesGallery({ photos }: Props) {
           setLightboxRequested(true);
           setLightboxIndex(index);
         }}
-        columns={(containerWidth) => (containerWidth < 480 ? 1 : containerWidth < 768 ? 2 : 3)}
+        columns={(containerWidth) => {
+          const columns = containerWidth < 480 ? 1 : containerWidth < 1024 ? 2 : 3;
+          return Math.min(columns, photos.length);
+        }}
         spacing={16}
         render={{
           photo: ({ onClick }, { photo, index, width }) => (
