@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { GalleryImage } from '@/components/ImageLightbox';
 import dynamic from 'next/dynamic';
 import type { Photo } from '@/types/projects';
-import Image from 'next/image';
+import { ImageKitImage } from '@/components/ImageKitImage';
 import { Play } from 'lucide-react';
 import { TextLink } from '@/app/(site)/[locale]/_components/_ui/TextLink';
 import { ColumnsPhotoAlbum } from 'react-photo-album';
@@ -97,7 +97,7 @@ export function ImagesGallery({ photos }: Props) {
                     </span>
                   </>
                 ) : (
-                  <Image
+                  <ImageKitImage
                     src={photo.src}
                     alt={photo.alt}
                     width={photo.width}

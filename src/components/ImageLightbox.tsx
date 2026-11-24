@@ -11,6 +11,7 @@ import 'yet-another-react-lightbox/styles.css';
 import { CloseIcon } from '@/assets/icons';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { ActionBox } from '@/app/(site)/[locale]/_components/_ui/ActionBox';
+import { imageKitSrcSet, isImageKitUrl } from '@/lib/imagekit/loader';
 
 type ImageCaption = {
   title?: string;
@@ -78,6 +79,10 @@ export const ImageLightbox = ({
               width: photo.width,
               height: photo.height,
               alt: photo.alt,
+              // Lets the lightbox (and its thumbnails) pick a resized copy instead of the full original.
+              ...(isImageKitUrl(photo.src) && photo.width && photo.height
+                ? { srcSet: imageKitSrcSet(photo.src, photo.width, photo.height) }
+                : {}),
             }
       ),
     [photos]

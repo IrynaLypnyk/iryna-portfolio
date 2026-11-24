@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { ImageKitImage } from '@/components/ImageKitImage';
 import { cn } from '@/lib/utils';
 import type { Photo } from '@/types/projects';
 
@@ -34,7 +34,7 @@ export function ImageFrame({
         className={cn('border-app-line max-w-full overflow-hidden border', className)}
         style={{ width }}
       >
-        <Image
+        <ImageKitImage
           src={photo.src}
           alt={photo.alt}
           width={photo.width}
@@ -66,7 +66,7 @@ export function ImageFrame({
           className="h-full w-full object-contain"
         />
       ) : photo ? (
-        <Image
+        <ImageKitImage
           src={photo.src}
           alt={photo.alt}
           fill

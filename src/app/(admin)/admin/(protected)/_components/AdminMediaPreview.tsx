@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { ImageKitImage } from '@/components/ImageKitImage';
 
 import { cn } from '@/lib/utils';
 
@@ -56,7 +56,7 @@ export function AdminMediaPreview({
           )}
         </>
       ) : (
-        <Image
+        <ImageKitImage
           src={src}
           alt={alt}
           fill
