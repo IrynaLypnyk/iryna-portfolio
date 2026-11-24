@@ -9,7 +9,7 @@ export function ExperimentLinkIndicator({ loadingLabel }: { loadingLabel: string
   return (
     <span className="text-app-accent-bright inline-flex h-5 w-5 items-center justify-center font-sans text-[18px]">
       {pending ? (
-        <span role="status">
+        <span role="status" className="link-pending">
           <span className="sr-only">{loadingLabel}</span>
           <span
             aria-hidden="true"

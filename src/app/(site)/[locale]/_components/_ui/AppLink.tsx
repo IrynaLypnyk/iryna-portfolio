@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
+import { LinkPending } from '@/app/(site)/[locale]/_components/_ui/LinkPending';
 import { MoveDown, MoveLeft, ArrowUpRight, ArrowRight, ArrowDownRight } from 'lucide-react';
 
 export type ArrowType = 'right' | 'left' | 'down' | 'upRight' | 'downRight' | 'none';
@@ -71,9 +72,13 @@ export function AppLink({
   );
 
   if (internal && !isAnchor) {
+    // The arrow turns into a spinner while the page is loading, so the click visibly registers.
+    const pendingArrow = renderArrowIcon && <LinkPending>{renderArrowIcon}</LinkPending>;
     return (
       <Link href={href} data-component="AppLink" className={classNames}>
-        {content}
+        {arrowPosition === 'before' && pendingArrow}
+        {children}
+        {arrowPosition === 'after' && pendingArrow}
       </Link>
     );
   }

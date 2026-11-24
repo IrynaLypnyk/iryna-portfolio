@@ -9,6 +9,7 @@ import { CaseSection } from '../_sections/CaseSection';
 import { ImagesGallery } from '@/app/(site)/[locale]/_components/_ui/ImagesGallery';
 import { Label } from '@/app/(site)/[locale]/_components/_ui/Label';
 import { Reveal } from '@/app/(site)/[locale]/_components/_ui/Reveal';
+import { LinkPending } from '@/app/(site)/[locale]/_components/_ui/LinkPending';
 
 type Props = {
   componentName: string;
@@ -127,7 +128,7 @@ export function CaseStudyLayout({
                 href={next.href}
                 className="text-app-text hover:text-accent min-h-11 text-right text-[clamp(18px,2vw,26px)] tracking-[-0.02em] transition-colors"
               >
-                {nextLabel}: {next.title} →
+                {nextLabel}: {next.title} <LinkPending>→</LinkPending>
               </Link>
             )}
           </div>
