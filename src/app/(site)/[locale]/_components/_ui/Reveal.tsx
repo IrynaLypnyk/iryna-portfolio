@@ -10,10 +10,15 @@ const REVEAL_SELECTOR = [
   '[data-component="RecentProjectArticle"]',
   '[data-component="EarlierProjectArticle"]',
   '[data-component="ExperimentCard"]',
+  '[data-component="CaseSection"]',
 ].join(',');
 
-/** Enhance the home page after hydration, keeping server-rendered content visible without JS. */
-export function HomeReveal({ children }: { children: ReactNode }) {
+/**
+ * Scroll-in animations for the home and case study pages, added after hydration so server-rendered
+ * content stays visible without JS. The first screen (`#hero`, `[data-reveal-intro]`) animates in CSS
+ * instead — see `_reveal.css`.
+ */
+export function Reveal({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,7 +51,7 @@ export function HomeReveal({ children }: { children: ReactNode }) {
       root?.querySelectorAll<HTMLElement>(REVEAL_SELECTOR).forEach((element) => {
         // Never hide content that is already painted, especially potential LCP elements.
         if (
-          element.closest(`#${anchors.hero}`) ||
+          element.closest(`#${anchors.hero}, [data-reveal-intro]`) ||
           element.getBoundingClientRect().top < window.innerHeight ||
           element.contains(document.activeElement)
         ) {
@@ -110,7 +115,7 @@ export function HomeReveal({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div ref={ref} className="home-reveal">
+    <div ref={ref} className="reveal">
       {children}
     </div>
   );

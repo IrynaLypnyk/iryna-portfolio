@@ -12,7 +12,7 @@ import { Playground } from '@/app/(site)/[locale]/_components/_sections/Playgrou
 import { getPublishedProjects } from '@/lib/projects/get-published-projects';
 import { getPublishedExperiments } from '@/lib/data/experiments';
 import { HashScroll } from '@/app/(site)/[locale]/_components/_ui/HashScroll';
-import { HomeReveal } from '@/app/(site)/[locale]/_components/_ui/HomeReveal';
+import { Reveal } from '@/app/(site)/[locale]/_components/_ui/Reveal';
 
 // Prerendered per locale and served from the CDN. Data comes from unstable_cache (tags `projects` /
 // `experiments`), which the admin API revalidates on save; the time-based fallback refreshes in background.
@@ -46,7 +46,7 @@ export default async function IndexPage({ params }: Props) {
   ]);
 
   return (
-    <HomeReveal key={locale}>
+    <Reveal key={locale}>
       <HashScroll />
 
       <Hero />
@@ -54,6 +54,6 @@ export default async function IndexPage({ params }: Props) {
       <Playground experiments={experiments} />
       <About />
       <Contact />
-    </HomeReveal>
+    </Reveal>
   );
 }
