@@ -5,14 +5,22 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { routes } from '@/constants/routes';
 import type { LocaleType } from '@/i18n/routing';
-import { getExperimentDetail } from '@/lib/data/experiments';
+import { getAllExperimentSlugsForSitemap, getExperimentDetail } from '@/lib/data/experiments';
 import { buildPageMetadata } from '@/lib/seo/build-metadata';
-
-export const dynamic = 'force-dynamic';
 
 type Props = {
   params: Promise<{ locale: LocaleType; slug: string }>;
 };
+
+// Prerendered per locale + slug and served from the CDN instead of rendering on every request
+// (which streamed the loading skeleton first and fetched the page from iad1). Data comes from
+// unstable_cache, which the admin API revalidates by tag on save; `revalidate` is a background fallback.
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const experiments = await getAllExperimentSlugsForSitemap();
+  return experiments.map(({ slug }) => ({ slug }));
+}
 
 const loadDetail = cache(getExperimentDetail);
 

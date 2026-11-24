@@ -5,14 +5,27 @@ import type { Metadata } from 'next';
 import type { LocaleType } from '@/i18n/routing';
 import { routes } from '@/constants/routes';
 import { toProjectDetail } from '@/lib/data/project-mappers';
-import { getPublishedProjectDetail, getDetailProjectNeighbours } from '@/lib/data/projects';
+import {
+  getPublishedProjectDetail,
+  getDetailProjectNeighbours,
+  getAllProjectSlugsForSitemap,
+} from '@/lib/data/projects';
 import { cache } from 'react';
-export const dynamic = 'force-dynamic';
 import { buildAlternates } from '@/lib/seo/config';
 
 type Props = {
   params: Promise<{ locale: LocaleType; slug: string }>;
 };
+
+// Prerendered per locale + slug and served from the CDN instead of rendering on every request
+// (which streamed the loading skeleton first and fetched the page from iad1). Data comes from
+// unstable_cache, which the admin API revalidates by tag on save; `revalidate` is a background fallback.
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const projects = await getAllProjectSlugsForSitemap();
+  return projects.map(({ slug }) => ({ slug }));
+}
 
 const loadDetail = cache(async (slug: string, locale: LocaleType) => {
   const project = await getPublishedProjectDetail(slug);

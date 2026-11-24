@@ -59,16 +59,25 @@ export async function getPublishedExperiments(locale: LocaleType): Promise<Exper
   return rows.map((row, index) => toExperimentData(row, locale, index));
 }
 export async function getExperimentDetail(slug: string, locale: LocaleType) {
-  const row = await prisma.experiment.findFirst({
-    where: { slug, ...detailPublished },
-    include: { ...include, contentBlocks: publicBlocks },
-  });
+  const { row, siblings } = await unstable_cache(
+    async () => {
+      const [row, siblings] = await Promise.all([
+        prisma.experiment.findFirst({
+          where: { slug, ...detailPublished },
+          include: { ...include, contentBlocks: publicBlocks },
+        }),
+        prisma.experiment.findMany({
+          where: detailPublished,
+          orderBy: [{ order: 'asc' }, { id: 'asc' }],
+          select: { slug: true, titleEn: true, titleUk: true },
+        }),
+      ]);
+      return { row, siblings };
+    },
+    ['experiment-detail', slug, 'legacy-gallery-compat-v4'],
+    { revalidate: 60, tags: ['experiments'] }
+  )();
   if (!row) return null;
-  const siblings = await prisma.experiment.findMany({
-    where: detailPublished,
-    orderBy: [{ order: 'asc' }, { id: 'asc' }],
-    select: { slug: true, titleEn: true, titleUk: true },
-  });
   const index = siblings.findIndex((item) => item.slug === slug);
   const experiment = toExperimentData(row, locale, Math.max(0, index));
   const next = siblings.length > 1 ? siblings[(index + 1) % siblings.length] : null;
