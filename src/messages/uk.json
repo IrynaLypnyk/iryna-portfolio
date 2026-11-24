@@ -95,10 +95,10 @@
     "p3": "Мені комфортно працювати самостійно й водночас співпрацювати з продуктовою командою, дизайнерами та бекенд-розробниками командами — від перших ідей до реалізації та запуску.",
     "labelCurrently": "Працюю",
     "labelLearning": "Досліджую",
-    "labelOutside": "ДОЛУЧАЮСЬ",
+    "labelOutside": "Волонтерю",
     "currently": "над full-stack проєктами для фриланс-клієнтів: Next.js, React 19, TypeScript, PostgreSQL і Prisma",
     "learning": "розробку з допомогою AI та продуктові функції на основі AI",
-    "outside": { "p1": "до open-source платформи", "p2": "Women Coding Community" }
+    "outside": { "p1": "в open-source проєкті", "p2": "Women Coding Community", "p3": "" }
   },
   "Contact": {
     "title": "Контакти",

@@ -17,7 +17,8 @@ export function About() {
       {t('outside.p1')}{' '}
       <TextLink href="https://www.womencodingcommunity.com/" isExternal={true}>
         {t('outside.p2')}
-      </TextLink>
+      </TextLink>{' '}
+      {t('outside.p3')}
     </>
   );
 

@@ -15,7 +15,7 @@ type Props = {
 export function ArchivedProjects({ projects }: Props) {
   const t = useTranslations('Work');
   const detailsId = useId();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   if (projects.length === 0) return null;
 
   return (
